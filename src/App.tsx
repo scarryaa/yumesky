@@ -1,9 +1,10 @@
 import './App.scss';
+import agent from './api/agent';
 import Login from './screens/Login';
 
-function App() {
-  const handleLogin = (username: string, password: string) => {
-    console.log(`Username: ${username}, Password: ${password}`);
+const App = (): JSX.Element => {
+  const handleLogin = async (username: string, password: string): Promise<void> => {
+    await agent.login({ identifier: username, password })
   };
 
   return (
