@@ -1,6 +1,6 @@
 import React from 'react';
 import './Sidebar.scss';
-import { faBell, faHashtag, faHome, faList } from '@fortawesome/free-solid-svg-icons';
+import { faHashtag, faHome, faList } from '@fortawesome/free-solid-svg-icons';
 import NavButton from './NavButton';
 
 const Sidebar: React.FC = () => {
@@ -11,9 +11,6 @@ const Sidebar: React.FC = () => {
         </li>
         <li>
             <NavButton active={false} link='/#' icon={faHashtag} size={22}/>
-        </li>
-        <li>
-            <NavButton active={false} link='/notifications' icon={faBell} size={22}/>
         </li>
         <li>
             <NavButton active={false} link='/lists' icon={faList} size={22}/>

@@ -1,5 +1,6 @@
 import './App.scss';
 import agent from './api/agent';
+import MainTopBar from './components/MainTopBar';
 import Sidebar from './components/Sidebar';
 import AuthProvider, { useAuth } from './contexts/AuthContext';
 import Home from './screens/Home';
@@ -40,6 +41,7 @@ const AppContent = (): JSX.Element => {
         <>
           <Sidebar />
           <div className="current-route">
+            <MainTopBar />
             <Routes>
               <Route path="/" element={<Home />} />
             </Routes>

@@ -1,0 +1,31 @@
+@import '../variables.scss';
+
+.post {
+    padding: 1rem;
+    border-bottom: 1px solid $border-color;
+    display: flex;
+
+    .post-info {
+        display: flex;
+        flex-direction: column;
+
+        .post-avatar {
+            max-width: 50px;
+            max-height: 50px;
+            border-radius: 50%;
+        }
+
+        .post-info-inner {    
+            display: flex;
+            align-items: baseline;
+            
+            .post-display-name {
+                font-weight: bold;
+            }
+    
+            .post-handle {
+                color: $text-light-color;
+            }
+        }
+    }
+}
