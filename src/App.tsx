@@ -1,6 +1,8 @@
 import './App.scss';
 import agent from './api/agent';
+import Sidebar from './components/Sidebar';
 import AuthProvider, { useAuth } from './contexts/AuthContext';
+import Home from './screens/Home';
 import Login from './screens/Login';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -32,19 +34,24 @@ const AppContent = (): JSX.Element => {
   };
 
   return (
-    <>
+    <div className="content-container">
       {isAuthenticated
         ? (
-        <Routes>
-          <Route path="/" element={<div>Woo you made it!!</div>} />
-        </Routes>
+        <>
+          <Sidebar />
+          <div className="current-route">
+            <Routes>
+              <Route path="/" element={<Home />} />
+            </Routes>
+          </div>
+        </>
           )
         : (
         <Routes>
           <Route path="/" element={<Login onSubmit={handleLogin} />} />
         </Routes>
           )}
-    </>
+    </div>
   );
 }
 
