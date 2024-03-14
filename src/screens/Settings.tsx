@@ -10,7 +10,7 @@ const Settings: React.FC = () => {
         <SelectableButton left label='System' selected={theme === 'system'} onSelect={() => { toggleTheme('system') }} />
         <SelectableButton label='Light' selected={theme === 'light'} onSelect={() => { toggleTheme('light') }} />
         <SelectableButton label='Dim' selected={theme === 'dim'} onSelect={() => { toggleTheme('dim') }} />
-        <SelectableButton right label='Dark' borderColor="#ced4da" selected={theme === 'dark'} onSelect={() => { toggleTheme('dark') }} />
+        <SelectableButton right label='Dark' selected={theme === 'dark'} onSelect={() => { toggleTheme('dark') }} />
     </div>
   )
 }

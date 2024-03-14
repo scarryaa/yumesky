@@ -10,10 +10,20 @@
   --box-shadow: rgba(0, 0, 0, 0.15);
 }
 
+// Dim theme
+[data-theme='dim'] {
+  --secondary: #1f2a33;
+  --secondary-highlight: #2d3e4b;
+  --background: #1b2229;
+  --text: #fff;
+  --text-light: #c0c0c0;
+  --border: #151c22;
+}
+
 // Dark theme
 [data-theme='dark'] {
   --secondary: #070707;
-  --secondary-highlight: #141414;
+  --secondary-highlight: #363636;
   --background: #000;
   --text: #fff;
   --text-light: #c0c0c0;
