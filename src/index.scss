@@ -17,3 +17,12 @@ body, html {
     color: $text-color;
   }
 }
+
+.no-button-style {
+  background: none;
+  color: inherit;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}

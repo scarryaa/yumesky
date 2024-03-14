@@ -14,4 +14,12 @@ export const getTimeline = async (): Promise<AppBskyFeedDefs.FeedViewPost[]> => 
   }
 }
 
+export const repost = async (uri: string, cid: string): Promise<void> => {
+  await agent.repost(uri, cid);
+}
+
+export const like = async (uri: string, cid: string): Promise<void> => {
+  await agent.like(uri, cid);
+}
+
 export default agent;

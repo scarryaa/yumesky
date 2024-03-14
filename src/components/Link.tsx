@@ -9,7 +9,7 @@ interface LinkProps extends ReactLinkProps {
 
 const Link: React.FC<LinkProps> = ({ children, linkStyle, to, className }: LinkProps) => {
   return (
-    <ReactLink to={to} className={`${linkStyle ? '' : 'no-link-style'} ${className}`}>
+    <ReactLink to={to} className={`${linkStyle ? 'link-style' : 'no-link-style'} ${className}`}>
         {children}
     </ReactLink>
   )

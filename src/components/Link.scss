@@ -1,4 +1,13 @@
 .no-link-style {
     color: inherit;
-    text-decoration: inherit;
+    text-decoration: none;
+}
+
+.link-style {
+    text-decoration: none;
+    color: inherit;
+
+    &:hover {
+        text-decoration: underline;
+    }
 }

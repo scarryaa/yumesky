@@ -1,31 +1,86 @@
 @import '../variables.scss';
 
+.post-reason {
+    margin-left: 2.2rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    font-size: 15px;
+    font-weight: bold;
+    color: $text-light-color;
+}
+
 .post {
-    padding: 1rem;
+    padding: 0.8rem;
     border-bottom: 1px solid $border-color;
     display: flex;
 
-    .post-info {
+    .post-avatar {
+        max-width: 50px;
+        max-height: 50px;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+    }
+
+    .post-info-container {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        width: 100%;
 
-        .post-avatar {
-            max-width: 50px;
-            max-height: 50px;
-            border-radius: 50%;
-        }
-
-        .post-info-inner {    
+        .post-info {
             display: flex;
-            align-items: baseline;
-            
-            .post-display-name {
-                font-weight: bold;
+            flex-direction: column;
+            width: 100%;
+    
+            .post-info-inner {    
+                display: flex;
+                align-items: baseline;
+                margin-bottom: 0.1rem;
+                
+                .post-display-name {
+                    font-weight: bold;
+                }
+        
+                .post-handle {
+                    color: $text-light-color;
+                }
             }
     
-            .post-handle {
+            .post-content {
+                margin-bottom: 0.5rem;
+            }
+
+            .post-reply-tag {
+                display: flex;
+                align-items: center;
                 color: $text-light-color;
+                gap: 0.25rem;
+                font-size: 15px;
+                margin-bottom: 0.2rem;
             }
         }
+    }
+}
+
+.post-controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: $text-light-color;
+    align-items: center;
+
+    .post-controls-comment,
+    .post-controls-repost,
+    .post-controls-like,
+    .post-controls-more {
+        display: flex;
+        justify-self: flex-start;
+        flex: 1;
+    }
+
+    .post-controls-comment-count,
+    .post-controls-repost-count,
+    .post-controls-like-count {
+        margin-left: 0.2rem;
     }
 }

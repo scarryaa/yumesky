@@ -6,6 +6,7 @@ import AuthProvider, { useAuth } from './contexts/AuthContext';
 import Home from './screens/Home';
 import Login from './screens/Login';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Settings from './screens/Settings';
 
 const App = (): JSX.Element => {
   return (
@@ -44,6 +45,7 @@ const AppContent = (): JSX.Element => {
             <MainTopBar />
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/settings" element={<Settings />} />
             </Routes>
           </div>
         </>
