@@ -5,9 +5,11 @@ import Sidebar from './components/Sidebar';
 import AuthProvider, { useAuth } from './contexts/AuthContext';
 import Home from './screens/Home';
 import Login from './screens/Login';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Settings from './screens/Settings';
 import ThemeProvider from './contexts/ThemeContext';
+import { useEffect, useState } from 'react';
+import { mapCurrentPageFromPathName } from './utils';
 
 const App = (): JSX.Element => {
   return (
@@ -25,6 +27,12 @@ const App = (): JSX.Element => {
 
 const AppContent = (): JSX.Element => {
   const { isAuthenticated, setIsAuthenticated } = useAuth();
+  const [currentPage, setCurrentPage] = useState<string | null>();
+  const location = useLocation();
+
+  useEffect(() => {
+    setCurrentPage(mapCurrentPageFromPathName(location.pathname));
+  }, [location.pathname]);
 
   const handleLogin = async (username: string, password: string): Promise<void> => {
     try {
@@ -45,7 +53,7 @@ const AppContent = (): JSX.Element => {
         <>
           <Sidebar />
           <div className="current-route">
-            <MainTopBar />
+            <MainTopBar title={(currentPage != null) ? `${currentPage?.[0].toUpperCase()}${currentPage?.substring(1)}` : null}/>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/settings" element={<Settings />} />

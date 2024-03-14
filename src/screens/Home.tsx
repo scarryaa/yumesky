@@ -3,6 +3,7 @@ import './Home.scss';
 import Post from '../components/Post';
 import { getTimeline } from '../api/agent';
 import { type AppBskyFeedDefs } from '@atproto/api';
+import BasicView from '../components/BasicView';
 
 const Home: React.FC = () => {
   const [posts, setPosts] = useState<AppBskyFeedDefs.FeedViewPost[]>([]);
@@ -17,11 +18,11 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <div className='home'>
+    <BasicView>
         {posts.map((post, index) => (
             <Post post={post} key={index}/>
         ))}
-    </div>
+    </BasicView>
   );
 };
 

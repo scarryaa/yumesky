@@ -20,13 +20,19 @@ const TopBarButton: React.FC<TopBarButtonProps> = ({ icon, fontSize, link }: Top
   )
 }
 
-const MainTopBar: React.FC = () => {
+interface MainTopBarProps {
+  title?: string | null;
+}
+const MainTopBar: React.FC<MainTopBarProps> = ({ title }: MainTopBarProps) => {
   return (
     <div className='main-top-bar'>
-        <TopBarButton link='/settings' icon={faCog} fontSize={20} />
-        <TopBarButton link='/notifications' icon={faBell} fontSize={20} />
-        <TopBarButton link='/messages' icon={faEnvelope} fontSize={20} />
-        <ProfileIcon size={40} />
+        {(title != null) ? <span className='main-top-bar-title'>{title}</span> : <div></div>}
+        <div className='main-top-bar-buttons'>
+            <TopBarButton link='/settings' icon={faCog} fontSize={20} />
+            <TopBarButton link='/notifications' icon={faBell} fontSize={20} />
+            <TopBarButton link='/messages' icon={faEnvelope} fontSize={20} />
+            <ProfileIcon className='main-top-bar-profile-icon' size={40} />
+        </div>
     </div>
   )
 }

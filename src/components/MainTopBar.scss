@@ -2,12 +2,26 @@
     padding: 1rem;
     display: flex;
     flex-direction: row;
-    gap: 0.2rem;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     position: sticky;
     top: 0;
     background-color: var(--secondary);
+
+    .main-top-bar-title {
+        font-size: x-large;
+    }
+
+    .main-top-bar-buttons {
+        display: flex;
+        flex-direction: row;
+        gap: 0.2rem;
+        align-items: center;
+        
+        .main-top-bar-profile-icon {
+            margin-left: 0.2rem;
+        }
+    }
 }
 
 .main-top-bar-button {
