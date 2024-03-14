@@ -7,16 +7,19 @@ import Home from './screens/Home';
 import Login from './screens/Login';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Settings from './screens/Settings';
+import ThemeProvider from './contexts/ThemeContext';
 
 const App = (): JSX.Element => {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <div className="app">
-          <AppContent />
-        </div>
-      </BrowserRouter>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <div className="app">
+            <AppContent />
+          </div>
+        </BrowserRouter>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

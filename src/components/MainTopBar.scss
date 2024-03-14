@@ -1,5 +1,3 @@
-@import '../variables.scss';
-
 .main-top-bar {
     padding: 1rem;
     display: flex;
@@ -9,7 +7,7 @@
     justify-content: flex-end;
     position: sticky;
     top: 0;
-    background-color: $secondary-color;
+    background-color: var(--secondary);
 }
 
 .main-top-bar-button {
@@ -18,6 +16,6 @@
     border-radius: 50%;
 
     &:hover {
-        background-color: $secondary-highlight-color;
+        background-color: var(--secondary-highlight);
     }
 }

@@ -1,5 +1,3 @@
-@import '../variables.scss';
-
 .post-reason {
     margin-left: 2.2rem;
     display: flex;
@@ -7,12 +5,12 @@
     align-items: center;
     font-size: 15px;
     font-weight: bold;
-    color: $text-light-color;
+    color: var(--text-light);
 }
 
 .post {
     padding: 0.8rem;
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid var(--border);
     display: flex;
 
     .post-avatar {
@@ -42,7 +40,7 @@
                 }
         
                 .post-handle {
-                    color: $text-light-color;
+                    color: var(--text-light);
                 }
             }
     
@@ -53,7 +51,7 @@
             .post-reply-tag {
                 display: flex;
                 align-items: center;
-                color: $text-light-color;
+                color: var(--text-light);
                 gap: 0.25rem;
                 font-size: 15px;
                 margin-bottom: 0.2rem;
@@ -66,7 +64,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    color: $text-light-color;
+    color: var(--text-light);
     align-items: center;
 
     .post-controls-comment,

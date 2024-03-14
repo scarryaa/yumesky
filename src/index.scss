@@ -1,4 +1,24 @@
-@import './variables.scss';
+// Default theme
+:root {
+  --primary: #007bff;
+  --secondary: #f9fafb;
+  --secondary-highlight: #e2e2e2;
+  --background: #fff;
+  --text: #000;
+  --text-light: #4b4b4b;
+  --border: #ced4da;
+  --box-shadow: rgba(0, 0, 0, 0.15);
+}
+
+// Dark theme
+[data-theme='dark'] {
+  --secondary: #070707;
+  --secondary-highlight: #141414;
+  --background: #000;
+  --text: #fff;
+  --text-light: #c0c0c0;
+  --border: #000000;
+}
 
 body, html {
   margin: 0;
@@ -7,15 +27,8 @@ body, html {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: $background-color;
-  color: $text-color;
-}
-
-.dark-theme {
-  body, html {
-    background-color: $background-color;
-    color: $text-color;
-  }
+  background-color: var(--background);
+  color: var(--text);
 }
 
 .no-button-style {
