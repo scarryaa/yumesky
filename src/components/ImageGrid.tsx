@@ -15,15 +15,27 @@ const ImageGrid: React.FC<ImageGridProps> = ({ images }: ImageGridProps) => {
       )
     case 2:
       return (
-        <div>2</div>
+        <div className='image-grid--2'>
+            <img style={{ width: '100%', marginBottom: '0.5rem' }} className='img' src={images?.[0].thumb} />
+            <img style={{ width: '100%', marginBottom: '0.5rem' }} className='img' src={images?.[1].thumb} />
+        </div>
       )
     case 3:
       return (
-        <div>3</div>
+        <div className='image-grid--3'>
+            <img style={{ width: '100%', marginBottom: '0.5rem' }} className='img' src={images?.[0].thumb} />
+            <img style={{ width: '100%', marginBottom: '0.5rem' }} className='img' src={images?.[1].thumb} />
+            <img style={{ width: '100%', marginBottom: '0.5rem' }} className='img' src={images?.[2].thumb} />
+        </div>
       )
     case 4:
       return (
-        <div>4</div>
+        <div className='image-grid--4'>
+            <img style={{ width: '100%', marginBottom: '0.5rem' }} className='img' src={images?.[0].thumb} />
+            <img style={{ width: '100%', marginBottom: '0.5rem' }} className='img' src={images?.[1].thumb} />
+            <img style={{ width: '100%', marginBottom: '0.5rem' }} className='img' src={images?.[2].thumb} />
+            <img style={{ width: '100%', marginBottom: '0.5rem' }} className='img' src={images?.[3].thumb} />
+        </div>
       )
 
     default: return null;
