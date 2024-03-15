@@ -10,18 +10,22 @@ import Settings from './screens/Settings';
 import ThemeProvider from './contexts/ThemeContext';
 import { useEffect, useState } from 'react';
 import { mapCurrentPageFromPathName } from './utils';
+import ThreadView from './screens/ThreadView';
+import PostProvider from './contexts/PostContext';
 
 const App = (): JSX.Element => {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          <div className="app">
-            <AppContent />
-          </div>
-        </BrowserRouter>
-      </AuthProvider>
-    </ThemeProvider>
+    <PostProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <div className="app">
+              <AppContent />
+            </div>
+          </BrowserRouter>
+        </AuthProvider>
+      </ThemeProvider>
+    </PostProvider>
   );
 }
 
@@ -56,6 +60,7 @@ const AppContent = (): JSX.Element => {
             <MainTopBar title={(currentPage != null) ? `${currentPage?.[0].toUpperCase()}${currentPage?.substring(1)}` : null}/>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/profile/:username/post/:id" element={<ThreadView />} />
               <Route path="/settings" element={<Settings />} />
             </Routes>
           </div>

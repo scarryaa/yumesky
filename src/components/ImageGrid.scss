@@ -5,11 +5,19 @@
     min-height: 200px;
 }
 
+.image-grid--1 {
+    margin-bottom: 16px;
+}
+
 .image-grid--2 {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 8px;
     padding-bottom: 16px;
+
+    .img:first-child, .img:nth-child(2) {
+        object-fit: cover;
+    }
 }
 
 .image-grid--3 {

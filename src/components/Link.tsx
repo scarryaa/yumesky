@@ -5,11 +5,12 @@ import { Link as ReactLink, type LinkProps as ReactLinkProps } from 'react-route
 interface LinkProps extends ReactLinkProps {
   children: React.ReactNode;
   linkStyle: boolean;
+  onClick?: () => void;
 }
 
-const Link: React.FC<LinkProps> = ({ children, linkStyle, to, className }: LinkProps) => {
+const Link: React.FC<LinkProps> = ({ children, linkStyle, to, className, onClick }: LinkProps) => {
   return (
-    <ReactLink to={to} className={`${linkStyle ? 'link-style' : 'no-link-style'} ${className}`}>
+    <ReactLink onClick={onClick} to={to} className={`${linkStyle ? 'link-style' : 'no-link-style'} ${className}`}>
         {children}
     </ReactLink>
   )

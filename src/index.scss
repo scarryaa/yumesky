@@ -49,3 +49,7 @@ body, html {
   cursor: pointer;
   outline: inherit;
 }
+
+.no-underline {
+  text-decoration: none !important;
+}

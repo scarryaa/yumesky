@@ -1,5 +1,6 @@
 .post-reason {
     margin-left: 2.2rem;
+    margin-bottom: 0.2rem;
     display: flex;
     gap: 0.5rem;
     align-items: center;
@@ -14,8 +15,8 @@
     display: flex;
 
     .post-avatar {
-        max-width: 50px;
-        max-height: 50px;
+        max-width: 40px;
+        max-height: 40px;
         border-radius: 50%;
         margin-right: 0.5rem;
     }
@@ -29,11 +30,19 @@
             display: flex;
             flex-direction: column;
             width: 100%;
+
+            .post-info-and-timestamp {
+                display: flex;
+                flex-direction: row;
+                gap: 0.4rem;
+                align-items: center;
+                margin-bottom: 0.1rem;
+            }
     
             .post-info-inner {    
                 display: flex;
                 align-items: baseline;
-                margin-bottom: 0.1rem;
+                max-width: max-content;
                 
                 .post-display-name {
                     font-weight: bold;
@@ -45,7 +54,7 @@
             }
     
             .post-content {
-                margin-bottom: 0.5rem;
+                margin-bottom: 0.8rem;
             }
 
             .post-reply-tag {
@@ -73,12 +82,19 @@
     .post-controls-more {
         display: flex;
         justify-self: flex-start;
-        flex: 1;
     }
 
     .post-controls-comment-count,
     .post-controls-repost-count,
     .post-controls-like-count {
         margin-left: 0.5rem;
+    }
+}
+
+.post-timestamp {
+    color: var(--text-light);
+
+    &:hover {
+        text-decoration: underline;
     }
 }
