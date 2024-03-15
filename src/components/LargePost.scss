@@ -21,16 +21,29 @@
             flex-direction: column;
             align-items: baseline;
             margin-bottom: 0.1rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
 
-            .post-display-name {
-                font-weight: bold;
-                font-size: 17px;
+            .post-display-name-link {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                max-width: 100%;
+                
+                .post-display-name {
+                    font-weight: bold;
+                    font-size: 17px;
+                }
             }
     
             .post-handle {
                 color: var(--text-light);
                 font-size: 15px;
                 margin-top: 0.1rem;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                max-width: 100%;
             }
         }
     }

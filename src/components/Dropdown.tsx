@@ -94,7 +94,7 @@ const Dropdown: React.FC<DropdownProps> = ({ children, style, items }: DropdownP
               return (
                 <DropdownMenuItem onSelect={item.onPress} key={index}>
                     <span>{item.label}</span>
-                    {item.icon !== undefined && <FontAwesomeIcon icon={item.icon} fontSize={item.iconSize} />}
+                    {item.icon !== undefined && <FontAwesomeIcon className='dropdown-icon' icon={item.icon} fontSize={item.iconSize} />}
                 </DropdownMenuItem>
               )
             })}

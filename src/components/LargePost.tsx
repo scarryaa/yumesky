@@ -35,7 +35,7 @@ const LargePost: React.FC<LargePostProps> = ({ post }: LargePostProps) => {
         <div className='poster-info' style={{ marginBottom: rt?.length === 0 ? 0 : '0.5rem' }}>
             <img className='post-avatar' src={post?.post.author.avatar} />
             <div className='post-info-inner'>
-                <Link linkStyle={true} to={`/profile/${post?.post.author.handle}`}>
+                <Link linkStyle={true} className='post-display-name-link' to={`/profile/${post?.post.author.handle}`}>
                     <span className='post-display-name'>{post?.post.author.displayName}</span>
                     &nbsp;
                 </Link>

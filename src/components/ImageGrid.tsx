@@ -12,7 +12,9 @@ const ImageGrid: React.FC<ImageGridProps> = ({ images }: ImageGridProps) => {
   switch (count) {
     case 1:
       return (
-        <img style={{ width: '100%', marginBottom: '1rem' }} className='img' src={images?.[0].thumb} />
+        <div className='image-grid--1'>
+            <img style={{ width: '100%' }} className='img' src={images?.[0].thumb} />
+        </div>
       )
     case 2:
       return (
