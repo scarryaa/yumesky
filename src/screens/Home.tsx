@@ -31,7 +31,7 @@ const Home: React.FC = () => {
   };
 
   return (
-    <BasicView>
+    <BasicView viewPadding={false}>
       {posts.map((post, index) => (
         <Post post={post} key={index} />
       ))}
