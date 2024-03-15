@@ -1,42 +1,77 @@
 import './App.scss';
-import agent from './api/agent';
+import agent, { getPrefs } from './api/agent';
 import MainTopBar from './components/MainTopBar';
 import Sidebar from './components/Sidebar';
 import AuthProvider, { useAuth } from './contexts/AuthContext';
 import Home from './screens/Home';
 import Login from './screens/Login';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Settings from './screens/Settings';
 import ThemeProvider from './contexts/ThemeContext';
 import { useEffect, useState } from 'react';
-import { mapCurrentPageFromPathName } from './utils';
 import ThreadView from './screens/ThreadView';
 import PostProvider from './contexts/PostContext';
+import HomeTabs from './components/HomeTabs';
+import PrefsProvider, { usePrefs } from './contexts/PrefsContext';
+import { type AppBskyFeedDefs } from '@atproto/api';
 
-const App = (): JSX.Element => {
+const App: React.FC = () => {
   return (
-    <PostProvider>
-      <ThemeProvider>
-        <AuthProvider>
-          <BrowserRouter>
-            <div className="app">
-              <AppContent />
-            </div>
-          </BrowserRouter>
-        </AuthProvider>
-      </ThemeProvider>
-    </PostProvider>
+    <PrefsProvider>
+      <PostProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <BrowserRouter>
+              <div className="app">
+                <AppContent />
+              </div>
+            </BrowserRouter>
+          </AuthProvider>
+        </ThemeProvider>
+      </PostProvider>
+    </PrefsProvider>
   );
 }
 
-const AppContent = (): JSX.Element => {
-  const { isAuthenticated, setIsAuthenticated } = useAuth();
-  const [currentPage, setCurrentPage] = useState<string | null>();
-  const location = useLocation();
+const AppLoggedIn: React.FC = () => {
+  const [currentPage, setCurrentPage] = useState<string | null>(null);
+  const [selectedTab, setSelectedTab] = useState<string>('Following');
+  const [tabs, setTabs] = useState<AppBskyFeedDefs.GeneratorView[]>([{ displayName: 'Following', cid: '', uri: '', indexedAt: '', did: '', creator: { did: '', handle: '' } }]);
+  const { setPrefs } = usePrefs();
 
+  const handleTabClick = (tabDisplayName: string): void => {
+    setSelectedTab(tabDisplayName);
+  };
+
+  // get initial info we need
   useEffect(() => {
-    setCurrentPage(mapCurrentPageFromPathName(location.pathname));
-  }, [location.pathname]);
+    const getUserPrefs = async (): Promise<void> => {
+      const res = await getPrefs();
+      setPrefs(res);
+    }
+
+    void getUserPrefs();
+  }, []);
+
+  return (
+    <>
+      <Sidebar />
+      <div className="current-route">
+        <MainTopBar
+          component={(currentPage == null) ? <HomeTabs tabs={tabs} setTabs={setTabs} selectedTab={selectedTab} onTabClick={handleTabClick} /> : null}
+          title={(currentPage != null) ? `${currentPage?.[0].toUpperCase()}${currentPage?.substring(1)}` : null}/>
+        <Routes>
+          <Route path="/" element={<Home tabs={tabs} setCurrentPage={setCurrentPage} selectedTab={selectedTab} />} />
+          <Route path="/profile/:username/post/:id" element={<ThreadView setCurrentPage={setCurrentPage} />} />
+          <Route path="/settings" element={<Settings setCurrentPage={setCurrentPage} />} />
+        </Routes>
+      </div>
+    </>
+  )
+}
+
+const AppContent: React.FC = () => {
+  const { isAuthenticated, setIsAuthenticated } = useAuth();
 
   const handleLogin = async (username: string, password: string): Promise<void> => {
     try {
@@ -54,17 +89,7 @@ const AppContent = (): JSX.Element => {
     <div className="content-container">
       {isAuthenticated
         ? (
-        <>
-          <Sidebar />
-          <div className="current-route">
-            <MainTopBar title={(currentPage != null) ? `${currentPage?.[0].toUpperCase()}${currentPage?.substring(1)}` : null}/>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/profile/:username/post/:id" element={<ThreadView />} />
-              <Route path="/settings" element={<Settings />} />
-            </Routes>
-          </div>
-        </>
+        <AppLoggedIn />
           )
         : (
         <Routes>

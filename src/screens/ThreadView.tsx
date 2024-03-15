@@ -11,7 +11,10 @@ type OutputSchema = AppBskyFeedDefs.ThreadViewPost | AppBskyFeedDefs.NotFoundPos
   [k: string]: unknown;
 };
 
-const ThreadView: React.FC = () => {
+interface ThreadViewProps {
+  setCurrentPage: (pageName: string) => void;
+}
+const ThreadView: React.FC<ThreadViewProps> = ({ setCurrentPage }: ThreadViewProps) => {
   const { cachedPost } = usePost();
   const [thread, setThread] = useState<OutputSchema>();
   const [currentPost, setCurrentPost] = useState<AppBskyFeedDefs.PostView | null>(null);
@@ -20,6 +23,8 @@ const ThreadView: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const currentPostRef = useRef<HTMLDivElement>(null);
   const [scrollSet, setScrollSet] = useState<boolean>(false);
+
+  setCurrentPage('Post');
 
   useEffect(() => {
     const getParentPosts = async (): Promise<void> => {

@@ -1,4 +1,4 @@
-import { type AppBskyFeedDefs, BskyAgent } from '@atproto/api';
+import { type AppBskyFeedDefs, BskyAgent, type AppBskyActorDefs } from '@atproto/api';
 import { type ThreadViewPost, type NotFoundPost, type BlockedPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
 
 const agent = new BskyAgent({
@@ -21,6 +21,16 @@ export const repost = async (uri: string, cid: string): Promise<void> => {
 
 export const like = async (uri: string, cid: string): Promise<void> => {
   await agent.like(uri, cid);
+}
+
+export const getPrefs = async (): Promise<AppBskyActorDefs.Preferences> => {
+  const res = await agent.api.app.bsky.actor.getPreferences();
+
+  if (res.success) {
+    return res.data.preferences;
+  } else {
+    throw new Error('Error fetching user preferences.');
+  }
 }
 
 export const getThread = async (uri: string | undefined): Promise<ThreadViewPost | NotFoundPost | BlockedPost | { [k: string]: unknown; $type: string; } | undefined> => {

@@ -3,8 +3,13 @@ import SelectableButton from '../components/SelectableButton';
 import { useTheme } from '../contexts/ThemeContext';
 import './Settings.scss';
 
-const Settings: React.FC = () => {
+interface SettingsProps {
+  setCurrentPage: (pageName: string) => void;
+}
+const Settings: React.FC<SettingsProps> = ({ setCurrentPage }: SettingsProps) => {
   const { theme, toggleTheme } = useTheme();
+
+  setCurrentPage('Settings');
 
   return (
     <BasicView padding={true} viewPadding={true}>

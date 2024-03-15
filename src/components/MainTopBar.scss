@@ -1,5 +1,4 @@
 .main-top-bar {
-    padding: 1rem;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -8,8 +7,13 @@
     top: 0;
     background-color: var(--secondary);
 
+    .main-top-bar-component {
+       max-width: 60%;
+    }
+
     .main-top-bar-title {
         font-size: x-large;
+        padding-block: 14px;
     }
 
     .main-top-bar-buttons {
