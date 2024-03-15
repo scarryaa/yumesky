@@ -1,5 +1,5 @@
 .post-reason {
-    margin-left: 2.2rem;
+    margin-left: 1.4rem;
     margin-bottom: 0.2rem;
     display: flex;
     gap: 0.5rem;
@@ -82,12 +82,15 @@
     .post-controls-more {
         display: flex;
         justify-self: flex-start;
+        align-items: center;
     }
 
     .post-controls-comment-count,
     .post-controls-repost-count,
     .post-controls-like-count {
         margin-left: 0.5rem;
+        font-size: 15px;
+        align-items: center;
     }
 }
 

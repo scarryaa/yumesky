@@ -57,7 +57,7 @@ const LargePost: React.FC<LargePostProps> = ({ post }: LargePostProps) => {
                     {(post.post.repostCount != null) && post.post.repostCount > 0 && <span className='count'>{post?.post.repostCount} <span className='normal-text'>repost{(((post?.post.repostCount) != null) && post?.post.repostCount !== 1) ? 's' : ''}</span></span>}
                     {(post.post.likeCount != null) && post.post.likeCount > 0 && <span className='count'>{post?.post.likeCount} <span className='normal-text'>like{(((post?.post.likeCount) != null) && post?.post.likeCount !== 1) ? 's' : ''}</span></span>}
                 </div>}
-                <PostControls big={true} post={post} likeCount={post?.post.likeCount} replyCount={post?.post.replyCount} repostCount={post?.post.repostCount} />
+                <PostControls big={true} post={post} />
             </div>
         </div>
     </div>
