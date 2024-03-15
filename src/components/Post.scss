@@ -7,6 +7,7 @@
     font-size: 15px;
     font-weight: bold;
     color: var(--text-light);
+    max-width: max-content;
 }
 
 .post {
@@ -66,31 +67,6 @@
                 margin-bottom: 0.2rem;
             }
         }
-    }
-}
-
-.post-controls {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    color: var(--text-light);
-    align-items: center;
-
-    .post-controls-comment,
-    .post-controls-repost,
-    .post-controls-like,
-    .post-controls-more {
-        display: flex;
-        justify-self: flex-start;
-        align-items: center;
-    }
-
-    .post-controls-comment-count,
-    .post-controls-repost-count,
-    .post-controls-like-count {
-        margin-left: 0.5rem;
-        font-size: 15px;
-        align-items: center;
     }
 }
 

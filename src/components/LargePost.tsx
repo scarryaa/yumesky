@@ -2,8 +2,9 @@ import { type AppBskyEmbedImages, AppBskyFeedPost, RichText, type AppBskyFeedDef
 import { useMemo } from 'react';
 import Link from './Link';
 import ImageGrid from './ImageGrid';
-import { PostControls, PostTimestamp } from './Post';
+import { PostTimestamp } from './Post';
 import './LargePost.scss';
+import PostControls from './PostControls';
 
 interface LargePostProps {
   post: AppBskyFeedDefs.FeedViewPost | undefined;

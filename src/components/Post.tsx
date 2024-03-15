@@ -2,91 +2,12 @@ import { type AppBskyActorDefs, AppBskyFeedDefs, AppBskyFeedPost, RichText, type
 import './Post.scss';
 import Link from './Link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment, faHeart } from '@fortawesome/free-regular-svg-icons';
-import { faEllipsisH, faReply, faRetweet, faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
+import { faReply, faRetweet } from '@fortawesome/free-solid-svg-icons';
 import ImageGrid from './ImageGrid';
-import { useMemo, useState } from 'react';
-import agent from '../api/agent';
+import { useMemo } from 'react';
 import { usePost } from '../contexts/PostContext';
 import { ago, agoLong } from '../utils';
-
-interface PostControlsProps {
-  post: AppBskyFeedDefs.FeedViewPost | undefined;
-  big?: boolean;
-}
-export const PostControls: React.FC<PostControlsProps> = ({ post, big }: PostControlsProps) => {
-  const [likedUri, setLikedUri] = useState<string | undefined>(post?.post.viewer?.like);
-  const [repostedUri, setRepostedUri] = useState<string | undefined>(post?.post.viewer?.repost);
-  const [likeCount, setLikeCount] = useState<number | undefined>(post?.post.likeCount);
-  const [repostCount, setRepostCount] = useState<number | undefined>(post?.post.repostCount);
-  const [replyCount] = useState<number | undefined>(post?.post.replyCount);
-
-  const reply = (e: React.MouseEvent<HTMLButtonElement>, post: AppBskyFeedDefs.FeedViewPost | undefined): void => {
-    e.preventDefault();
-  }
-
-  const repost = async (e: React.MouseEvent<HTMLButtonElement>, post: AppBskyFeedDefs.FeedViewPost | undefined): Promise<void> => {
-    e.preventDefault();
-    if (post === undefined) return;
-    // TODO add better error handling (msg, toast?)
-
-    if (repostedUri !== undefined) {
-      // if reposted, attempt to un-repost
-      await agent.deleteRepost(repostedUri);
-      if (repostCount !== undefined) setRepostCount(repostCount - 1);
-      setRepostedUri(undefined);
-    } else {
-      const res = await agent.repost(post.post.uri, post.post.cid);
-      if (res.uri.length > 0) {
-        if (repostCount !== undefined) setRepostCount(repostCount + 1);
-        setRepostedUri(res.uri);
-      }
-    }
-  }
-
-  const like = async (e: React.MouseEvent<HTMLButtonElement>, post: AppBskyFeedDefs.FeedViewPost | undefined): Promise<void> => {
-    e.preventDefault();
-    if (post === undefined) return;
-    // TODO add better error handling (msg, toast?)
-
-    if (likedUri !== undefined) {
-      // if liked, attempt to unlike
-      await agent.deleteLike(likedUri);
-      if (likeCount !== undefined) setLikeCount(likeCount - 1);
-      setLikedUri(undefined);
-    } else {
-      const res = await agent.like(post.post.uri, post.post.cid);
-      if (res.uri.length > 0) {
-        if (likeCount !== undefined) setLikeCount(likeCount + 1);
-        setLikedUri(res.uri);
-      }
-    }
-  }
-
-  const more = (e: React.MouseEvent<HTMLButtonElement>, post: AppBskyFeedDefs.FeedViewPost | undefined): void => {
-    e.preventDefault();
-  }
-
-  return (
-    <div className='post-controls' style={{ paddingInline: (big ?? false) ? '0.2rem' : 0 }}>
-        <button onClick={async (e) => { reply(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-controls-comment no-button-style'>
-            <FontAwesomeIcon icon={faComment} fontSize={(big ?? false) ? 20 : 16} />
-            <span className='post-controls-comment-count'>{replyCount === 0 ? null : replyCount}</span>
-        </button>
-        <button onClick={async (e) => { await repost(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-controls-repost no-button-style'>
-            <FontAwesomeIcon icon={faRetweet} color={(repostedUri != null) ? 'var(--green)' : 'var(--text-light)'} fontSize={(big ?? false) ? 20 : 16} />
-            <span className='post-controls-repost-count' style={{ color: (repostedUri != null) ? 'var(--green)' : 'var(--text-light)' }}>{repostCount === 0 ? null : repostCount}</span>
-        </button>
-        <button onClick={async (e) => { await like(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-controls-like no-button-style'>
-            <FontAwesomeIcon icon={(likedUri != null) ? faHeartSolid : faHeart} color={(likedUri != null) ? 'var(--red)' : 'var(--text-light)'} fontSize={(big ?? false) ? 20 : 16} />
-            <span className='post-controls-like-count' style={{ color: (likedUri != null) ? 'var(--red)' : 'var(--text-light)' }}>{likeCount === 0 ? null : likeCount}</span>
-        </button>
-        <button onClick={async (e) => { more(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-controls-more no-button-style'>
-            <FontAwesomeIcon icon={faEllipsisH} fontSize={(big ?? false) ? 20 : 16} />
-        </button>
-    </div>
-  )
-}
+import PostControls from './PostControls';
 
 interface PostTimestampProps {
   post: AppBskyFeedDefs.FeedViewPost | undefined;

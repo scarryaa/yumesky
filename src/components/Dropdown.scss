@@ -1,0 +1,27 @@
+.dropdown-menu-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 20px;
+    padding: 0.5rem;
+    border-radius: 4px;
+    color: var(--text);
+
+    &:hover {
+        background-color: var(--dropdown-highlight);
+    }
+}
+
+.separator {
+    height: 1px;
+    margin-block: 4px;
+    background-color: var(--separator);
+}
+
+.dropdown {
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 20px;
+    background-color: var(--dropdown);
+    border-radius: 4px;
+    padding-block: 0.2rem;
+}
