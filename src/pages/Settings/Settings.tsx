@@ -1,6 +1,6 @@
-import BasicView from '../components/BasicView';
-import SelectableButton from '../components/SelectableButton';
-import { useTheme } from '../contexts/ThemeContext';
+import BasicView from '../../components/BasicView/BasicView';
+import SelectableButton from '../../components/SelectableButton/SelectableButton';
+import { useTheme } from '../../contexts/ThemeContext';
 import './Settings.scss';
 
 interface SettingsProps {

@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { type AppBskyFeedDefs } from '@atproto/api';
-import { usePrefs } from '../contexts/PrefsContext';
+import { usePrefs } from '../../contexts/PrefsContext';
 import './HomeTabs.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import FeedService from '../api/feed';
+import FeedService from '../../api/feed';
 
 interface HomeTabsProps {
   selectedTab: string;

@@ -1,13 +1,13 @@
 import { type AppBskyActorDefs, AppBskyFeedDefs, AppBskyFeedPost, RichText, type AppBskyEmbedImages } from '@atproto/api';
 import './Post.scss';
-import Link from './Link';
+import Link from '../Link/Link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faReply, faRetweet } from '@fortawesome/free-solid-svg-icons';
-import ImageGrid from './ImageGrid';
+import ImageGrid from '../ImageGrid/ImageGrid';
 import { useMemo } from 'react';
-import { usePost } from '../contexts/PostContext';
-import { ago, agoLong } from '../utils';
-import PostControls from './PostControls';
+import { usePost } from '../../contexts/PostContext';
+import { ago, agoLong } from '../../utils';
+import PostControls from '../PostControls/PostControls';
 
 interface PostTimestampProps {
   post: AppBskyFeedDefs.FeedViewPost | undefined;

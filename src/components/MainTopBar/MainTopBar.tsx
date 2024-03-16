@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './MainTopBar.scss';
 import { faBell, faCog, faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import ProfileIcon from './ProfileIcon';
+import ProfileIcon from '../ProfileIcon/ProfileIcon';
 import { type IconProp } from '@fortawesome/fontawesome-svg-core';
-import Link from './Link';
+import Link from '../Link/Link';
 
 interface TopBarButtonProps {
   icon: IconProp;

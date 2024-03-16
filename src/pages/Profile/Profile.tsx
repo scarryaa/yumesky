@@ -1,4 +1,4 @@
-import BasicView from '../components/BasicView';
+import BasicView from '../../components/BasicView/BasicView';
 
 interface ProfileProps {
   setCurrentPage: (pageName: string) => void;

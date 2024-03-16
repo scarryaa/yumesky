@@ -1,10 +1,10 @@
 import { type AppBskyEmbedImages, AppBskyFeedPost, RichText, type AppBskyFeedDefs } from '@atproto/api';
 import { useMemo } from 'react';
-import Link from './Link';
-import ImageGrid from './ImageGrid';
-import { PostTimestamp } from './Post';
+import Link from '../Link/Link';
+import ImageGrid from '../ImageGrid/ImageGrid';
+import { PostTimestamp } from '../Post/Post';
 import './LargePost.scss';
-import PostControls from './PostControls';
+import PostControls from '../PostControls/PostControls';
 
 interface LargePostProps {
   post: AppBskyFeedDefs.FeedViewPost | undefined;

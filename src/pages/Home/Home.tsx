@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import './Home.scss';
-import Post from '../components/Post';
+import Post from '../../components/Post/Post';
 import { type AppBskyFeedDefs } from '@atproto/api';
-import BasicView from '../components/BasicView';
-import { usePosts } from '../hooks/usePosts';
+import BasicView from '../../components/BasicView/BasicView';
+import { usePosts } from '../../hooks/usePosts';
 
 interface HomeProps {
   selectedTab: string;

@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import BasicView from '../components/BasicView';
-import LargePost from '../components/LargePost';
-import Post from '../components/Post';
-import { usePost } from '../contexts/PostContext';
+import BasicView from '../../components/BasicView/BasicView';
+import LargePost from '../../components/LargePost/LargePost';
+import Post from '../../components/Post/Post';
+import { usePost } from '../../contexts/PostContext';
 import { AppBskyFeedDefs, AppBskyFeedPost } from '@atproto/api';
-import agent from '../api/agent';
+import agent from '../../api/agent';
 
 type OutputSchema = AppBskyFeedDefs.ThreadViewPost | AppBskyFeedDefs.NotFoundPost | AppBskyFeedDefs.BlockedPost | {
   $type: string;

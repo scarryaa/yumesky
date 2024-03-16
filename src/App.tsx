@@ -1,20 +1,20 @@
 import './App.scss';
 import agent, { getPrefs } from './api/agent';
-import MainTopBar from './components/MainTopBar';
-import Sidebar from './components/Sidebar';
+import MainTopBar from './components/MainTopBar/MainTopBar';
+import Sidebar from './components/Sidebar/Sidebar';
 import AuthProvider, { useAuth } from './contexts/AuthContext';
-import Home from './pages/Home';
-import Login from './pages/Login';
+import Home from './pages/Home/Home';
+import Login from './pages/Login/Login';
 import { Routes, Route, HashRouter } from 'react-router-dom';
-import Settings from './pages/Settings';
+import Settings from './pages/Settings/Settings';
 import ThemeProvider from './contexts/ThemeContext';
 import { useEffect, useState } from 'react';
-import ThreadView from './pages/ThreadView';
+import ThreadView from './pages/ThreadView/ThreadView';
 import PostProvider from './contexts/PostContext';
-import HomeTabs from './components/HomeTabs';
+import HomeTabs from './components/HomeTabs/HomeTabs';
 import PrefsProvider, { usePrefs } from './contexts/PrefsContext';
 import { type AppBskyFeedDefs } from '@atproto/api';
-import Profile from './pages/Profile';
+import Profile from './pages/Profile/Profile';
 
 const App: React.FC = () => {
   return (

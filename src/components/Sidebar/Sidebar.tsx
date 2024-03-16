@@ -1,7 +1,7 @@
 import React from 'react';
 import './Sidebar.scss';
 import { faHashtag, faHome, faList } from '@fortawesome/free-solid-svg-icons';
-import NavButton from './NavButton';
+import NavButton from '../NavButton/NavButton';
 
 const Sidebar: React.FC = () => {
   return (

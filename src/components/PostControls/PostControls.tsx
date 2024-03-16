@@ -3,9 +3,9 @@ import { faComment, faEyeSlash, faHeart } from '@fortawesome/free-regular-svg-ic
 import { faEllipsisH, faRetweet, faHeart as faHeartSolid, faShare, faClipboard, faFont, faVolumeOff, faFilter, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
-import agent from '../api/agent';
+import agent from '../../api/agent';
 import './PostControls.scss';
-import Dropdown, { type MenuItem } from './Dropdown';
+import Dropdown, { type MenuItem } from '../Dropdown/Dropdown';
 
 const dropdownItems: MenuItem[] = [
   {
