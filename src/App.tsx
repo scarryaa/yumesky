@@ -5,7 +5,7 @@ import Sidebar from './components/Sidebar';
 import AuthProvider, { useAuth } from './contexts/AuthContext';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route, HashRouter } from 'react-router-dom';
 import Settings from './pages/Settings';
 import ThemeProvider from './contexts/ThemeContext';
 import { useEffect, useState } from 'react';
@@ -22,11 +22,11 @@ const App: React.FC = () => {
       <PostProvider>
         <ThemeProvider>
           <AuthProvider>
-            <BrowserRouter>
+            <HashRouter>
               <div className="app">
                 <AppContent />
               </div>
-            </BrowserRouter>
+            </HashRouter>
           </AuthProvider>
         </ThemeProvider>
       </PostProvider>
