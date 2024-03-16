@@ -24,9 +24,9 @@ const ThreadView: React.FC<ThreadViewProps> = ({ setCurrentPage }: ThreadViewPro
   const currentPostRef = useRef<HTMLDivElement>(null);
   const [scrollSet, setScrollSet] = useState<boolean>(false);
 
-  setCurrentPage('Post');
-
   useEffect(() => {
+    setCurrentPage('Post');
+
     const getParentPosts = async (): Promise<void> => {
       // verify post has record
       if (cachedPost !== undefined && AppBskyFeedPost.isRecord(cachedPost.post.record) && AppBskyFeedPost.validateRecord(cachedPost.post.record).success) {

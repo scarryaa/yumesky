@@ -36,10 +36,11 @@ const App: React.FC = () => {
 const AppLoggedIn: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<string | null>(null);
   const [selectedTab, setSelectedTab] = useState<string>('Following');
-  const [tabs, setTabs] = useState<AppBskyFeedDefs.GeneratorView[]>([{ displayName: 'Following', cid: '', uri: '', indexedAt: '', did: '', creator: { did: '', handle: '' } }]);
+  const [tabs, setTabs] = useState<AppBskyFeedDefs.GeneratorView[]>([]);
   const { setPrefs } = usePrefs();
 
   const handleTabClick = (tabDisplayName: string): void => {
+    // need this to fix post likes/reposts count carrying over on other posts
     setSelectedTab(tabDisplayName);
   };
 

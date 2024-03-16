@@ -12,7 +12,7 @@ export const usePost = (): PostContextType => {
   const context = useContext(PostContext);
 
   if (context == null) {
-    throw new Error('usePost must be used within an PostProvider');
+    throw new Error('usePost must be used within a PostProvider!');
   }
   return context;
 }

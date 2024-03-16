@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import { AppBskyActorDefs, type AppBskyFeedDefs } from '@atproto/api';
+import { type AppBskyFeedDefs } from '@atproto/api';
 import { usePrefs } from '../contexts/PrefsContext';
-import agent from '../api/agent';
 import './HomeTabs.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import FeedService from '../api/feed';
 
 interface HomeTabsProps {
   selectedTab: string;
@@ -17,24 +17,13 @@ const HomeTabs: React.FC<HomeTabsProps> = ({ selectedTab, onTabClick, setTabs, t
   const { prefs } = usePrefs();
 
   useEffect(() => {
-    const setTabsFromPrefs = async (prefs: AppBskyActorDefs.Preferences): Promise<void> => {
-      // set tabs from prefs
-      const savedFeedsPref = prefs.find(
-        (pref): pref is AppBskyActorDefs.SavedFeedsPref =>
-          AppBskyActorDefs.isSavedFeedsPref(pref)
-      );
+    const feeds = FeedService.getUserFeeds(prefs);
 
-      // look up feeds from saved
-      if (savedFeedsPref !== undefined) {
-        const res = await agent.app.bsky.feed.getFeedGenerators({ feeds: savedFeedsPref?.pinned });
-        setTabs((prevTabs: AppBskyFeedDefs.GeneratorView[]) => [
-          ...prevTabs,
-          ...res.data.feeds
-        ]);
-      }
+    const setShownTabs = async (): Promise<void> => {
+      setTabs(await feeds);
     }
 
-    void setTabsFromPrefs(prefs);
+    void setShownTabs();
   }, [prefs]);
 
   const firstThreeTabs = tabs.slice(0, 3);
@@ -56,7 +45,7 @@ const HomeTabs: React.FC<HomeTabsProps> = ({ selectedTab, onTabClick, setTabs, t
   );
 };
 
-interface TabType {
+export interface TabType {
   name: string;
   onClick?: () => void;
   key: string;

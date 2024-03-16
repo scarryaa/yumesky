@@ -6,10 +6,11 @@
     position: sticky;
     top: 0;
     background-color: var(--secondary);
+    padding-inline: 10px;
 
     .main-top-bar-component {
-       max-width: 60%;
-    }
+        max-width: 65%;
+     }
 
     .main-top-bar-title {
         font-size: x-large;
@@ -31,6 +32,7 @@
 .main-top-bar-button {
     padding: 0.5rem;
     width: 40px;
+    height: 40px;
     border-radius: 50%;
 
     &:hover {
