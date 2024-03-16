@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import BasicView from '../../components/BasicView/BasicView';
 import SelectableButton from '../../components/SelectableButton/SelectableButton';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -9,7 +10,9 @@ interface SettingsProps {
 const Settings: React.FC<SettingsProps> = ({ setCurrentPage }: SettingsProps) => {
   const { theme, toggleTheme } = useTheme();
 
-  setCurrentPage('Settings');
+  useEffect(() => {
+    setCurrentPage('Settings');
+  }, [])
 
   return (
     <BasicView padding={true} viewPadding={true}>

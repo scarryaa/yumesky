@@ -11,10 +11,11 @@ import ThemeProvider from './contexts/ThemeContext';
 import { useEffect, useState } from 'react';
 import ThreadView from './pages/ThreadView/ThreadView';
 import PostProvider from './contexts/PostContext';
-import HomeTabs from './components/HomeTabs/HomeTabs';
+import TabList from './components/TabList/TabList';
 import PrefsProvider, { usePrefs } from './contexts/PrefsContext';
 import { type AppBskyFeedDefs } from '@atproto/api';
 import Profile from './pages/Profile/Profile';
+import FeedService from './api/feed';
 
 const App: React.FC = () => {
   return (
@@ -37,8 +38,9 @@ const App: React.FC = () => {
 const AppLoggedIn: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<string | null>(null);
   const [selectedTab, setSelectedTab] = useState<string>('Following');
-  const [tabs, setTabs] = useState<AppBskyFeedDefs.GeneratorView[]>([]);
+  const [tabs, setTabs] = useState<string[]>([]);
   const { setPrefs } = usePrefs();
+  const [generators, setGenerators] = useState<AppBskyFeedDefs.GeneratorView[]>([]);
 
   const handleTabClick = (tabDisplayName: string): void => {
     setSelectedTab(tabDisplayName);
@@ -49,20 +51,28 @@ const AppLoggedIn: React.FC = () => {
     const getUserPrefs = async (): Promise<void> => {
       const res = await getPrefs();
       setPrefs(res);
+
+      const gens = await FeedService.getUserFeeds(res);
+      console.log(gens);
+      setGenerators(gens);
     }
 
     void getUserPrefs();
   }, []);
+
+  useEffect(() => {
+    setTabs(generators.map(generator => generator.displayName));
+  }, [generators]);
 
   return (
     <>
       <Sidebar />
       <div className="current-route">
         <MainTopBar
-          component={(currentPage == null) ? <HomeTabs tabs={tabs} setTabs={setTabs} selectedTab={selectedTab} onTabClick={handleTabClick} /> : null}
+          component={(currentPage == null) ? <TabList shownTabs={3} tabs={tabs} selectedTab={selectedTab} onTabClick={handleTabClick} /> : null}
           title={(currentPage != null) ? `${currentPage?.[0].toUpperCase()}${currentPage?.substring(1)}` : null}/>
         <Routes>
-          <Route path="/" element={<Home tabs={tabs} setCurrentPage={setCurrentPage} selectedTab={selectedTab} />} />
+          <Route path="/" element={<Home tabs={generators} setCurrentPage={setCurrentPage} selectedTab={selectedTab} />} />
           <Route path="/profile/:username" element={<Profile setCurrentPage={setCurrentPage}/>} />
           <Route path="/profile/:username/post/:id" element={<ThreadView setCurrentPage={setCurrentPage} />} />
           <Route path="/settings" element={<Settings setCurrentPage={setCurrentPage} />} />

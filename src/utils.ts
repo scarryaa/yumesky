@@ -1,3 +1,5 @@
+import { type AppBskyFeedDefs } from '@atproto/api';
+
 export const ago = (date: number | string | Date): string => {
   let ts: number;
 
@@ -55,4 +57,8 @@ export const agoLong = (date: number | string | Date): string => {
   hour = hour ?? 12;
 
   return `${month} ${day}, ${year} at ${hour}:${minute.toString().padStart(2, '0')} ${ampm}`;
+};
+
+export const convertStringArrayToGeneratorViewArray = (stringArray: string[]): AppBskyFeedDefs.GeneratorView[] => {
+  return stringArray.map(str => ({ displayName: str, uri: '', cid: '', indexedAt: '', did: '', creator: { did: '', handle: '' } }));
 };

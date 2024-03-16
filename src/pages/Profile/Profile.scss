@@ -1,0 +1,97 @@
+.profile {
+    width: 100%;
+
+    .profile-banner {
+        height: 150px;
+        object-fit: cover;
+        width: 100%;
+        background-color: var(--primary);
+    }
+
+    .fallback-div {
+        margin-bottom: 0.25rem;
+    }
+
+    .profile-picture {
+        height: 100px;
+        width: 100px;
+        border-radius: 50%;
+        position: absolute;
+        top: 160px;
+        border: 2px solid var(--secondary);
+    }
+
+    .profile-info {
+        margin-inline: 0.8rem;
+
+        .profile-body {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+            
+            .profile-metrics {
+                display: flex;
+                flex-direction: row;
+                gap: 0.8rem;
+                margin-top: 1rem;
+                color: var(--text-light);
+
+                .profile-metrics-text {
+                    color: var(--text);
+                }
+            }
+        }
+        
+        .profile-info-inner {
+            margin-left: 7rem;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+            .displayname-and-handle {
+                width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                padding-right: 0.5rem;
+
+                .follows-you-and-handle {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 0.5rem;
+                    margin-top: 0.2rem;
+                }
+
+                .displayname {
+                    font-size: larger;
+                    font-weight: bold;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+    
+                .handle {
+                    font-size: medium;
+                    color: var(--text-light);
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+            }
+
+            .profile-buttons {
+                display: flex;
+                flex-direction: row;
+                gap: 0.4rem;
+
+                .profile-buttons-following {
+                    font-size: 14px;
+                    display: flex;
+                    gap: 0.4rem;
+                }
+            }
+        }
+    }
+}

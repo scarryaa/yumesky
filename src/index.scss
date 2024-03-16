@@ -48,6 +48,7 @@
 }
 
 body, html {
+  padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -69,4 +70,20 @@ body, html {
 
 .no-underline {
   text-decoration: none !important;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.white {
+  color: var(--white);
+}
+
+.hover-underline {
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
