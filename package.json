@@ -2,6 +2,7 @@
   "name": "yumesky",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://scarryaa.github.io/yumesky",
   "dependencies": {
     "@atproto/api": "^0.10.5",
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
@@ -24,6 +25,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "deploy": "gh-pages -d build",
+    "predeploy": "npm run build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -55,6 +58,7 @@
     "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.34.0",
+    "gh-pages": "^6.1.1",
     "sass": "^1.72.0",
     "sass-loader": "^14.1.1"
   }

@@ -10,7 +10,7 @@ const Sidebar: React.FC = () => {
             <NavButton active={true} link='/' icon={faHome} size={22}/>
         </li>
         <li>
-            <NavButton active={false} link='/#' icon={faHashtag} size={22}/>
+            <NavButton active={false} link='/hashtags' icon={faHashtag} size={22}/>
         </li>
         <li>
             <NavButton active={false} link='/lists' icon={faList} size={22}/>

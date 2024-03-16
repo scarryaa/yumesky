@@ -3,17 +3,18 @@ import agent, { getPrefs } from './api/agent';
 import MainTopBar from './components/MainTopBar';
 import Sidebar from './components/Sidebar';
 import AuthProvider, { useAuth } from './contexts/AuthContext';
-import Home from './screens/Home';
-import Login from './screens/Login';
+import Home from './pages/Home';
+import Login from './pages/Login';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Settings from './screens/Settings';
+import Settings from './pages/Settings';
 import ThemeProvider from './contexts/ThemeContext';
 import { useEffect, useState } from 'react';
-import ThreadView from './screens/ThreadView';
+import ThreadView from './pages/ThreadView';
 import PostProvider from './contexts/PostContext';
 import HomeTabs from './components/HomeTabs';
 import PrefsProvider, { usePrefs } from './contexts/PrefsContext';
 import { type AppBskyFeedDefs } from '@atproto/api';
+import Profile from './pages/Profile';
 
 const App: React.FC = () => {
   return (
@@ -40,7 +41,6 @@ const AppLoggedIn: React.FC = () => {
   const { setPrefs } = usePrefs();
 
   const handleTabClick = (tabDisplayName: string): void => {
-    // need this to fix post likes/reposts count carrying over on other posts
     setSelectedTab(tabDisplayName);
   };
 
@@ -63,6 +63,7 @@ const AppLoggedIn: React.FC = () => {
           title={(currentPage != null) ? `${currentPage?.[0].toUpperCase()}${currentPage?.substring(1)}` : null}/>
         <Routes>
           <Route path="/" element={<Home tabs={tabs} setCurrentPage={setCurrentPage} selectedTab={selectedTab} />} />
+          <Route path="/profile/:username" element={<Profile setCurrentPage={setCurrentPage}/>} />
           <Route path="/profile/:username/post/:id" element={<ThreadView setCurrentPage={setCurrentPage} />} />
           <Route path="/settings" element={<Settings setCurrentPage={setCurrentPage} />} />
         </Routes>
