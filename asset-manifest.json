@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/yumesky/static/css/main.fc584eaf.css",
+    "main.js": "/yumesky/static/js/main.94c2b8e5.js",
+    "static/js/453.8bba5bc5.chunk.js": "/yumesky/static/js/453.8bba5bc5.chunk.js",
+    "index.html": "/yumesky/index.html",
+    "main.fc584eaf.css.map": "/yumesky/static/css/main.fc584eaf.css.map",
+    "main.94c2b8e5.js.map": "/yumesky/static/js/main.94c2b8e5.js.map",
+    "453.8bba5bc5.chunk.js.map": "/yumesky/static/js/453.8bba5bc5.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.fc584eaf.css",
+    "static/js/main.94c2b8e5.js"
+  ]
+}
