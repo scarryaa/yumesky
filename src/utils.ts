@@ -59,6 +59,17 @@ export const agoLong = (date: number | string | Date): string => {
   return `${month} ${day}, ${year} at ${hour}:${minute.toString().padStart(2, '0')} ${ampm}`;
 };
 
-export const convertStringArrayToGeneratorViewArray = (stringArray: string[]): AppBskyFeedDefs.GeneratorView[] => {
-  return stringArray.map(str => ({ displayName: str, uri: '', cid: '', indexedAt: '', did: '', creator: { did: '', handle: '' } }));
+export const convertStringArrayToGeneratorViewArray = (stringArray: string[], generatorArray?: string[]): AppBskyFeedDefs.GeneratorView[] => {
+  if (generatorArray == null) {
+    return stringArray.map(str => ({ displayName: str, uri: '', cid: '', indexedAt: '', did: '', creator: { did: '', handle: '' } }));
+  }
+
+  return stringArray.map((str, index) => ({
+    displayName: str,
+    uri: '',
+    cid: '',
+    indexedAt: '',
+    did: generatorArray[index],
+    creator: { did: '', handle: '' }
+  }));
 };

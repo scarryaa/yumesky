@@ -1,25 +1,15 @@
 import './TabList.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useState } from 'react';
 
 interface TabListProps {
   selectedTab: string;
   onTabClick: (tabKey: string) => void;
   tabs: string[];
-  shownTabs: number;
 }
 
-const TabList: React.FC<TabListProps> = ({ selectedTab, onTabClick, tabs, shownTabs }: TabListProps) => {
-  const [tabsSlice, setTabsSlice] = useState<string[]>([]);
-
-  useEffect(() => {
-    setTabsSlice(tabs.slice(0, shownTabs));
-  }, [tabs])
-
+const TabList: React.FC<TabListProps> = ({ selectedTab, onTabClick, tabs }: TabListProps) => {
   return (
       <div className="tablist">
-        {tabsSlice.map((tab) => (
+        {tabs.map((tab) => (
           <Tab
             key={tab}
             name={tab}
@@ -27,9 +17,6 @@ const TabList: React.FC<TabListProps> = ({ selectedTab, onTabClick, tabs, shownT
             className={selectedTab === tab ? 'tab--active' : ''}
           />
         ))}
-        {(tabsSlice.length !== tabs.length) && <div className='tablist-more'>
-            <FontAwesomeIcon color='var(--text)' icon={faChevronRight} fontSize={16} />
-        </div>}
       </div>
   );
 };

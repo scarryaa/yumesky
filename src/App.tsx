@@ -16,6 +16,8 @@ import PrefsProvider, { usePrefs } from './contexts/PrefsContext';
 import { type AppBskyFeedDefs } from '@atproto/api';
 import Profile from './pages/Profile/Profile';
 import FeedService from './api/feed';
+import config from './config';
+import { convertStringArrayToGeneratorViewArray } from './utils';
 
 const App: React.FC = () => {
   return (
@@ -37,10 +39,11 @@ const App: React.FC = () => {
 
 const AppLoggedIn: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<string | null>(null);
-  const [selectedTab, setSelectedTab] = useState<string>('Following');
-  const [tabs, setTabs] = useState<string[]>([]);
+  const [selectedTab, setSelectedTab] = useState<string>(config.DEFAULT_HOME_TABS.TABS[0]);
+  const [tabs, setTabs] = useState<string[]>(config.DEFAULT_HOME_TABS.TABS);
   const { setPrefs } = usePrefs();
-  const [generators, setGenerators] = useState<AppBskyFeedDefs.GeneratorView[]>([]);
+  const [generators, setGenerators] = useState<AppBskyFeedDefs.GeneratorView[]>(
+    convertStringArrayToGeneratorViewArray(config.DEFAULT_HOME_TABS.TABS, config.DEFAULT_HOME_TABS.GENERATORS));
 
   const handleTabClick = (tabDisplayName: string): void => {
     setSelectedTab(tabDisplayName);
@@ -53,7 +56,6 @@ const AppLoggedIn: React.FC = () => {
       setPrefs(res);
 
       const gens = await FeedService.getUserFeeds(res);
-      console.log(gens);
       setGenerators(gens);
     }
 
@@ -69,7 +71,7 @@ const AppLoggedIn: React.FC = () => {
       <Sidebar />
       <div className="current-route">
         <MainTopBar
-          component={(currentPage == null) ? <TabList shownTabs={3} tabs={tabs} selectedTab={selectedTab} onTabClick={handleTabClick} /> : null}
+          component={(currentPage == null) ? <TabList tabs={tabs} selectedTab={selectedTab} onTabClick={handleTabClick} /> : null}
           title={(currentPage != null) ? `${currentPage?.[0].toUpperCase()}${currentPage?.substring(1)}` : null}/>
         <Routes>
           <Route path="/" element={<Home tabs={generators} setCurrentPage={setCurrentPage} selectedTab={selectedTab} />} />

@@ -8,6 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import FollowsYou from '../../components/FollowsYou/FollowsYou';
 import TabList from '../../components/TabList/TabList';
+import config from '../../config';
+import RichText from '../../components/RichText/RichText';
+import { RichText as RichTextAPI } from '@atproto/api';
 
 interface ProfileProps {
   setCurrentPage: (pageName: string) => void;
@@ -15,11 +18,15 @@ interface ProfileProps {
 const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
   const { username } = useParams();
   const profile = useProfile(username);
-  const [selectedTab, setSelectedTab] = useState<string>('Posts');
-  const [tabs] = useState<string[]>(['Posts', 'Replies', 'Media', 'Feeds', 'Lists', 'Likes']);
+
+  const [selectedTab, setSelectedTab] = useState<string>(config.DEFAULT_PROFILE_TABS.TABS[0]);
+  const [tabs] = useState<string[]>(config.DEFAULT_PROFILE_TABS.TABS);
   const handleTabClick = (tabDisplayName: string): void => {
     setSelectedTab(tabDisplayName);
   };
+
+  const description = profile?.description;
+  const descriptionRT = new RichTextAPI({ text: description ?? '' });
 
   useEffect(() => {
     setCurrentPage('Profile');
@@ -54,14 +61,12 @@ const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
                   <span className='hover-underline'><span className='text-bold profile-metrics-text'>{profile?.followsCount}</span> following</span>
                   <span><span className='text-bold profile-metrics-text'>{profile?.postsCount}</span> posts</span>
               </div>
-              <div>
-                {profile?.description}
-              </div>
+              <RichText value={descriptionRT} />
             </div>
           </div>
 
           <div>
-            <TabList tabs={tabs} selectedTab={selectedTab} onTabClick={handleTabClick} shownTabs={tabs.length} />
+            <TabList tabs={tabs} selectedTab={selectedTab} onTabClick={handleTabClick} />
           </div>
         </div>
     </BasicView>
