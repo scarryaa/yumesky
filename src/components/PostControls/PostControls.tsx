@@ -1,62 +1,12 @@
 import { type AppBskyFeedDefs } from '@atproto/api';
-import { faComment, faEyeSlash, faHeart } from '@fortawesome/free-regular-svg-icons';
-import { faEllipsisH, faRetweet, faHeart as faHeartSolid, faShare, faClipboard, faFont, faVolumeOff, faFilter, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { faComment, faHeart } from '@fortawesome/free-regular-svg-icons';
+import { faEllipsisH, faRetweet, faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import agent from '../../api/agent';
 import './PostControls.scss';
-import Dropdown, { type MenuItem } from '../Dropdown/Dropdown';
-
-const dropdownItems: MenuItem[] = [
-  {
-    label: 'Translate',
-    icon: faFont,
-    iconSize: 18,
-    onPress: () => { }
-  },
-  {
-    label: 'Copy post',
-    icon: faClipboard,
-    iconSize: 18,
-    onPress: () => { }
-  },
-  {
-    label: 'Share post',
-    icon: faShare,
-    iconSize: 18,
-    onPress: () => { }
-  },
-  {
-    label: 'separator'
-  },
-  {
-    label: 'Mute thread',
-    icon: faVolumeOff,
-    iconSize: 20,
-    onPress: () => { }
-  },
-  {
-    label: 'Mute words & tags',
-    icon: faFilter,
-    iconSize: 18,
-    onPress: () => { }
-  },
-  {
-    label: 'Hide post',
-    icon: faEyeSlash,
-    iconSize: 18,
-    onPress: () => { }
-  },
-  {
-    label: 'separator'
-  },
-  {
-    label: 'Report post',
-    icon: faCircleExclamation,
-    iconSize: 18,
-    onPress: () => { }
-  }
-]
+import Dropdown from '../Dropdown/Dropdown';
+import usePostDropdown from '../../hooks/dropdown/usePostDropdown';
 
 interface MoreButtonProps {
   post: AppBskyFeedDefs.FeedViewPost | undefined;
@@ -66,6 +16,7 @@ const MoreButton: React.FC<MoreButtonProps> = ({ post, big }: MoreButtonProps) =
   const more = (e: React.MouseEvent<HTMLButtonElement>, post: AppBskyFeedDefs.FeedViewPost | undefined): void => {
     e.preventDefault();
   }
+  const { dropdownItems } = usePostDropdown(post);
 
   return (
     <Dropdown items={dropdownItems}>

@@ -1,25 +1,27 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { type IconProp } from '@fortawesome/fontawesome-svg-core';
-import { useEffect, useRef, useState } from 'react';
 import './Dropdown.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import useDropdown from '../../hooks/dropdown/useDropdown';
+import React, { type MouseEvent } from 'react';
 
 export type MenuItem = {
   label: string | 'separator';
   icon?: never;
   iconSize?: never;
-  onPress?: never;
+  onClick?: never;
 } | {
   label: string;
   icon: IconProp;
   iconSize: number;
-  onPress: () => void;
+  onClick: (event: MouseEvent<HTMLDivElement>) => void;
 };
 
 type ItemProps = React.ComponentProps<(typeof DropdownMenu)['Item']>
-const DropdownMenuItem = (props: ItemProps): JSX.Element => {
+const DropdownMenuItem = (props: ItemProps & { onClick: (e: MouseEvent<HTMLDivElement>) => void }): JSX.Element => {
   return (
         <DropdownMenu.DropdownMenuItem
+        onClick={e => { props?.onClick(e); }}
         className={'dropdown-menu-item'}>
             {props.children}
         </DropdownMenu.DropdownMenuItem>
@@ -32,44 +34,7 @@ interface DropdownProps {
   items: MenuItem[];
 }
 const Dropdown: React.FC<DropdownProps> = ({ children, style, items }: DropdownProps) => {
-  const [open, setOpen] = useState(false);
-  const buttonRef = useRef<HTMLButtonElement>(null)
-  const menuRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const clickHandler = (e: MouseEvent): void => {
-      const t = e.target;
-
-      if (!open) return;
-      if (t == null) return;
-      if ((buttonRef.current == null) || (menuRef.current == null)) return;
-
-      if (
-        t !== buttonRef.current &&
-                !buttonRef.current.contains(t as Node) &&
-                t !== menuRef.current &&
-                !menuRef.current.contains(t as Node)
-      ) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        setOpen(false);
-      }
-    }
-
-    const keydownHandler = (e: KeyboardEvent): void => {
-      if (e.key === 'Escape' && open) {
-        setOpen(false);
-      }
-    }
-
-    document.addEventListener('click', clickHandler, true);
-    window.addEventListener('keydown', keydownHandler, true);
-    return () => {
-      document.removeEventListener('click', clickHandler, true);
-      window.removeEventListener('keydown', keydownHandler, true);
-    }
-  }, [open, setOpen]);
+  const { setOpen, buttonRef, menuRef } = useDropdown();
 
   return (
     <DropdownMenu.Root>
@@ -92,7 +57,11 @@ const Dropdown: React.FC<DropdownProps> = ({ children, style, items }: DropdownP
               }
 
               return (
-                <DropdownMenuItem onSelect={item.onPress} key={index}>
+                <DropdownMenuItem onClick={(e) => {
+                  e.stopPropagation();
+                  if (item.onClick !== undefined) { item.onClick(e); }
+                }}
+                    key={index}>
                     <span>{item.label}</span>
                     {item.icon !== undefined && <FontAwesomeIcon className='dropdown-icon' icon={item.icon} fontSize={item.iconSize} />}
                 </DropdownMenuItem>

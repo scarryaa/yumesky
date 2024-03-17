@@ -8,10 +8,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import FollowsYou from '../../components/FollowsYou/FollowsYou';
 import TabList from '../../components/TabList/TabList';
-import config from '../../config';
 import RichText from '../../components/RichText/RichText';
 import { RichText as RichTextAPI } from '@atproto/api';
 import agent from '../../api/agent';
+import getConfig from '../../config';
 
 interface ProfileProps {
   setCurrentPage: (pageName: string) => void;
@@ -20,8 +20,8 @@ const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
   const { username } = useParams();
   const profile = useProfile(username);
 
-  const [selectedTab, setSelectedTab] = useState<string>(config.DEFAULT_PROFILE_TABS.TABS[0]);
-  const [tabs] = useState<string[]>(config.DEFAULT_PROFILE_TABS.TABS);
+  const [selectedTab, setSelectedTab] = useState<string>(getConfig().DEFAULT_PROFILE_TABS.TABS[0]);
+  const [tabs] = useState<string[]>(getConfig().DEFAULT_PROFILE_TABS.TABS);
   const handleTabClick = (tabDisplayName: string): void => {
     setSelectedTab(tabDisplayName);
   };

@@ -16,34 +16,40 @@ import PrefsProvider, { usePrefs } from './contexts/PrefsContext';
 import { type AppBskyFeedDefs } from '@atproto/api';
 import Profile from './pages/Profile/Profile';
 import FeedService from './api/feed';
-import config from './config';
+import getConfig from './config';
 import { convertStringArrayToGeneratorViewArray } from './utils';
+import { Provider as MutedThreadsProvider } from './state/muted-threads';
+import { Provider as HiddenPostsProvider } from './state/hidden-posts';
 
 const App: React.FC = () => {
   return (
     <PrefsProvider>
-      <PostProvider>
-        <ThemeProvider>
-          <AuthProvider>
-            <HashRouter>
-              <div className="app">
-                <AppContent />
-              </div>
-            </HashRouter>
-          </AuthProvider>
-        </ThemeProvider>
-      </PostProvider>
+      <HiddenPostsProvider>
+        <MutedThreadsProvider>
+          <PostProvider>
+            <ThemeProvider>
+              <AuthProvider>
+                <HashRouter>
+                  <div className="app">
+                    <AppContent />
+                  </div>
+                </HashRouter>
+              </AuthProvider>
+            </ThemeProvider>
+          </PostProvider>
+        </MutedThreadsProvider>
+      </HiddenPostsProvider>
     </PrefsProvider>
   );
 }
 
 const AppLoggedIn: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<string | null>(null);
-  const [selectedTab, setSelectedTab] = useState<string>(config.DEFAULT_HOME_TABS.TABS[0]);
-  const [tabs, setTabs] = useState<string[]>(config.DEFAULT_HOME_TABS.TABS);
+  const [selectedTab, setSelectedTab] = useState<string>(getConfig().DEFAULT_HOME_TABS.TABS[0]);
+  const [tabs, setTabs] = useState<string[]>(getConfig().DEFAULT_HOME_TABS.TABS);
   const { setPrefs } = usePrefs();
   const [generators, setGenerators] = useState<AppBskyFeedDefs.GeneratorView[]>(
-    convertStringArrayToGeneratorViewArray(config.DEFAULT_HOME_TABS.TABS, config.DEFAULT_HOME_TABS.GENERATORS));
+    convertStringArrayToGeneratorViewArray(getConfig().DEFAULT_HOME_TABS.TABS, getConfig().DEFAULT_HOME_TABS.GENERATORS));
 
   const handleTabClick = (tabDisplayName: string): void => {
     setSelectedTab(tabDisplayName);

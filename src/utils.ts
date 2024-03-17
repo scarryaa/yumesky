@@ -1,4 +1,5 @@
 import { type AppBskyFeedDefs } from '@atproto/api';
+import getConfig from './config';
 
 export const ago = (date: number | string | Date): string => {
   let ts: number;
@@ -73,3 +74,12 @@ export const convertStringArrayToGeneratorViewArray = (stringArray: string[], ge
     creator: { did: '', handle: '' }
   }));
 };
+
+export const getPostId = (post: AppBskyFeedDefs.FeedViewPost): string => {
+  return post.post.uri.split('/')[4];
+}
+
+export const generatePostShareLink = (post: AppBskyFeedDefs.FeedViewPost | undefined): string => {
+  if (post === undefined) return '';
+  return `${getConfig().DOMAIN}/profile/${post.post.author.handle}/post/${getPostId(post)}`;
+}
