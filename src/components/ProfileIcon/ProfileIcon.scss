@@ -1,6 +1,8 @@
 .profile-icon {
-    border-radius: 50%;
     background-color: grey;
-    height: 24px;
-    width: 24px;
+    border-radius: 50%;
+
+    .profile-icon-img {
+        border-radius: 50%;
+    }
 }

@@ -1,4 +1,4 @@
-import { type AppBskyActorDefs, AppBskyFeedDefs, AppBskyFeedPost, RichText, type AppBskyEmbedImages } from '@atproto/api';
+import { type AppBskyActorDefs, AppBskyFeedDefs, AppBskyFeedPost, RichText as RichTextAPI, type AppBskyEmbedImages } from '@atproto/api';
 import './Post.scss';
 import Link from '../Link/Link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,6 +8,7 @@ import { useMemo } from 'react';
 import { usePost } from '../../contexts/PostContext';
 import { ago, agoLong } from '../../utils';
 import PostControls from '../PostControls/PostControls';
+import RichText from '../RichText/RichText';
 
 interface PostTimestampProps {
   post: AppBskyFeedDefs.FeedViewPost | undefined;
@@ -34,16 +35,7 @@ const PostInfo: React.FC<PostProps> = ({ post }: PostProps) => {
     [post]
   );
 
-  const rt = useMemo(
-    () =>
-      (record != null)
-        ? new RichText({
-          text: record.text,
-          facets: record.facets
-        })
-        : undefined,
-    [record]
-  );
+  const rt = new RichTextAPI({ text: (record != null) ? record.text : '', facets: record?.facets });
 
   const authorDisplayName = useMemo(
     () =>
@@ -65,7 +57,9 @@ const PostInfo: React.FC<PostProps> = ({ post }: PostProps) => {
                 <span>Reposted by <Link to={`/profile/${AppBskyFeedDefs.isReasonRepost(post.reason) && post.reason.by.handle}`} linkStyle={true}>{AppBskyFeedDefs.isReasonRepost(post.reason) && post.reason.by.displayName}</Link></span>
             </Link>}
         <div className='post-info-container'>
+          <Link linkStyle={false} to={`/profile/${post.post.author.handle}`}>
             <img className='post-avatar' src={post.post.author.avatar} />
+          </Link>
             <div className='post-info'>
                 <div className='post-info-and-timestamp'>
                     <Link linkStyle={true} to={`/profile/${post.post.author.handle}`} className='post-info-inner'>
@@ -81,7 +75,7 @@ const PostInfo: React.FC<PostProps> = ({ post }: PostProps) => {
                     <span>Reply to <Link linkStyle={true} to={`/profile/${authorHandle}`}>{authorDisplayName}</Link></span>
                 </div>}
                 <div className='post-content'>
-                    {rt?.text}
+                    <RichText value={rt} />
                 </div>
 
                 {post.post.embed?.$type === 'app.bsky.embed.images#view' && <ImageGrid images={post.post.embed.images as AppBskyEmbedImages.ViewImage[]} />}

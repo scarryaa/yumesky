@@ -4,11 +4,12 @@ interface TabListProps {
   selectedTab: string;
   onTabClick: (tabKey: string) => void;
   tabs: string[];
+  className?: string;
 }
 
-const TabList: React.FC<TabListProps> = ({ selectedTab, onTabClick, tabs }: TabListProps) => {
+const TabList: React.FC<TabListProps> = ({ selectedTab, onTabClick, tabs, className }: TabListProps) => {
   return (
-      <div className="tablist">
+      <div className={`tablist ${className}`}>
         {tabs.map((tab) => (
           <Tab
             key={tab}
@@ -31,7 +32,8 @@ export interface TabType {
 const Tab: React.FC<TabType> = ({ name, onClick, className }: TabType) => {
   return (
         <div className={`tab ${className}`} onClick={onClick}>
-          {name}
+          <span className='tab-name'>{name}</span>
+          <div className='tab-border'></div>
         </div>
   )
 }

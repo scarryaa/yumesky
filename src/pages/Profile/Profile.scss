@@ -1,6 +1,10 @@
 .profile {
     width: 100%;
 
+    .profile-tablist {
+        border-bottom: 1px solid var(--border);
+    }
+
     .profile-banner {
         height: 150px;
         object-fit: cover;
@@ -89,6 +93,7 @@
                 .profile-buttons-following {
                     font-size: 14px;
                     display: flex;
+                    white-space: nowrap;
                     gap: 0.4rem;
                 }
             }

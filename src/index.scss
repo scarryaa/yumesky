@@ -59,6 +59,15 @@ body, html {
   color: var(--text);
 }
 
+a {
+  color: rgb(32, 139, 254);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .no-button-style {
   background: none;
   color: inherit;

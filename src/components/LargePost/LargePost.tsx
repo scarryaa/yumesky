@@ -1,10 +1,11 @@
-import { type AppBskyEmbedImages, AppBskyFeedPost, RichText, type AppBskyFeedDefs } from '@atproto/api';
+import { type AppBskyEmbedImages, AppBskyFeedPost, RichText as RichTextAPI, type AppBskyFeedDefs } from '@atproto/api';
 import { useMemo } from 'react';
 import Link from '../Link/Link';
 import ImageGrid from '../ImageGrid/ImageGrid';
 import { PostTimestamp } from '../Post/Post';
 import './LargePost.scss';
 import PostControls from '../PostControls/PostControls';
+import RichText from '../RichText/RichText';
 
 interface LargePostProps {
   post: AppBskyFeedDefs.FeedViewPost | undefined;
@@ -19,21 +20,14 @@ const LargePost: React.FC<LargePostProps> = ({ post }: LargePostProps) => {
     [post]
   );
 
-  const rt = useMemo(
-    () =>
-      (record != null)
-        ? new RichText({
-          text: record.text,
-          facets: record.facets
-        })
-        : undefined,
-    [record]
-  );
+  const rt = useMemo<RichTextAPI>(() => new RichTextAPI({ text: (record != null) ? record.text : '', facets: record?.facets }), []);
 
   return (
     <div className='large-post'>
         <div className='poster-info' style={{ marginBottom: rt?.length === 0 ? 0 : '0.5rem' }}>
+          <Link linkStyle={false} to={`/profile/${post?.post.author.handle}`}>
             <img className='post-avatar' src={post?.post.author.avatar} />
+          </Link>
             <div className='post-info-inner'>
                 <Link linkStyle={true} className='post-display-name-link' to={`/profile/${post?.post.author.handle}`}>
                     <span className='post-display-name'>{post?.post.author.displayName}</span>
@@ -45,7 +39,7 @@ const LargePost: React.FC<LargePostProps> = ({ post }: LargePostProps) => {
         <div className='post-info-container'>
             <div className='post-info'>
                 <div className='post-content'>
-                    {rt?.text}
+                    <RichText value={rt} />
                 </div>
 
                 {post?.post.embed?.$type === 'app.bsky.embed.images#view' &&

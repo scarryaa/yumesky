@@ -11,6 +11,7 @@ import TabList from '../../components/TabList/TabList';
 import config from '../../config';
 import RichText from '../../components/RichText/RichText';
 import { RichText as RichTextAPI } from '@atproto/api';
+import agent from '../../api/agent';
 
 interface ProfileProps {
   setCurrentPage: (pageName: string) => void;
@@ -48,7 +49,7 @@ const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
               </div>
               <div className='profile-buttons'>
                 <PillButton color='var(--secondary-highlight)' className='profile-buttons-following'>
-                  {((profile?.viewer?.following) != null) ? <><FontAwesomeIcon icon={faCheck} fontSize={14} />Following</> : 'Follow'}
+                  {((profile?.viewer?.following) != null) ? <><FontAwesomeIcon icon={faCheck} fontSize={14} />Following</> : (profile?.did === agent.session?.did) ? 'Edit Profile' : 'Follow'}
                 </PillButton>
                 <PillButton color='var(--secondary-highlight)'>
                   <FontAwesomeIcon icon={faEllipsisH} fontSize={16} />
@@ -66,7 +67,7 @@ const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
           </div>
 
           <div>
-            <TabList tabs={tabs} selectedTab={selectedTab} onTabClick={handleTabClick} />
+            <TabList className='profile-tablist' tabs={tabs} selectedTab={selectedTab} onTabClick={handleTabClick} />
           </div>
         </div>
     </BasicView>
