@@ -20,23 +20,27 @@ import getConfig from './config';
 import { convertStringArrayToGeneratorViewArray } from './utils';
 import { Provider as MutedThreadsProvider } from './state/muted-threads';
 import { Provider as HiddenPostsProvider } from './state/hidden-posts';
+import { Provider as ModalProvider } from './state/modals/index';
+import { ModalsContainer } from './components/Modal/Modal';
 
 const App: React.FC = () => {
   return (
     <PrefsProvider>
       <HiddenPostsProvider>
         <MutedThreadsProvider>
-          <PostProvider>
-            <ThemeProvider>
-              <AuthProvider>
-                <HashRouter>
-                  <div className="app">
-                    <AppContent />
-                  </div>
-                </HashRouter>
-              </AuthProvider>
-            </ThemeProvider>
-          </PostProvider>
+          <ModalProvider>
+            <PostProvider>
+              <ThemeProvider>
+                <AuthProvider>
+                  <HashRouter>
+                    <div className="app">
+                      <AppContent />
+                    </div>
+                  </HashRouter>
+                </AuthProvider>
+              </ThemeProvider>
+            </PostProvider>
+          </ModalProvider>
         </MutedThreadsProvider>
       </HiddenPostsProvider>
     </PrefsProvider>
@@ -85,6 +89,7 @@ const AppLoggedIn: React.FC = () => {
           <Route path="/profile/:username/post/:id" element={<ThreadView setCurrentPage={setCurrentPage} />} />
           <Route path="/settings" element={<Settings setCurrentPage={setCurrentPage} />} />
         </Routes>
+        <ModalsContainer />
       </div>
     </>
   )

@@ -5,6 +5,7 @@ import { faShare, faClipboard, faFont, faVolumeOff, faFilter, faCircleExclamatio
 import { generatePostShareLink } from '../../utils';
 import { useToggleThreadMute } from '../../state/muted-threads';
 import { useToggleHidePost } from '../../state/hidden-posts';
+import { useModalControls } from '../../state/modals';
 
 interface UsePostDropdownProps {
   dropdownItems: MenuItem[];
@@ -15,6 +16,7 @@ const usePostDropdown = (post: AppBskyFeedDefs.FeedViewPost | undefined): UsePos
   const trimmedText = text?.replace(/%20+/g, '') ?? '';
   const toggleThreadMute = useToggleThreadMute();
   const toggleHidePost = useToggleHidePost();
+  const { openModal } = useModalControls();
 
   const dropdownItems: MenuItem[] = [
     {
@@ -91,7 +93,13 @@ const usePostDropdown = (post: AppBskyFeedDefs.FeedViewPost | undefined): UsePos
       label: 'Report post',
       icon: faCircleExclamation,
       iconSize: 18,
-      onClick: () => { }
+      onClick: () => {
+        openModal({
+          name: 'report',
+          uri: '',
+          cid: ''
+        });
+      }
     }
   ];
 
