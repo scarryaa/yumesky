@@ -13,20 +13,20 @@ const ImageGrid: React.FC<ImageGridProps> = ({ images, className }: ImageGridPro
   switch (count) {
     case 1:
       return (
-        <div className={`image-grid--1' ${className}`}>
+        <div className={`image-grid--1 ${className}`}>
             <img style={{ width: '100%' }} className='img' src={images?.[0].thumb} />
         </div>
       )
     case 2:
       return (
-        <div className={`image-grid--2' ${className}`}>
+        <div className={`image-grid--2 ${className}`}>
             <img style={{ width: '100%', height: '100%', marginBottom: '1rem' }} className='img' src={images?.[0].thumb} />
             <img style={{ width: '100%', height: '100%', marginBottom: '1rem' }} className='img' src={images?.[1].thumb} />
         </div>
       )
     case 3:
       return (
-        <div className={`image-grid--3' ${className}`}>
+        <div className={`image-grid--3 ${className}`}>
             <img style={{ width: '100%', height: '100%', marginBottom: '1rem' }} className='img' src={images?.[0].thumb} />
             <img style={{ width: '100%', height: '100%', marginBottom: '1rem' }} className='img' src={images?.[1].thumb} />
             <img style={{ width: '100%', height: '100%', marginBottom: '1rem' }} className='img' src={images?.[2].thumb} />
@@ -34,7 +34,7 @@ const ImageGrid: React.FC<ImageGridProps> = ({ images, className }: ImageGridPro
       )
     case 4:
       return (
-        <div className={`image-grid--4' ${className}`}>
+        <div className={`image-grid--4 ${className}`}>
             <img style={{ width: '100%', height: '100%', marginBottom: '1rem' }} className='img' src={images?.[0].thumb} />
             <img style={{ width: '100%', height: '100%', marginBottom: '1rem' }} className='img' src={images?.[1].thumb} />
             <img style={{ width: '100%', height: '100%', marginBottom: '1rem' }} className='img' src={images?.[2].thumb} />

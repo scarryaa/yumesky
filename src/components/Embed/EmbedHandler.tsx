@@ -1,4 +1,4 @@
-import { type AppBskyFeedDefs, type AppBskyEmbedImages, type AppBskyFeedPost, type AppBskyEmbedRecord } from '@atproto/api';
+import { type AppBskyFeedDefs, type AppBskyEmbedImages, type AppBskyFeedPost, type AppBskyEmbedRecord, type AppBskyEmbedExternal } from '@atproto/api';
 import ImageGrid from '../ImageGrid/ImageGrid';
 import EmbedContainer from './EmbedContainer';
 import './EmbedHandler.scss';
@@ -11,7 +11,7 @@ interface EmbedHandlerProps {
 }
 const EmbedHandler: React.FC<EmbedHandlerProps> = ({ post }: EmbedHandlerProps) => {
   const embedType: EmbedType = post.post.embed?.$type as EmbedType;
-  console.log(post.post.embed?.record);
+  console.log(post.post.embed);
 
   switch (embedType) {
     case 'app.bsky.embed.images#view': {
@@ -35,7 +35,12 @@ const EmbedHandler: React.FC<EmbedHandlerProps> = ({ post }: EmbedHandlerProps) 
     case 'app.bsky.embed.external#view': {
       return (
             <div className='embed-handler'>
-                external embed
+              <img className='embed-external-img' src={(post.post.embed?.external as AppBskyEmbedExternal.External).thumb?.toString()} />
+              <div className='embed-external-info'>
+                <span className='embed-external-uri'>{(post.post.embed?.external as AppBskyEmbedExternal.External).uri}</span>
+                <span className='embed-external-title'>{(post.post.embed?.external as AppBskyEmbedExternal.External).title}</span>
+                <span className='embed-external-description'>{(post.post.embed?.external as AppBskyEmbedExternal.External).description}</span>
+              </div>
             </div>
       )
     }
