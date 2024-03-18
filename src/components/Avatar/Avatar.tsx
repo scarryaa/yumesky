@@ -10,6 +10,7 @@ interface AvatarProps {
   height: number;
   className?: string;
 }
+// TODO fix issue where profile pfp doesnt reload if you navigate from a broken profile to a normal one
 const Avatar: React.FC<AvatarProps> = ({ link, img, width, height, className }: AvatarProps) => {
   if (link === undefined) {
     return (
@@ -22,7 +23,6 @@ const Avatar: React.FC<AvatarProps> = ({ link, img, width, height, className }: 
     )
   }
 
-  // eslint-disable-next-line no-return-assign
   return (
     <Link linkStyle={false} to={link ?? ''} className={`avatar ${className}`} style={{ width, height }}>
         { img !== undefined &&
