@@ -23,15 +23,25 @@
     .feed-inner {
         display: flex;
         flex-direction: column;
+        width: 100%;
+        overflow: hidden;
 
         .feed-name {
             font-weight: bold;
             font-size: 16px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
         }
 
         .feed-by {
             font-size: 14px;
             color: var(--text-light);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
         }
     }
 

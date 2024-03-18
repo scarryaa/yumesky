@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import BasicView from '../../components/BasicView/BasicView';
 import { useProfile } from '../../hooks/useProfile';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import './Profile.scss';
 import PillButton from '../../components/PillButton/PillButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,6 +14,7 @@ import agent from '../../api/agent';
 import getConfig, { type DefaultHomeTabs, type DefaultProfileTabs } from '../../config';
 import ProfileBody from '../../components/Profile/ProfileBody';
 import { useProfileExtras } from '../../hooks/useProfileExtras';
+import Avatar from '../../components/Avatar/Avatar';
 
 interface ProfileProps {
   setCurrentPage: (pageName: string) => void;
@@ -33,6 +34,9 @@ const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
   const description = profile?.description;
   const descriptionRT = new RichTextAPI({ text: description ?? '' });
 
+  const authorDisplayNameOrHandle = useMemo(() =>
+    (profile?.displayName ?? profile?.handle), [profile]);
+
   useEffect(() => {
     setTabs(['Posts', 'Replies', 'Media', (isAgentProfile || hasFeedgens) ? 'Feeds' : null, (isAgentProfile || hasLists) ? 'Lists' : null, isAgentProfile ? 'Likes' : null]);
   }, [hasFeedgens, hasLists]);
@@ -46,10 +50,10 @@ const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
         <div className='profile'>
           {((profile?.banner) != null) ? <img className='profile-banner' src={profile?.banner} /> : <div className='profile-banner fallback-div'></div>}
           <div className='profile-info'>
-            <img className='profile-picture' src={profile?.avatar} />
+            <Avatar className='profile-picture' height={100} width={100} img={profile?.avatar} link={undefined} />
             <div className='profile-info-inner'>
               <div className='displayname-and-handle'>
-                <span className='displayname'>{profile?.displayName}</span>
+                <span className='displayname'>{authorDisplayNameOrHandle}</span>
                 <div className='follows-you-and-handle'>
                   {((profile?.viewer?.followedBy) != null) && <FollowsYou />}
                   <div className='handle'>@{profile?.handle}</div>

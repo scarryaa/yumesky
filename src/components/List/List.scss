@@ -17,21 +17,32 @@
         display: flex;
         flex-direction: row;
         gap: 1rem;
+        width: 100%;
         align-items: center;
     }
 
     .list-inner {
         display: flex;
+        width: 100%;
         flex-direction: column;
+        overflow: hidden;
 
         .list-name {
             font-weight: bold;
             font-size: 16px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
         }
 
         .list-purpose {
             font-size: 14px;
             color: var(--text-light);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
         }
     }
 
@@ -39,6 +50,9 @@
         margin-left: 3.3rem;
         display: flex;
         font-size: 14px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
 }
 

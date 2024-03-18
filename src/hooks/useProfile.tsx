@@ -18,7 +18,7 @@ export const useProfile = (actor: string | undefined): AppBskyActorDefs.ProfileV
     }
 
     void getActorProfile();
-  }, []);
+  }, [actor]);
 
   return profile;
 }

@@ -9,6 +9,7 @@ import { usePost } from '../../contexts/PostContext';
 import { ago, agoLong } from '../../utils';
 import PostControls from '../PostControls/PostControls';
 import RichText from '../RichText/RichText';
+import Avatar from '../Avatar/Avatar';
 
 interface PostTimestampProps {
   post: AppBskyFeedDefs.FeedViewPost | undefined;
@@ -37,42 +38,53 @@ const PostInfo: React.FC<PostProps> = ({ post }: PostProps) => {
 
   const rt = new RichTextAPI({ text: (record != null) ? record.text : '', facets: record?.facets });
 
-  const authorDisplayName = useMemo(
-    () =>
-      ((post.reply != null) ? post.reply?.parent.author as AppBskyActorDefs.ProfileViewBasic : undefined)?.displayName,
-    [post]
-  )
+  const authorDisplayNameOrHandle = useMemo(() =>
+    (post.post.author.displayName ?? post.post.author.handle), [post]);
 
-  const authorHandle = useMemo(
+  const authorHandleOrDisplayName = useMemo(() =>
+    (post.post.author.handle ?? post.post.author.displayName), [post]);
+
+  const postReasonAuthor = useMemo(
     () =>
-      ((post.reply != null) ? post.reply.parent.author as AppBskyActorDefs.ProfileViewBasic : undefined)?.handle,
+      (AppBskyFeedDefs.isReasonRepost(post.reason) && (post.reason.by.handle ?? post.reason.by.displayName)),
     [post]
-  )
+  );
+
+  const replyToDisplayNameOrHandle = useMemo(
+    () =>
+      ((post.reply != null) ? post.reply?.parent.author as AppBskyActorDefs.ProfileViewBasic : undefined)?.displayName ??
+      ((post.reply != null) ? post.reply?.parent.author as AppBskyActorDefs.ProfileViewBasic : undefined)?.handle,
+    [post]
+  );
+
+  const replyHandle = useMemo(
+    () =>
+      ((post.reply != null) ? post.reply?.parent.author as AppBskyActorDefs.ProfileViewBasic : undefined)?.handle,
+    [post]
+  );
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
         {post.reason?.$type === 'app.bsky.feed.defs#reasonRepost' &&
             <Link linkStyle={false} to={`/profile/${AppBskyFeedDefs.isReasonRepost(post.reason) && post.reason.by.handle}`} className='post-reason'>
                 <FontAwesomeIcon className='post-reason-icon' icon={faRetweet} fontSize={14} />
-                <span>Reposted by <Link to={`/profile/${AppBskyFeedDefs.isReasonRepost(post.reason) && post.reason.by.handle}`} linkStyle={true}>{AppBskyFeedDefs.isReasonRepost(post.reason) && post.reason.by.displayName}</Link></span>
+                <span>Reposted by <Link to={`/profile/${postReasonAuthor}`} linkStyle={true}>{postReasonAuthor}</Link></span>
             </Link>}
         <div className='post-info-container'>
-          <Link className='post-avatar' linkStyle={false} to={`/profile/${post.post.author.handle}`}>
-            <img className='post-avatar' src={post.post.author.avatar} />
-          </Link>
+          <Avatar link={`/profile/${post.post.author.handle}`} width={40} height={40} className='post-avatar' img={post.post.author.avatar} />
             <div className='post-info'>
                 <div className='post-info-and-timestamp'>
                     <Link linkStyle={true} to={`/profile/${post.post.author.handle}`} className='post-info-inner'>
-                        <span className='post-display-name'>{post.post.author.displayName}</span>
+                        <span className='post-display-name'>{authorDisplayNameOrHandle}</span>
                         &nbsp;
-                        <span className='post-handle'>@{post.post.author.handle}</span>
+                        <span className='post-handle'>@{authorHandleOrDisplayName}</span>
                     </Link>
                     <span>·</span>
                     <PostTimestamp short={true} post={post} />
                 </div>
                 {post.reply?.parent.uri != null && <div className='post-reply-tag'>
                     <FontAwesomeIcon className='post-reply-icon' icon={faReply} fontSize={10} />
-                    <span>Reply to <Link linkStyle={true} to={`/profile/${authorHandle}`}>{authorDisplayName}</Link></span>
+                    <span>Reply to <Link linkStyle={true} to={`/profile/${replyHandle}`}>{replyToDisplayNameOrHandle}</Link></span>
                 </div>}
                 <div className='post-content'>
                     <RichText value={rt} />
@@ -90,7 +102,7 @@ const Post: React.FC<PostProps> = ({ post }: PostProps) => {
   const { setCachedPost } = usePost();
 
   return (
-        <Link onClick={() => { setCachedPost(post); }} linkStyle={false} to={`/profile/${post.post.author.handle}/post/${post.post.uri.split('/')[4]}`} className='post'>
+        <Link onClick={() => { setCachedPost(undefined); setCachedPost(post); }} linkStyle={false} to={`/profile/${post.post.author.handle}/post/${post.post.uri.split('/')[4]}`} className='post'>
             <PostInfo post={post} />
         </Link>
   )
