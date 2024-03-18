@@ -11,7 +11,9 @@ import TabList from '../../components/TabList/TabList';
 import RichText from '../../components/RichText/RichText';
 import { RichText as RichTextAPI } from '@atproto/api';
 import agent from '../../api/agent';
-import getConfig from '../../config';
+import getConfig, { type DefaultHomeTabs, type DefaultProfileTabs } from '../../config';
+import ProfileBody from '../../components/Profile/ProfileBody';
+import { useProfileExtras } from '../../hooks/useProfileExtras';
 
 interface ProfileProps {
   setCurrentPage: (pageName: string) => void;
@@ -19,15 +21,21 @@ interface ProfileProps {
 const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
   const { username } = useParams();
   const profile = useProfile(username);
+  const { hasFeedgens, hasLists } = useProfileExtras(profile?.did);
+  const isAgentProfile = agent.session?.handle === username;
 
-  const [selectedTab, setSelectedTab] = useState<string>(getConfig().DEFAULT_PROFILE_TABS.TABS[0]);
-  const [tabs] = useState<string[]>(getConfig().DEFAULT_PROFILE_TABS.TABS);
-  const handleTabClick = (tabDisplayName: string): void => {
+  const [selectedTab, setSelectedTab] = useState<DefaultProfileTabs[number] | DefaultHomeTabs[number]>(getConfig().DEFAULT_PROFILE_TABS.TABS[0]);
+  const [tabs, setTabs] = useState<Array<DefaultProfileTabs[number] | null>>(['Posts', 'Replies', 'Media', (isAgentProfile || hasFeedgens) ? 'Feeds' : null, (isAgentProfile || hasLists) ? 'Lists' : null, isAgentProfile ? 'Likes' : null]);
+  const handleTabClick = (tabDisplayName: DefaultProfileTabs[number] | DefaultHomeTabs[number]): void => {
     setSelectedTab(tabDisplayName);
   };
 
   const description = profile?.description;
   const descriptionRT = new RichTextAPI({ text: description ?? '' });
+
+  useEffect(() => {
+    setTabs(['Posts', 'Replies', 'Media', (isAgentProfile || hasFeedgens) ? 'Feeds' : null, (isAgentProfile || hasLists) ? 'Lists' : null, isAgentProfile ? 'Likes' : null]);
+  }, [hasFeedgens, hasLists]);
 
   useEffect(() => {
     setCurrentPage('Profile');
@@ -68,6 +76,9 @@ const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
 
           <div>
             <TabList className='profile-tablist' tabs={tabs} selectedTab={selectedTab} onTabClick={handleTabClick} />
+          </div>
+          <div>
+            <ProfileBody actor={profile?.did} currentTab={selectedTab} />
           </div>
         </div>
     </BasicView>

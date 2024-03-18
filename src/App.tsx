@@ -16,12 +16,14 @@ import PrefsProvider, { usePrefs } from './contexts/PrefsContext';
 import { type AppBskyFeedDefs } from '@atproto/api';
 import Profile from './pages/Profile/Profile';
 import FeedService from './api/feed';
-import getConfig from './config';
+import getConfig, { type DefaultHomeTabs } from './config';
 import { convertStringArrayToGeneratorViewArray } from './utils';
 import { Provider as MutedThreadsProvider } from './state/muted-threads';
 import { Provider as HiddenPostsProvider } from './state/hidden-posts';
 import { Provider as ModalProvider } from './state/modals/index';
 import { ModalsContainer } from './components/Modal/Modal';
+import Hashtag from './pages/Hashtag/Hashtag';
+import Feeds from './pages/Feeds/Feeds';
 
 const App: React.FC = () => {
   return (
@@ -50,7 +52,7 @@ const App: React.FC = () => {
 const AppLoggedIn: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<string | null>(null);
   const [selectedTab, setSelectedTab] = useState<string>(getConfig().DEFAULT_HOME_TABS.TABS[0]);
-  const [tabs, setTabs] = useState<string[]>(getConfig().DEFAULT_HOME_TABS.TABS);
+  const [tabs, setTabs] = useState<DefaultHomeTabs>(getConfig().DEFAULT_HOME_TABS.TABS);
   const { setPrefs } = usePrefs();
   const [generators, setGenerators] = useState<AppBskyFeedDefs.GeneratorView[]>(
     convertStringArrayToGeneratorViewArray(getConfig().DEFAULT_HOME_TABS.TABS, getConfig().DEFAULT_HOME_TABS.GENERATORS));
@@ -73,7 +75,7 @@ const AppLoggedIn: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    setTabs(generators.map(generator => generator.displayName));
+    setTabs(generators.map(generator => generator.displayName) as DefaultHomeTabs);
   }, [generators]);
 
   return (
@@ -87,6 +89,8 @@ const AppLoggedIn: React.FC = () => {
           <Route path="/" element={<Home tabs={generators} setCurrentPage={setCurrentPage} selectedTab={selectedTab} />} />
           <Route path="/profile/:username" element={<Profile setCurrentPage={setCurrentPage}/>} />
           <Route path="/profile/:username/post/:id" element={<ThreadView setCurrentPage={setCurrentPage} />} />
+          <Route path='/hashtag/:hashtag' element={<Hashtag setCurrentPage={setCurrentPage} />} />
+          <Route path='/feeds' element={<Feeds setCurrentPage={setCurrentPage} />} />
           <Route path="/settings" element={<Settings setCurrentPage={setCurrentPage} />} />
         </Routes>
         <ModalsContainer />

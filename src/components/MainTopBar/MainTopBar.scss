@@ -8,6 +8,7 @@
     background-color: var(--secondary);
     padding-inline: 10px;
     border-bottom: 1px solid var(--border);
+    z-index: 999;
 
     .main-top-bar-component {
         max-width: 64%;
@@ -16,6 +17,7 @@
     .main-top-bar-title {
         font-size: x-large;
         padding-block: 11px;
+        height: 30px;
     }
 
     .main-top-bar-buttons {

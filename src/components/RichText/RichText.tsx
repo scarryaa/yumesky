@@ -1,5 +1,6 @@
 import { AppBskyRichtextFacet, RichText as RichTextAPI } from '@atproto/api';
 import React from 'react';
+import agent from '../../api/agent';
 import { Link } from 'react-router-dom';
 
 interface RichTextProps {
@@ -9,6 +10,7 @@ interface RichTextProps {
 const RichText: React.FC<RichTextProps> = ({ value }: RichTextProps) => {
   const richText = React.useMemo(() => value instanceof RichTextAPI ? value : new RichTextAPI({ text: value }), [value]);
 
+  void richText.detectFacets(agent);
   const { text, facets } = richText;
 
   if ((facets?.length) == null) {

@@ -1,20 +1,21 @@
+import { type DefaultHomeTabs, type DefaultProfileTabs } from '../../config';
 import './TabList.scss';
 
 interface TabListProps {
   selectedTab: string;
-  onTabClick: (tabKey: string) => void;
-  tabs: string[];
+  onTabClick: (tabKey: DefaultProfileTabs[number] | DefaultHomeTabs[number]) => void;
+  tabs: Array<DefaultHomeTabs[number] | DefaultProfileTabs[number] | null>;
   className?: string;
 }
 
 const TabList: React.FC<TabListProps> = ({ selectedTab, onTabClick, tabs, className }: TabListProps) => {
   return (
       <div className={`tablist ${className}`}>
-        {tabs.map((tab) => (
+        {tabs?.filter(tab => tab !== null).map((tab, i) => (
           <Tab
-            key={tab}
-            name={tab}
-            onClick={() => { onTabClick(tab); }}
+            key={tab ?? `tab-${i}`}
+            name={tab ?? ''}
+            onClick={() => { onTabClick(tab ?? 'Posts'); }}
             className={selectedTab === tab ? 'tab--active' : ''}
           />
         ))}

@@ -1,6 +1,8 @@
+export type DefaultProfileTabs = ['Posts', 'Replies', 'Media', 'Feeds', 'Lists', 'Likes'];
+export type DefaultHomeTabs = ['Following', 'Discover'];
 interface SharedConfig {
-  DEFAULT_HOME_TABS: { TABS: string[], GENERATORS: string[] };
-  DEFAULT_PROFILE_TABS: { TABS: string[], GENERATORS: string[] };
+  DEFAULT_HOME_TABS: { TABS: DefaultHomeTabs, GENERATORS: string[] };
+  DEFAULT_PROFILE_TABS: { TABS: DefaultProfileTabs, GENERATORS: string[] };
 }
 
 interface Config extends SharedConfig {
@@ -33,7 +35,7 @@ const devConfig: Config = {
 }
 
 const prodConfig: Config = {
-  DOMAIN: process.env.PUBLIC_URL,
+  DOMAIN: 'https://scarryaa.github.io/yumesky',
   ...sharedConfig
 }
 

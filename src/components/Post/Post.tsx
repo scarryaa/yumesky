@@ -57,7 +57,7 @@ const PostInfo: React.FC<PostProps> = ({ post }: PostProps) => {
                 <span>Reposted by <Link to={`/profile/${AppBskyFeedDefs.isReasonRepost(post.reason) && post.reason.by.handle}`} linkStyle={true}>{AppBskyFeedDefs.isReasonRepost(post.reason) && post.reason.by.displayName}</Link></span>
             </Link>}
         <div className='post-info-container'>
-          <Link linkStyle={false} to={`/profile/${post.post.author.handle}`}>
+          <Link className='post-avatar' linkStyle={false} to={`/profile/${post.post.author.handle}`}>
             <img className='post-avatar' src={post.post.author.avatar} />
           </Link>
             <div className='post-info'>
