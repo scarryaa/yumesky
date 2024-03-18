@@ -29,7 +29,7 @@ const ImageGrid: React.FC<ImageGridProps> = ({ images, className }: ImageGridPro
         <div className={`image-grid--3 ${className}`}>
             <img style={{ width: '100%', height: '100%', marginBottom: '1rem' }} className='img' src={images?.[0].thumb} />
             <img style={{ width: '100%', height: '100%', marginBottom: '1rem' }} className='img' src={images?.[1].thumb} />
-            <img style={{ width: '100%', height: '100%', marginBottom: '1rem' }} className='img' src={images?.[2].thumb} />
+            <img style={{ width: '100%', height: '100%', marginBottom: '1rem' }} className='img img--3' src={images?.[2].thumb} />
         </div>
       )
     case 4:

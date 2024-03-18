@@ -34,7 +34,9 @@ const EmbedContainer: React.FC<EmbedContainerProps> = ({ children, embed }: Embe
                 <span className='embed-timestamp'>{AppBskyEmbedRecord.isViewRecord(embed.record) && ago(embed.record.indexedAt)}</span>
             </div>
         </div>
-        {children}
+        <div className='embed-children'>
+            {children}
+        </div>
     </Link>
   )
 }

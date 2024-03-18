@@ -1,10 +1,10 @@
 .embed-handler {
-    margin-bottom: 1rem;
     border: 1px solid var(--border);
     border-radius: 4px;
     display: flex;
     flex-direction: column;
     text-decoration: none !important;
+    margin-top: 0.4rem;
 
     .embed-external-img {
         border-radius: 4px;
@@ -31,9 +31,4 @@
             font-size: 15px;
         }
     }
-}
-
-.embed-images { 
-    margin-top: 0.8rem;
-    margin-bottom: -1rem;
 }

@@ -1,11 +1,11 @@
 .embed-container {
-    margin-bottom: 1rem;
     border: 1px solid var(--border);
     border-radius: 4px;
     padding: 0.5rem;
     display: flex;
     flex-direction: column;
     text-decoration: none !important;
+    margin-top: 0.8rem;
 
     .embed-info {
         display: flex;

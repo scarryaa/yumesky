@@ -16,19 +16,19 @@ const EmbedHandler: React.FC<EmbedHandlerProps> = ({ post }: EmbedHandlerProps) 
   switch (embedType) {
     case 'app.bsky.embed.images#view': {
       return (
-        <div>
-            <ImageGrid images={post.post.embed?.images as AppBskyEmbedImages.ViewImage[]} />
-        </div>
+        <ImageGrid images={post.post.embed?.images as AppBskyEmbedImages.ViewImage[]} />
       )
     }
     case 'app.bsky.embed.record#view': {
       return (
         <EmbedContainer embed={post.post.embed}>
             {((post.post.embed?.record as AppBskyEmbedRecord.ViewRecord).value as AppBskyFeedPost.Record).text}
-            {(((post.post.embed?.record as AppBskyEmbedRecord.ViewRecord).embeds?.length) != null) &&
-            (post.post.embed?.record as AppBskyEmbedRecord.ViewRecord).embeds?.map((embed, i) => (
-              <ImageGrid className='embed-images' key={i} images={embed.images as ViewImage[]} />
-            ))}
+            <div className='embed-images-container'>
+              {(((post.post.embed?.record as AppBskyEmbedRecord.ViewRecord).embeds?.length) != null) &&
+              (post.post.embed?.record as AppBskyEmbedRecord.ViewRecord).embeds?.map((embed, i) => (
+                <ImageGrid className='embed-images' key={i} images={embed.images as ViewImage[]} />
+              ))}
+            </div>
         </EmbedContainer>
       )
     }
