@@ -1,5 +1,7 @@
 import { type DefaultHomeTabs, type DefaultProfileTabs } from '../../config'
 import { useProfilePosts } from '../../hooks/useProfile';
+import Feed from '../Feed/Feed';
+import List from '../List/List';
 import Post from '../Post/Post';
 import './ProfileBody.scss';
 
@@ -26,7 +28,7 @@ const ProfileBody: React.FC<ProfileBodyProps> = ({ actor, currentTab }: ProfileB
       return (
         <div>
             {feeds?.map((feed, i) => (
-                <div key={i}>feed</div>
+                <Feed feed={feed} key={i} />
             ))}
         </div>
       )
@@ -36,7 +38,7 @@ const ProfileBody: React.FC<ProfileBodyProps> = ({ actor, currentTab }: ProfileB
       return (
         <div>
             {lists?.map((list, i) => (
-                <div key={i}>list</div>
+                <List list={list} key={i} />
             ))}
         </div>
       )

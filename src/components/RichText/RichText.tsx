@@ -10,10 +10,11 @@ interface RichTextProps {
 const RichText: React.FC<RichTextProps> = ({ value }: RichTextProps) => {
   const richText = React.useMemo(() => value instanceof RichTextAPI ? value : new RichTextAPI({ text: value }), [value]);
 
-  void richText.detectFacets(agent);
   const { text, facets } = richText;
 
   if ((facets?.length) == null) {
+    void richText.detectFacets(agent);
+
     return (
         <div style={{ whiteSpace: 'pre-wrap' }}>{text}</div>
     )

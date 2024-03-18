@@ -1,0 +1,56 @@
+.feed {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none !important;
+    justify-content: center;
+
+    .feed-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+    }
+
+    .feed-shell {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .feed-inner {
+        display: flex;
+        flex-direction: column;
+
+        .feed-name {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .feed-by {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+    }
+
+    .feed-liked-by {
+        margin-left: 3.3rem;
+        display: flex;
+        font-size: 14px;
+        color: var(--text-light);
+    }
+}
+
+.feed-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 36px;
+    min-height: 36px;
+    max-width: 36px;
+    max-height: 36px;
+    border-radius: 8px;
+    background-color: var(--primary);
+}
