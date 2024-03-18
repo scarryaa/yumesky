@@ -4,16 +4,17 @@ interface BasicViewProps {
   children: React.ReactNode;
   padding?: boolean;
   viewPadding: boolean;
+  className?: string;
 }
 
-const BasicView: React.FC<BasicViewProps> = ({ children, padding, viewPadding }: BasicViewProps) => {
+const BasicView: React.FC<BasicViewProps> = ({ children, padding, viewPadding, className }: BasicViewProps) => {
   const style: React.CSSProperties = { padding: '0.8rem' }
 
   return (
-        <div className='basic-view' style={(padding ?? false) ? style : {}}>
-            {children}
-            {viewPadding && <div className='basic-view-padding'></div>}
-        </div>
+    <div className={`basic-view ${className}`} style={(padding ?? false) ? style : {}}>
+        {children}
+        {viewPadding && <div className='basic-view-padding'></div>}
+    </div>
   )
 }
 

@@ -1,6 +1,8 @@
 .basic-view {
     width: 100%;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 
     .basic-view-padding {
         height: 100vh;

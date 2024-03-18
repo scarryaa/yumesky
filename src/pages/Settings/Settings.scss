@@ -1,5 +1,9 @@
 .settings {
-    width: 100%;
-    min-height: 100vh;
-    padding: 0.8rem;
+    gap: 1rem;
+
+    .color-picker {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
 }
