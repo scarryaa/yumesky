@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { type MouseEvent } from 'react';
 import './Link.scss';
 import { Link as ReactLink, type LinkProps as ReactLinkProps } from 'react-router-dom';
 
 interface LinkProps extends ReactLinkProps {
   children: React.ReactNode;
   linkStyle: boolean;
-  onClick?: () => void;
+  onClick?: (e: MouseEvent) => void;
 }
 
 const Link: React.FC<LinkProps> = ({ children, linkStyle, to, className, onClick }: LinkProps) => {

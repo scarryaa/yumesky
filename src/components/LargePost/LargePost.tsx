@@ -1,5 +1,5 @@
 import { type AppBskyEmbedImages, AppBskyFeedPost, RichText as RichTextAPI, type AppBskyFeedDefs } from '@atproto/api';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import Link from '../Link/Link';
 import ImageGrid from '../ImageGrid/ImageGrid';
 import { PostTimestamp } from '../Post/Post';
@@ -9,8 +9,10 @@ import RichText from '../RichText/RichText';
 
 interface LargePostProps {
   post: AppBskyFeedDefs.FeedViewPost | undefined;
+  ref: any;
 }
-const LargePost: React.FC<LargePostProps> = ({ post }: LargePostProps) => {
+
+const LargePost = React.forwardRef<HTMLDivElement, LargePostProps>(({ post }, ref) => {
   const record = useMemo<AppBskyFeedPost.Record | undefined>(
     () =>
       AppBskyFeedPost.isRecord(post?.post.record) &&
@@ -20,10 +22,10 @@ const LargePost: React.FC<LargePostProps> = ({ post }: LargePostProps) => {
     [post]
   );
 
-  const rt = useMemo<RichTextAPI>(() => new RichTextAPI({ text: (record != null) ? record.text : '', facets: record?.facets }), []);
+  const rt = useMemo<RichTextAPI>(() => new RichTextAPI({ text: (record != null) ? record.text : '', facets: record?.facets }), [post]);
 
   return (
-    <div className='large-post'>
+    <div className='large-post' ref={ref}>
         <div className='poster-info' style={{ marginBottom: rt?.length === 0 ? 0 : '0.5rem' }}>
           <Link linkStyle={false} to={`/profile/${post?.post.author.handle}`}>
             <img className='post-avatar' src={post?.post.author.avatar} />
@@ -57,6 +59,8 @@ const LargePost: React.FC<LargePostProps> = ({ post }: LargePostProps) => {
         </div>
     </div>
   )
-}
+});
+
+LargePost.displayName = 'LargePost';
 
 export default LargePost;

@@ -1,24 +1,29 @@
+import { useEffect } from 'react';
 import BasicView from '../../components/BasicView/BasicView';
 import LargePost from '../../components/LargePost/LargePost';
 import Post from '../../components/Post/Post';
+import { usePost } from '../../contexts/PostContext';
 import useThreadView from '../../hooks/useThreadView';
 
 interface ThreadViewProps {
   setCurrentPage: (pageName: string) => void;
 }
 const ThreadView: React.FC<ThreadViewProps> = ({ setCurrentPage }: ThreadViewProps) => {
-  const { filteredPosts, currentPost, childPosts, currentPostRef } = useThreadView(setCurrentPage)
+  const { cachedPost } = usePost();
+  const { postRef, childPosts, filteredPosts } = useThreadView();
+
+  useEffect(() => {
+    setCurrentPage('Post');
+  }, []);
 
   return (
     <BasicView viewPadding={true}>
-      {filteredPosts.map((post, index) => (
-          <Post key={index} post={{ post }} />
+      {filteredPosts.map((post, i) => (
+        <Post post={{ post }} key={i} />
       ))}
-      <div ref={currentPostRef}>
-          {(currentPost != null) && <LargePost post={{ post: currentPost }} />}
-      </div>
-      {childPosts.map((post, index) => (
-          <Post key={index} post={{ post }} />
+      {cachedPost !== undefined && <LargePost ref={postRef} post={cachedPost} />}
+      {childPosts.map((post, i) => (
+        <Post post={{ post }} key={i} />
       ))}
     </BasicView>
   )

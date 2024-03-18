@@ -8,19 +8,18 @@ type OutputSchema = AppBskyFeedDefs.ThreadViewPost | AppBskyFeedDefs.NotFoundPos
   [k: string]: unknown;
 };
 
-export const useThreadView = (setCurrentPage: (pageName: string) => void): { filteredPosts: AppBskyFeedDefs.PostView[], currentPost: AppBskyFeedDefs.PostView | null, childPosts: AppBskyFeedDefs.PostView[], currentPostRef: React.RefObject<HTMLDivElement>, loading: boolean } => {
+// TODO improve this (namely lag between switching posts, and ghost replies showing briefly, and like/reply/repost counts carrying over btwn cached posts)
+export const useThreadView = (): { filteredPosts: AppBskyFeedDefs.PostView[], currentPost: AppBskyFeedDefs.PostView | undefined, childPosts: AppBskyFeedDefs.PostView[], postRef: React.RefObject<HTMLDivElement>, setChildPosts: React.Dispatch<React.SetStateAction<AppBskyFeedDefs.PostView[]>>, loading: boolean } => {
   const { cachedPost } = usePost();
   const [thread, setThread] = useState<OutputSchema>();
-  const [currentPost, setCurrentPost] = useState<AppBskyFeedDefs.PostView | null>(null);
+  const [currentPost, setCurrentPost] = useState<AppBskyFeedDefs.PostView | undefined>(undefined);
   const [posts, setPosts] = useState<AppBskyFeedDefs.PostView[]>([]);
   const [childPosts, setChildPosts] = useState<AppBskyFeedDefs.PostView[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const currentPostRef = useRef<HTMLDivElement>(null);
+  const postRef = useRef<HTMLDivElement>(null);
   const [scrollSet, setScrollSet] = useState<boolean>(false);
 
   useEffect(() => {
-    setCurrentPage('Post');
-
     const getParentPosts = async (): Promise<void> => {
       // verify post has record
       if (cachedPost !== undefined && AppBskyFeedPost.isRecord(cachedPost.post.record) && AppBskyFeedPost.validateRecord(cachedPost.post.record).success) {
@@ -34,19 +33,20 @@ export const useThreadView = (setCurrentPage: (pageName: string) => void): { fil
     };
 
     void getParentPosts();
-    if (cachedPost !== undefined) setCurrentPost(cachedPost.post);
+    setCurrentPost(cachedPost?.post);
   }, [cachedPost]);
 
   useEffect(() => {
-    if (!loading && !scrollSet && currentPostRef.current != null) {
-      currentPostRef.current.scrollIntoView({ behavior: 'instant' as ScrollBehavior, block: 'start', inline: 'nearest' });
-      window.scrollBy(0, -72);
+    if (postRef.current != null) {
+      postRef.current.scrollIntoView({ behavior: 'instant' as ScrollBehavior, block: 'start', inline: 'nearest' });
+      window.scrollBy(0, -52);
       setScrollSet(true);
     }
-  }, [loading, currentPost, scrollSet]);
+  }, [loading, currentPost, scrollSet, cachedPost]);
 
   useEffect(() => {
     if (thread != null) {
+      setChildPosts([]);
       setScrollSet(false);
       const collectedPosts: AppBskyFeedDefs.PostView[] = [];
 
@@ -82,12 +82,12 @@ export const useThreadView = (setCurrentPage: (pageName: string) => void): { fil
         setLoading(false);
       }
     }
-  }, [thread]);
+  }, [thread, cachedPost]);
 
   // filter out the current post from the collected posts
   const filteredPosts = posts.filter(p => p.uri !== currentPost?.uri);
 
-  return { filteredPosts, currentPost, childPosts, currentPostRef, loading };
+  return { filteredPosts, currentPost, childPosts, setChildPosts, postRef, loading };
 }
 
 export default useThreadView;

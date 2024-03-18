@@ -1,15 +1,15 @@
-import { type AppBskyActorDefs, AppBskyFeedDefs, AppBskyFeedPost, RichText as RichTextAPI, type AppBskyEmbedImages } from '@atproto/api';
+import { type AppBskyActorDefs, AppBskyFeedDefs, AppBskyFeedPost, RichText as RichTextAPI } from '@atproto/api';
 import './Post.scss';
 import Link from '../Link/Link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faReply, faRetweet } from '@fortawesome/free-solid-svg-icons';
-import ImageGrid from '../ImageGrid/ImageGrid';
 import { useMemo } from 'react';
 import { usePost } from '../../contexts/PostContext';
 import { ago, agoLong } from '../../utils';
 import PostControls from '../PostControls/PostControls';
 import RichText from '../RichText/RichText';
 import Avatar from '../Avatar/Avatar';
+import EmbedHandler from '../Embed/EmbedHandler';
 
 interface PostTimestampProps {
   post: AppBskyFeedDefs.FeedViewPost | undefined;
@@ -24,9 +24,10 @@ export const PostTimestamp: React.FC<PostTimestampProps> = ({ post, short, class
 
 interface PostProps {
   post: AppBskyFeedDefs.FeedViewPost;
+  ref?: any;
 }
 
-const PostInfo: React.FC<PostProps> = ({ post }: PostProps) => {
+const PostInfo: React.FC<PostProps> = ({ post, ref }: PostProps) => {
   const record = useMemo<AppBskyFeedPost.Record | undefined>(
     () =>
       AppBskyFeedPost.isRecord(post.post.record) &&
@@ -64,7 +65,7 @@ const PostInfo: React.FC<PostProps> = ({ post }: PostProps) => {
   );
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }} ref={ref}>
         {post.reason?.$type === 'app.bsky.feed.defs#reasonRepost' &&
             <Link linkStyle={false} to={`/profile/${AppBskyFeedDefs.isReasonRepost(post.reason) && post.reason.by.handle}`} className='post-reason'>
                 <FontAwesomeIcon className='post-reason-icon' icon={faRetweet} fontSize={14} />
@@ -90,7 +91,7 @@ const PostInfo: React.FC<PostProps> = ({ post }: PostProps) => {
                     <RichText value={rt} />
                 </div>
 
-                {post.post.embed?.$type === 'app.bsky.embed.images#view' && <ImageGrid images={post.post.embed.images as AppBskyEmbedImages.ViewImage[]} />}
+                <EmbedHandler post={post} />
                 <PostControls post={post}/>
             </div>
         </div>
@@ -102,7 +103,7 @@ const Post: React.FC<PostProps> = ({ post }: PostProps) => {
   const { setCachedPost } = usePost();
 
   return (
-        <Link onClick={() => { setCachedPost(undefined); setCachedPost(post); }} linkStyle={false} to={`/profile/${post.post.author.handle}/post/${post.post.uri.split('/')[4]}`} className='post'>
+        <Link onClick={() => { setCachedPost(post); }} linkStyle={false} to={`/profile/${post.post.author.handle}/post/${post.post.uri.split('/')[4]}`} className='post'>
             <PostInfo post={post} />
         </Link>
   )
