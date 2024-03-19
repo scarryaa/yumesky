@@ -19,7 +19,7 @@
     }
 
     .image-container {
-        // hacky
+        // hacky class override
         display: flex;
         align-items: center;
         justify-content: center;
@@ -32,6 +32,8 @@
     }
 
     .lightbox-alt-text-container {
+        position: absolute;
+        bottom: 0;
         background-color: var(--black);
         padding-left: 4rem;
         align-items: flex-start;

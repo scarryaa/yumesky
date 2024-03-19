@@ -2,25 +2,31 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 
 interface LightboxContext {
   isLightboxActive: boolean;
-  src: string | undefined;
-  alt: string | undefined;
+  lightboxImages: string[] | undefined;
+  alts: string[] | undefined;
+  currentImageIndex: number;
 }
 
 interface LightboxControlContext {
-  openLightbox: (src: string | undefined, alt: string | undefined) => void;
+  openLightbox: (images: string[], initialIndex: number, alts: string[]) => void;
   closeLightbox: () => void;
+  nextImage: () => void;
+  previousImage: () => void;
 }
 
-const lightboxContext = createContext<LightboxContext>({ isLightboxActive: false, src: undefined, alt: undefined });
+const lightboxContext = createContext<LightboxContext>({ isLightboxActive: false, lightboxImages: [], alts: [], currentImageIndex: 0 });
 const lightboxControlContext = createContext<LightboxControlContext>({
   closeLightbox: () => {},
-  openLightbox: () => {}
+  openLightbox: () => {},
+  nextImage: () => {},
+  previousImage: () => {}
 });
 
 export const Provider = ({ children }: React.PropsWithChildren<Record<string, unknown>>): JSX.Element => {
   const [isLightboxActive, setIsLightboxActive] = useState<boolean>(false);
-  const [src, setSrc] = useState<string | undefined>();
-  const [alt, setAlt] = useState<string | undefined>();
+  const [lightboxImages, setLightboxImages] = useState<string[]>([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
+  const [alts, setAlts] = useState<string[]>([]);
 
   useEffect(() => {
     if (isLightboxActive) {
@@ -32,26 +38,41 @@ export const Provider = ({ children }: React.PropsWithChildren<Record<string, un
     };
   }, [isLightboxActive]);
 
-  const closeLightbox = useCallback(() => {
-    setIsLightboxActive(false);
-  }, []);
-
-  const openLightbox = useCallback((src: string | undefined, alt: string | undefined) => {
+  const openLightbox = (images: string[], initialIndex: number = 0, alts: string[]): void => {
+    setLightboxImages(images);
+    setCurrentImageIndex(initialIndex);
+    setAlts(alts);
     setIsLightboxActive(true);
-    setAlt(alt);
-    setSrc(src);
-  }, []);
+  };
+
+  const closeLightbox = (): void => {
+    setLightboxImages([]);
+    setCurrentImageIndex(0);
+    setAlts([]);
+    setIsLightboxActive(false);
+  };
+
+  const nextImage = useCallback(() => {
+    setCurrentImageIndex((currentImageIndex + 1) % lightboxImages.length);
+  }, [currentImageIndex, lightboxImages]);
+
+  const previousImage = useCallback(() => {
+    setCurrentImageIndex((currentImageIndex - 1 + lightboxImages.length) % lightboxImages.length);
+  }, [currentImageIndex, lightboxImages]);
 
   const state = useMemo(() => ({
     isLightboxActive,
-    src,
-    alt
-  }), [isLightboxActive]);
+    lightboxImages,
+    alts,
+    currentImageIndex
+  }), [isLightboxActive, currentImageIndex, alts, lightboxImages]);
 
   const methods = useMemo(() => ({
     closeLightbox,
-    openLightbox
-  }), [closeLightbox, openLightbox])
+    openLightbox,
+    previousImage,
+    nextImage
+  }), [closeLightbox, openLightbox, nextImage, previousImage])
 
   return (
     <lightboxContext.Provider value={state}>
