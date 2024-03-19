@@ -16,7 +16,7 @@ const RichText: React.FC<RichTextProps> = ({ value }: RichTextProps) => {
     void richText.detectFacets(agent);
 
     return (
-        <div style={{ whiteSpace: 'pre-wrap' }}>{text}</div>
+        <div style={{ whiteSpace: 'pre-wrap', lineBreak: 'anywhere' }}>{text}</div>
     )
   }
 

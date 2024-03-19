@@ -22,6 +22,23 @@ const EmbedContainer: React.FC<EmbedContainerProps> = ({ children, embed }: Embe
   const { setCachedPost } = usePost();
   if (embed === undefined) return null;
 
+  // blocked
+  if ((embed.record as AppBskyEmbedRecord.ViewRecord).$type === 'app.bsky.embed.record#viewBlocked') {
+    return (
+        <div onClick={(e: React.MouseEvent<Element>) => { setCachedPost(undefined); e.stopPropagation(); e.preventDefault(); navigate(`../profile/${AppBskyEmbedRecord.isViewRecord(embed.record) && embed.record.author.handle}/post/${AppBskyEmbedRecord.isViewRecord(embed.record) && embed.record.uri.split('/')[4]}`); }} className='embed-container'>
+            <div className='embed-info'>
+                <div className='embed-deleted'>
+                    <FontAwesomeIcon icon={faInfoCircle} fontSize={14} />
+                    <span>Blocked</span>
+                </div>
+            </div>
+            <div className='embed-children'>
+                {children}
+            </div>
+        </div>
+    )
+  }
+
   // not found
   if ((embed.record as AppBskyEmbedRecord.ViewRecord).$type === 'app.bsky.embed.record#viewNotFound') {
     return (

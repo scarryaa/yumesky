@@ -44,4 +44,8 @@ export const getThread = async (uri: string | undefined): Promise<ThreadViewPost
   }
 }
 
+export const deletePost = async (uri: string): Promise<void> => {
+  await agent.deletePost(uri);
+}
+
 export default agent;

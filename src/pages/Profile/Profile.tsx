@@ -16,6 +16,7 @@ import ProfileBody from '../../components/Profile/ProfileBody';
 import { useProfileExtras } from '../../hooks/useProfileExtras';
 import Avatar from '../../components/Avatar/Avatar';
 import Image from '../../components/Image/Image';
+import { useLightbox, useLightboxControls } from '../../state/lightbox';
 
 interface ProfileProps {
   setCurrentPage: (pageName: string) => void;
@@ -25,6 +26,8 @@ const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
   const profile = useProfile(username);
   const { hasFeedgens, hasLists } = useProfileExtras(profile?.did);
   const isAgentProfile = agent.session?.handle === username;
+  const { isLightboxActive } = useLightbox();
+  const { openLightbox, closeLightbox } = useLightboxControls();
 
   const [selectedTab, setSelectedTab] = useState<DefaultProfileTabs[number] | DefaultHomeTabs[number]>(getConfig().DEFAULT_PROFILE_TABS.TABS[0]);
   const [tabs, setTabs] = useState<Array<DefaultProfileTabs[number] | null>>(['Posts', 'Replies', 'Media', (isAgentProfile || hasFeedgens) ? 'Feeds' : null, (isAgentProfile || hasLists) ? 'Lists' : null, isAgentProfile ? 'Likes' : null]);
@@ -49,7 +52,7 @@ const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
   return (
     <BasicView viewPadding={true}>
         <div className='profile'>
-          {((profile?.banner) != null) ? <div className='profile-banner'><Image src={profile?.banner} /></div> : <div className='profile-banner fallback-div'></div>}
+          {((profile?.banner) != null) ? <div className='profile-banner'><Image onClick={() => { isLightboxActive ? closeLightbox() : openLightbox([profile?.banner ?? ''], 0, []) }} src={profile?.banner} /></div> : <div className='profile-banner fallback-div'></div>}
           <div className='profile-info'>
             <Avatar className='profile-picture' height={100} width={100} src={profile?.avatar} link={undefined} />
             <div className='profile-info-inner'>

@@ -1,11 +1,14 @@
 import { AppBskyFeedPost, type AppBskyFeedDefs } from '@atproto/api';
 import { type MenuItem } from '../../components/Dropdown/Dropdown';
 import { faEyeSlash } from '@fortawesome/free-regular-svg-icons';
-import { faShare, faClipboard, faFont, faVolumeOff, faFilter, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { faShare, faClipboard, faFont, faVolumeOff, faFilter, faCircleExclamation, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { generatePostShareLink } from '../../utils';
 import { useToggleThreadMute } from '../../state/muted-threads';
 import { useToggleHidePost } from '../../state/hidden-posts';
 import { useModalControls } from '../../state/modals';
+import agent from '../../api/agent';
+import { usePromptControls } from '../../state/prompts';
+import { DeletePostPrompt } from '../../components/Prompt/delete-post/Prompt';
 
 interface UsePostDropdownProps {
   dropdownItems: MenuItem[];
@@ -17,6 +20,7 @@ const usePostDropdown = (post: AppBskyFeedDefs.FeedViewPost | undefined): UsePos
   const toggleThreadMute = useToggleThreadMute();
   const toggleHidePost = useToggleHidePost();
   const { openModal } = useModalControls();
+  const { openPrompt } = usePromptControls();
 
   const dropdownItems: MenuItem[] = [
     {
@@ -89,18 +93,27 @@ const usePostDropdown = (post: AppBskyFeedDefs.FeedViewPost | undefined): UsePos
     {
       label: 'separator'
     },
-    {
-      label: 'Report post',
-      icon: faCircleExclamation,
-      iconSize: 18,
-      onClick: () => {
-        openModal({
-          name: 'report',
-          uri: '',
-          cid: ''
-        });
-      }
-    }
+    post?.post.author.did === agent.session?.did
+      ? {
+          label: 'Delete post',
+          icon: faTrash,
+          iconSize: 18,
+          onClick: () => {
+            openPrompt({ ...DeletePostPrompt, uri: post?.post.uri })
+          }
+        }
+      : {
+          label: 'Report post',
+          icon: faCircleExclamation,
+          iconSize: 18,
+          onClick: () => {
+            openModal({
+              name: 'report',
+              uri: '',
+              cid: ''
+            });
+          }
+        }
   ];
 
   return { dropdownItems };

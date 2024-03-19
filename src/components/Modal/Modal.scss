@@ -1,4 +1,4 @@
-.mask {
+.modal-mask {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,7 +11,7 @@
     z-index: 999;
 }
 
-.container {
+.modal-container {
     width: 600px;
     max-width: 100vw;
     max-height: 90vh;

@@ -21,11 +21,13 @@ import { convertStringArrayToGeneratorViewArray } from './utils';
 import { Provider as MutedThreadsProvider } from './state/muted-threads';
 import { Provider as HiddenPostsProvider } from './state/hidden-posts';
 import { Provider as ModalProvider } from './state/modals/index';
+import { Provider as PromptProvider } from './state/prompts/index';
 import { Provider as LightboxProvider, useLightbox } from './state/lightbox';
 import { ModalsContainer } from './components/Modal/Modal';
 import Hashtag from './pages/Hashtag/Hashtag';
 import Feeds from './pages/Feeds/Feeds';
 import { LightboxContainer } from './components/Lightbox/Lightbox';
+import { PromptContainer } from './components/Prompt/Prompt';
 
 const App: React.FC = () => {
   return (
@@ -33,19 +35,21 @@ const App: React.FC = () => {
       <HiddenPostsProvider>
         <MutedThreadsProvider>
           <LightboxProvider>
-            <ModalProvider>
-              <PostProvider>
-                <ThemeProvider>
-                  <AuthProvider>
-                    <HashRouter>
-                      <div className="app">
-                        <AppContent />
-                      </div>
-                    </HashRouter>
-                  </AuthProvider>
-                </ThemeProvider>
-              </PostProvider>
-            </ModalProvider>
+            <PromptProvider>
+              <ModalProvider>
+                <PostProvider>
+                  <ThemeProvider>
+                    <AuthProvider>
+                      <HashRouter>
+                        <div className="app">
+                          <AppContent />
+                        </div>
+                      </HashRouter>
+                    </AuthProvider>
+                  </ThemeProvider>
+                </PostProvider>
+              </ModalProvider>
+            </PromptProvider>~
           </LightboxProvider>
         </MutedThreadsProvider>
       </HiddenPostsProvider>
@@ -97,6 +101,7 @@ const AppLoggedIn: React.FC = () => {
           <Route path='/feeds' element={<Feeds setCurrentPage={setCurrentPage} />} />
           <Route path="/settings" element={<Settings setCurrentPage={setCurrentPage} />} />
         </Routes>
+        <PromptContainer />
         <ModalsContainer />
         <LightboxContainer />
       </div>

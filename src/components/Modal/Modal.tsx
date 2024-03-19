@@ -1,7 +1,7 @@
 import { type MouseEvent } from 'react';
 import { useModalControls, useModals } from '../../state/modals';
-import type { Modal as ModalIface } from '../../state/modals'
-import * as ReportModal from './report/Modal'
+import type { Modal as ModalIface } from '../../state/modals';
+import * as ReportModal from './report/Modal';
 import './Modal.scss';
 
 export const ModalsContainer = (): JSX.Element | null => {
@@ -44,8 +44,8 @@ export const Modal = ({ modal }: { modal: ModalIface }): JSX.Element | null => {
   }
 
   return (
-    <div className='mask' onClick={onMaskClick}>
-        <div className='container' onClick={(e) => { onInnerClick(e); }}>
+    <div className='modal-mask' onClick={onMaskClick}>
+        <div className='modal-container' onClick={(e) => { onInnerClick(e); }}>
             {element}
         </div>
     </div>
