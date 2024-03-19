@@ -1,6 +1,6 @@
 import { usePrompts, usePromptControls } from '../../state/prompts'
 import type { Prompt as PromptIFace } from '../../state/prompts'
-import { type MouseEvent } from 'react';
+import { useEffect, type MouseEvent } from 'react';
 import './Prompt.scss';
 
 export const PromptContainer: React.FC = () => {
@@ -31,6 +31,21 @@ export const Prompt = ({ prompt }: { prompt: PromptIFace }): JSX.Element | null 
     e.preventDefault();
     e.stopPropagation();
   }
+
+  useEffect(() => {
+    const handleEsc = (event: KeyboardEvent): void => {
+      if (event.key === 'Escape') {
+        closePrompt();
+      }
+    };
+
+    window.addEventListener('keydown', handleEsc);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('keydown', handleEsc);
+    };
+  }, [isPromptActive]);
 
   return (
     <div className='prompt-mask' onClick={onMaskClick}>

@@ -25,6 +25,8 @@ export const Lightbox: React.FC<{ srcs: string[] | undefined, alts: string[] | u
         nextImage();
       } else if (event.key === 'ArrowLeft') {
         previousImage();
+      } else if (event.key === 'Escape') {
+        closeLightbox();
       }
     };
 

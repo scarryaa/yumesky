@@ -6,10 +6,15 @@
     align-items: center;
     margin-top: 0.8rem;
 
+    .post-controls-button-container {
+        flex: 1;
+    }
+
     .post-controls-comment,
     .post-controls-repost,
     .post-controls-like,
     .post-controls-more {
+        min-width: 0;
         display: flex;
         justify-self: flex-start;
         align-items: center;

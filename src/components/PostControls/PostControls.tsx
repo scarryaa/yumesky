@@ -82,19 +82,27 @@ const PostControls: React.FC<PostControlsProps> = ({ post, big }: PostControlsPr
 
   return (
       <div className='post-controls' style={{ paddingInline: (big ?? false) ? '0.2rem' : 0 }}>
+        <div style={{ flex: (big ?? false) ? 0 : 1 }}>
           <button onClick={async (e) => { reply(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-controls-comment no-button-style'>
               <FontAwesomeIcon icon={faComment} fontSize={(big ?? false) ? 20 : 16} />
               <span className='post-controls-comment-count'>{replyCount === 0 ? null : replyCount}</span>
           </button>
-          <button onClick={async (e) => { await repost(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-controls-repost no-button-style'>
-              <FontAwesomeIcon icon={faRetweet} color={(repostedUri != null) ? 'var(--green)' : 'var(--text-light)'} fontSize={(big ?? false) ? 20 : 16} />
-              <span className='post-controls-repost-count' style={{ color: (repostedUri != null) ? 'var(--green)' : 'var(--text-light)' }}>{repostCount === 0 ? null : repostCount}</span>
-          </button>
-          <button onClick={async (e) => { await like(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-controls-like no-button-style'>
-              <FontAwesomeIcon icon={(likedUri != null) ? faHeartSolid : faHeart} color={(likedUri != null) ? 'var(--red)' : 'var(--text-light)'} fontSize={(big ?? false) ? 20 : 16} />
-              <span className='post-controls-like-count' style={{ color: (likedUri != null) ? 'var(--red)' : 'var(--text-light)' }}>{likeCount === 0 ? null : likeCount}</span>
-          </button>
-          <MoreButton post={post} big={big} />
+        </div>
+          <div style={{ flex: (big ?? false) ? 0 : 1 }}>
+            <button onClick={async (e) => { await repost(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-controls-repost no-button-style'>
+                <FontAwesomeIcon icon={faRetweet} color={(repostedUri != null) ? 'var(--green)' : 'var(--text-light)'} fontSize={(big ?? false) ? 20 : 16} />
+                <span className='post-controls-repost-count' style={{ color: (repostedUri != null) ? 'var(--green)' : 'var(--text-light)' }}>{repostCount === 0 ? null : repostCount}</span>
+            </button>
+          </div>
+          <div style={{ flex: (big ?? false) ? 0 : 1 }}>
+            <button onClick={async (e) => { await like(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-controls-like no-button-style'>
+                <FontAwesomeIcon icon={(likedUri != null) ? faHeartSolid : faHeart} color={(likedUri != null) ? 'var(--red)' : 'var(--text-light)'} fontSize={(big ?? false) ? 20 : 16} />
+                <span className='post-controls-like-count' style={{ color: (likedUri != null) ? 'var(--red)' : 'var(--text-light)' }}>{likeCount === 0 ? null : likeCount}</span>
+            </button>
+          </div>
+          <div style={{ flex: (big ?? false) ? 0 : 1 }}>
+            <MoreButton post={post} big={big} />
+          </div>
       </div>
   )
 }
