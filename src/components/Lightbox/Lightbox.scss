@@ -1,0 +1,51 @@
+.lightbox-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000c;
+    display: flex;
+    flex-direction: row;
+    z-index: 999;
+    align-items: flex-start;
+    justify-content: center;
+
+    .lightbox-mask-inner {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .image-container {
+        // hacky
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .lightbox-image {
+       object-fit: contain;
+       max-height: 100%;
+       max-width: 100%;
+    }
+
+    .lightbox-alt-text-container {
+        background-color: var(--black);
+        padding-left: 4rem;
+        align-items: flex-start;
+        padding-block: 1.5rem;
+        width: 100%;
+
+        .lightbox-alt-text {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            overflow: hidden;
+            padding-right: 6rem;
+        }
+    }
+    
+}

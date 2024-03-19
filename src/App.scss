@@ -20,3 +20,9 @@
   background-color: var(--secondary);
   box-shadow: 0 0 10px rgba(#000, 0.1);
 }
+
+.fake-scrollbar {
+  width: 10px;
+  height: 100%;
+  background-color: transparent;
+}

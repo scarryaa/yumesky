@@ -21,28 +21,32 @@ import { convertStringArrayToGeneratorViewArray } from './utils';
 import { Provider as MutedThreadsProvider } from './state/muted-threads';
 import { Provider as HiddenPostsProvider } from './state/hidden-posts';
 import { Provider as ModalProvider } from './state/modals/index';
+import { Provider as LightboxProvider, useLightbox } from './state/lightbox';
 import { ModalsContainer } from './components/Modal/Modal';
 import Hashtag from './pages/Hashtag/Hashtag';
 import Feeds from './pages/Feeds/Feeds';
+import { LightboxContainer } from './components/Lightbox/Lightbox';
 
 const App: React.FC = () => {
   return (
     <PrefsProvider>
       <HiddenPostsProvider>
         <MutedThreadsProvider>
-          <ModalProvider>
-            <PostProvider>
-              <ThemeProvider>
-                <AuthProvider>
-                  <HashRouter>
-                    <div className="app">
-                      <AppContent />
-                    </div>
-                  </HashRouter>
-                </AuthProvider>
-              </ThemeProvider>
-            </PostProvider>
-          </ModalProvider>
+          <LightboxProvider>
+            <ModalProvider>
+              <PostProvider>
+                <ThemeProvider>
+                  <AuthProvider>
+                    <HashRouter>
+                      <div className="app">
+                        <AppContent />
+                      </div>
+                    </HashRouter>
+                  </AuthProvider>
+                </ThemeProvider>
+              </PostProvider>
+            </ModalProvider>
+          </LightboxProvider>
         </MutedThreadsProvider>
       </HiddenPostsProvider>
     </PrefsProvider>
@@ -94,6 +98,7 @@ const AppLoggedIn: React.FC = () => {
           <Route path="/settings" element={<Settings setCurrentPage={setCurrentPage} />} />
         </Routes>
         <ModalsContainer />
+        <LightboxContainer />
       </div>
     </>
   )
@@ -101,6 +106,7 @@ const AppLoggedIn: React.FC = () => {
 
 const AppContent: React.FC = () => {
   const { isAuthenticated, setIsAuthenticated } = useAuth();
+  const { isLightboxActive } = useLightbox();
 
   const handleLogin = async (username: string, password: string): Promise<void> => {
     try {
@@ -125,6 +131,7 @@ const AppContent: React.FC = () => {
           <Route path="/" element={<Login onSubmit={handleLogin} />} />
         </Routes>
           )}
+      {isLightboxActive && <div className='fake-scrollbar'></div>}
     </div>
   );
 }

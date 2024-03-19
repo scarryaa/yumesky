@@ -7,9 +7,17 @@
 
     .profile-banner {
         height: 150px;
+        max-height: 150px;
         object-fit: cover;
-        width: 100%;
+        max-width: 100%;
         background-color: var(--primary);
+        overflow: hidden;
+
+        .image-container {
+            > img {
+                max-width: 100%;
+            }
+        }
     }
 
     .fallback-div {

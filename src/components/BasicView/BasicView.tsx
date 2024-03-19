@@ -12,8 +12,10 @@ const BasicView: React.FC<BasicViewProps> = ({ children, padding, viewPadding, c
 
   return (
     <div className={`basic-view ${className}`} style={(padding ?? false) ? style : {}}>
+      <div className='basic-view-inner'>
         {children}
         {viewPadding && <div className='basic-view-padding'></div>}
+      </div>
     </div>
   )
 }

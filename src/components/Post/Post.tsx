@@ -47,7 +47,7 @@ const PostInfo: React.FC<PostProps> = ({ post, ref }: PostProps) => {
 
   const postReasonAuthor = useMemo(
     () =>
-      (AppBskyFeedDefs.isReasonRepost(post.reason) && (post.reason.by.handle ?? post.reason.by.displayName)),
+      (AppBskyFeedDefs.isReasonRepost(post.reason) && (post.reason.by.displayName ?? post.reason.by.handle)),
     [post]
   );
 
@@ -72,7 +72,7 @@ const PostInfo: React.FC<PostProps> = ({ post, ref }: PostProps) => {
                 <span>Reposted by <Link to={`/profile/${postReasonAuthor}`} linkStyle={true}>{postReasonAuthor}</Link></span>
             </Link>}
         <div className='post-info-container'>
-          <Avatar link={`/profile/${post.post.author.handle}`} width={40} height={40} className='post-avatar' img={post.post.author.avatar} />
+          <Avatar link={`/profile/${post.post.author.handle}`} width={40} height={40} className='post-avatar' src={post.post.author.avatar} />
             <div className='post-info'>
                 <div className='post-info-and-timestamp'>
                     <Link linkStyle={true} to={`/profile/${post.post.author.handle}`} className='post-info-inner'>

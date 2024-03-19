@@ -15,6 +15,7 @@ import getConfig, { type DefaultHomeTabs, type DefaultProfileTabs } from '../../
 import ProfileBody from '../../components/Profile/ProfileBody';
 import { useProfileExtras } from '../../hooks/useProfileExtras';
 import Avatar from '../../components/Avatar/Avatar';
+import Image from '../../components/Image/Image';
 
 interface ProfileProps {
   setCurrentPage: (pageName: string) => void;
@@ -48,9 +49,9 @@ const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
   return (
     <BasicView viewPadding={true}>
         <div className='profile'>
-          {((profile?.banner) != null) ? <img className='profile-banner' src={profile?.banner} /> : <div className='profile-banner fallback-div'></div>}
+          {((profile?.banner) != null) ? <div className='profile-banner'><Image src={profile?.banner} /></div> : <div className='profile-banner fallback-div'></div>}
           <div className='profile-info'>
-            <Avatar className='profile-picture' height={100} width={100} img={profile?.avatar} link={undefined} />
+            <Avatar className='profile-picture' height={100} width={100} src={profile?.avatar} link={undefined} />
             <div className='profile-info-inner'>
               <div className='displayname-and-handle'>
                 <span className='displayname'>{authorDisplayNameOrHandle}</span>

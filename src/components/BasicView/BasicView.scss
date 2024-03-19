@@ -2,9 +2,15 @@
     width: 100%;
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 
-    .basic-view-padding {
-        height: 100vh;
+    .basic-view-inner {  
+        width: 100%;    
+        display: flex;
+        flex-direction: column;
+
+        .basic-view-padding {
+            height: 100vh;
+        }
     }
 }
