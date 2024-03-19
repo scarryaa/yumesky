@@ -22,10 +22,15 @@ import { Provider as MutedThreadsProvider } from './state/muted-threads';
 import { Provider as HiddenPostsProvider } from './state/hidden-posts';
 import { Provider as ModalProvider } from './state/modals/index';
 import { ModalsContainer } from './components/Modal/Modal';
+import { init as initPersistedState } from './state/persisted';
 import Hashtag from './pages/Hashtag/Hashtag';
 import Feeds from './pages/Feeds/Feeds';
 
 const App: React.FC = () => {
+  useEffect(() => {
+    void initPersistedState();
+  }, []);
+
   return (
     <PrefsProvider>
       <HiddenPostsProvider>

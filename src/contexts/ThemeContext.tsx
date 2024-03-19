@@ -59,7 +59,7 @@ const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   useEffect(() => {
     // set primary color
     const colorMode = persisted.get('colorMode');
-    setPrimaryColor(colorMode.primary);
+    changePrimaryColor(colorMode.primary);
 
     if (colorMode.value !== 'light' && colorMode.value !== 'dim' && colorMode.value !== 'dark') {
       const listener = (e: MediaQueryListEvent): void => {
@@ -90,6 +90,7 @@ const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
   const changePrimaryColor = (primaryColor: string): void => {
     persisted.write('colorMode', { value: persisted.get('colorMode').value, primary: primaryColor });
+    document.documentElement.style.setProperty('--primary', primaryColor);
     setPrimaryColor(primaryColor);
   }
 

@@ -4,6 +4,7 @@ import EmbedContainer from './EmbedContainer';
 import './EmbedHandler.scss';
 import { type View, type ViewImage } from '@atproto/api/dist/client/types/app/bsky/embed/images';
 
+// TODO improve/clean up this component
 type EmbedType = 'app.bsky.embed.images#view' | 'app.bsky.embed.record#view' | 'app.bsky.embed.external#view' | 'app.bsky.embed.recordWithMedia#view';
 type EmbedEmbedType = Array<AppBskyEmbedImages.View | AppBskyEmbedExternal.View | View | AppBskyEmbedRecordWithMedia.View | {
   $type: string;
@@ -19,7 +20,6 @@ interface EmbedHandlerProps {
 }
 const EmbedHandler: React.FC<EmbedHandlerProps> = ({ post }: EmbedHandlerProps) => {
   const embedType: EmbedType = post.post.embed?.$type as EmbedType;
-  console.log(post.post.embed);
 
   switch (embedType) {
     case 'app.bsky.embed.images#view': {
@@ -30,7 +30,7 @@ const EmbedHandler: React.FC<EmbedHandlerProps> = ({ post }: EmbedHandlerProps) 
     case 'app.bsky.embed.record#view': {
       return (
         <EmbedContainer embed={post.post.embed}>
-            {((post.post.embed?.record as AppBskyEmbedRecord.ViewRecord).value as AppBskyFeedPost.Record).text}
+            {((post.post.embed?.record as AppBskyEmbedRecord.ViewRecord).value as AppBskyFeedPost.Record)?.text}
             <div className='embed-images-container'>
               {(((post.post.embed?.record as AppBskyEmbedRecord.ViewRecord).embeds?.length) != null) &&
               (post.post.embed?.record as AppBskyEmbedRecord.ViewRecord).embeds?.map((embed, i) => (
@@ -65,7 +65,7 @@ const EmbedHandler: React.FC<EmbedHandlerProps> = ({ post }: EmbedHandlerProps) 
               </div>
             </div>
         <EmbedContainer embed={post.post.embed?.record as AppBskyEmbedRecordWithMedia.View}>
-          {((post.post.embed?.record as AppBskyEmbedRecord.View).record.value as AppBskyFeedPost.Record).text}
+          {((post.post.embed?.record as AppBskyEmbedRecord.View).record.value as AppBskyFeedPost.Record)?.text}
           <div className='embed-images-container'>
             {(((post.post.embed?.record as AppBskyEmbedRecord.View).record.embeds) != null) &&
             (post.post.embed?.record as AppBskyEmbedRecord.View).record.embeds !== null &&

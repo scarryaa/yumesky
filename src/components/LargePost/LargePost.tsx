@@ -6,6 +6,7 @@ import { PostTimestamp } from '../Post/Post';
 import './LargePost.scss';
 import PostControls from '../PostControls/PostControls';
 import RichText from '../RichText/RichText';
+import EmbedHandler from '../Embed/EmbedHandler';
 
 interface LargePostProps {
   post: AppBskyFeedDefs.FeedViewPost | undefined;
@@ -48,6 +49,8 @@ const LargePost = React.forwardRef<HTMLDivElement, LargePostProps>(({ post }, re
                 <div className='image-grid' style={{ marginTop: rt?.length === 0 ? 0 : '0.2rem' }}>
                     <ImageGrid images={post.post.embed.images as AppBskyEmbedImages.ViewImage[]} />
                 </div>}
+
+                {post !== undefined && <EmbedHandler post={post} />}
 
                 <PostTimestamp className='post-timestamp no-underline' short={false} post={post} />
                 {((((post?.post.likeCount) != null) && post.post.likeCount > 0) || ((post?.post.repostCount != null) && post.post.repostCount > 0)) && <div className='reposts-and-likes'>

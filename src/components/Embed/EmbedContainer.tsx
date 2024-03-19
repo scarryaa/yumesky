@@ -21,7 +21,8 @@ const EmbedContainer: React.FC<EmbedContainerProps> = ({ children, embed }: Embe
   if (embed === undefined) return null;
 
   return (
-    <Link onClick={(e: React.MouseEvent<Element>) => { setCachedPost(undefined); e.stopPropagation(); e.preventDefault(); console.log('e'); navigate(`../profile/${AppBskyEmbedRecord.isViewRecord(embed.record) && embed.record.author.handle}/post/${AppBskyEmbedRecord.isViewRecord(embed.record) && embed.record.uri.split('/')[4]}`); }} linkStyle={false} to={`/profile/${AppBskyEmbedRecord.isViewRecord(embed.record) && embed.record.author.handle}/post/${AppBskyEmbedRecord.isViewRecord(embed.record) && embed.record.uri.split('/')[4]}`} className='embed-container'>
+    // TODO fix caching interaction with this
+    <Link onClick={(e: React.MouseEvent<Element>) => { setCachedPost(undefined); e.stopPropagation(); e.preventDefault(); navigate(`../profile/${AppBskyEmbedRecord.isViewRecord(embed.record) && embed.record.author.handle}/post/${AppBskyEmbedRecord.isViewRecord(embed.record) && embed.record.uri.split('/')[4]}`); }} linkStyle={false} to={`/profile/${AppBskyEmbedRecord.isViewRecord(embed.record) && embed.record.author.handle}/post/${AppBskyEmbedRecord.isViewRecord(embed.record) && embed.record.uri.split('/')[4]}`} className='embed-container'>
         <div className='embed-info'>
             <Avatar img={AppBskyEmbedRecord.isViewRecord(embed.record) ? embed.record.author.avatar : ''} height={15} width={15} />
             <div className='embed-info-and-timestamp'>

@@ -16,7 +16,6 @@ const Settings: React.FC<SettingsProps> = ({ setCurrentPage }: SettingsProps) =>
   }, []);
 
   useEffect(() => {
-    console.log('e');
     document.documentElement.style.setProperty('--primary', primaryColor);
   }, [primaryColor])
 
