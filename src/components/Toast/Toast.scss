@@ -1,0 +1,20 @@
+.toast-container {
+    position: fixed;
+    right: 30px;
+    top: 30px;
+    align-items: center;
+
+    .toast-inner {
+        padding-inline: 3rem;
+        padding-block: 1rem;
+        border-radius: 8px;
+        border-width: 1px;
+        background-color: var(--text);
+        box-shadow: 0 0 10px rgba(#000, 0.5);
+
+        .toast-text {
+            color: var(--text-inverse);
+            font-size: 22px;
+        }
+    }
+}

@@ -1,4 +1,4 @@
-import { type AppBskyFeedDefs } from '@atproto/api';
+import { type AppBskyActorDefs, type AppBskyFeedDefs } from '@atproto/api';
 import getConfig from './config';
 
 export const ago = (date: number | string | Date): string => {
@@ -82,4 +82,9 @@ export const getPostId = (post: AppBskyFeedDefs.FeedViewPost): string => {
 export const generatePostShareLink = (post: AppBskyFeedDefs.FeedViewPost | undefined): string => {
   if (post === undefined) return '';
   return `${getConfig().DOMAIN}/profile/${post.post.author.handle}/post/${getPostId(post)}`;
+}
+
+export const generateProfileShareLink = (profile: AppBskyActorDefs.ProfileView | undefined): string => {
+  if (profile === undefined) throw new Error('Profile is undefined');
+  return `${getConfig().DOMAIN}/profile/${profile.handle}`;
 }

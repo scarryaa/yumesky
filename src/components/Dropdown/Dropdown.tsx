@@ -43,11 +43,18 @@ const Dropdown: React.FC<DropdownProps> = ({ children, style, items }: DropdownP
         </DropdownMenu.Trigger>
 
         <DropdownMenu.Portal>
-            <DropdownMenu.Content className='dropdown' ref={menuRef} sideOffset={5}>
+            <DropdownMenu.Content className='dropdown' ref={menuRef} sideOffset={5}
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+              }}>
             {items.map((item, index) => {
               if (item.label === 'separator') {
                 return (
-                    <DropdownMenu.Separator
+                    <DropdownMenu.Separator onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                    }}
                     className='separator'
                     key={index}>
 

@@ -9,7 +9,7 @@ import { faCheck, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import FollowsYou from '../../components/FollowsYou/FollowsYou';
 import TabList from '../../components/TabList/TabList';
 import RichText from '../../components/RichText/RichText';
-import { RichText as RichTextAPI } from '@atproto/api';
+import { type AppBskyActorDefs, RichText as RichTextAPI } from '@atproto/api';
 import agent from '../../api/agent';
 import getConfig, { type DefaultHomeTabs, type DefaultProfileTabs } from '../../config';
 import ProfileBody from '../../components/Profile/ProfileBody';
@@ -17,6 +17,25 @@ import { useProfileExtras } from '../../hooks/useProfileExtras';
 import Avatar from '../../components/Avatar/Avatar';
 import Image from '../../components/Image/Image';
 import { useLightbox, useLightboxControls } from '../../state/lightbox';
+import useProfileDropdown from '../../hooks/dropdown/useProfileDropdown';
+import Dropdown from '../../components/Dropdown/Dropdown';
+
+interface ProfileDropdownProps {
+  profile: AppBskyActorDefs.ProfileView;
+}
+const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profile }: ProfileDropdownProps) => {
+  const { dropdownItems } = useProfileDropdown(profile);
+
+  return (
+    <Dropdown items={dropdownItems}>
+      <div>
+        <PillButton color='var(--secondary-highlight)'>
+          <FontAwesomeIcon icon={faEllipsisH} fontSize={16} />
+        </PillButton>
+      </div>
+    </Dropdown>
+  )
+}
 
 interface ProfileProps {
   setCurrentPage: (pageName: string) => void;
@@ -67,9 +86,7 @@ const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
                 <PillButton color='var(--secondary-highlight)' className='profile-buttons-following'>
                   {((profile?.viewer?.following) != null) ? <><FontAwesomeIcon icon={faCheck} fontSize={14} />Following</> : (profile?.did === agent.session?.did) ? 'Edit Profile' : 'Follow'}
                 </PillButton>
-                <PillButton color='var(--secondary-highlight)'>
-                  <FontAwesomeIcon icon={faEllipsisH} fontSize={16} />
-                </PillButton>
+                {profile !== undefined && <ProfileDropdown profile={profile}/>}
               </div>
             </div>
             <div className='profile-body'>

@@ -23,6 +23,7 @@ import { Provider as HiddenPostsProvider } from './state/hidden-posts';
 import { Provider as ModalProvider } from './state/modals/index';
 import { Provider as PromptProvider } from './state/prompts/index';
 import { Provider as LightboxProvider, useLightbox } from './state/lightbox';
+import { Provider as ToastProvider } from './state/toasts';
 import { ModalsContainer } from './components/Modal/Modal';
 import Hashtag from './pages/Hashtag/Hashtag';
 import Feeds from './pages/Feeds/Feeds';
@@ -37,19 +38,21 @@ const App: React.FC = () => {
           <LightboxProvider>
             <PromptProvider>
               <ModalProvider>
-                <PostProvider>
-                  <ThemeProvider>
-                    <AuthProvider>
-                      <HashRouter>
-                        <div className="app">
-                          <AppContent />
-                        </div>
-                      </HashRouter>
-                    </AuthProvider>
-                  </ThemeProvider>
-                </PostProvider>
+                <ToastProvider>
+                  <PostProvider>
+                    <ThemeProvider>
+                      <AuthProvider>
+                        <HashRouter>
+                          <div className="app">
+                            <AppContent />
+                          </div>
+                        </HashRouter>
+                      </AuthProvider>
+                    </ThemeProvider>
+                  </PostProvider>
+                </ToastProvider>
               </ModalProvider>
-            </PromptProvider>~
+            </PromptProvider>
           </LightboxProvider>
         </MutedThreadsProvider>
       </HiddenPostsProvider>
