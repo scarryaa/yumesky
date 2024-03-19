@@ -56,12 +56,26 @@ const EmbedHandler: React.FC<EmbedHandlerProps> = ({ post }: EmbedHandlerProps) 
       return (
         <>
         <ImageGrid images={(post.post.embed?.media as MediaType).images as ViewImage[]} />
+        <div className='embed-handler'>
+              <img className='embed-external-img' src={((post.post.embed?.media as MediaType)?.external as AppBskyEmbedExternal.External)?.thumb?.toString()} />
+              <div className='embed-external-info'>
+                <span className='embed-external-uri'>{((post.post.embed?.media as MediaType)?.external as AppBskyEmbedExternal.External)?.uri}</span>
+                <span className='embed-external-title'>{((post.post.embed?.media as MediaType)?.external as AppBskyEmbedExternal.External)?.title}</span>
+                <span className='embed-external-description'>{((post.post.embed?.media as MediaType)?.external as AppBskyEmbedExternal.External)?.description}</span>
+              </div>
+            </div>
         <EmbedContainer embed={post.post.embed?.record as AppBskyEmbedRecordWithMedia.View}>
           {((post.post.embed?.record as AppBskyEmbedRecord.View).record.value as AppBskyFeedPost.Record).text}
           <div className='embed-images-container'>
             {(((post.post.embed?.record as AppBskyEmbedRecord.View).record.embeds) != null) &&
+            (post.post.embed?.record as AppBskyEmbedRecord.View).record.embeds !== null &&
             ((post.post.embed?.record as AppBskyEmbedRecord.View).record.embeds as EmbedEmbedType).map((embed, i) => (
-              <ImageGrid className='embed-images' key={i} images={(embed.media as MediaType).images as ViewImage[]} />
+              <ImageGrid className='embed-images' key={i} images={(embed.media as MediaType)?.images as ViewImage[]} />
+            ))}
+            {(((post.post.embed?.record as AppBskyEmbedRecord.View).record.embeds) != null) &&
+            (post.post.embed?.record as AppBskyEmbedRecord.View).record.embeds !== null &&
+            ((post.post.embed?.record as AppBskyEmbedRecord.View).record.embeds as EmbedEmbedType).map((embed, i) => (
+              <ImageGrid className='embed-images' key={i} images={(embed.images as ViewImage[])} />
             ))}
           </div>
       </EmbedContainer>
