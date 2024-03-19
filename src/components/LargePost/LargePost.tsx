@@ -1,7 +1,6 @@
-import { type AppBskyEmbedImages, AppBskyFeedPost, RichText as RichTextAPI, type AppBskyFeedDefs } from '@atproto/api';
+import { AppBskyFeedPost, RichText as RichTextAPI, type AppBskyFeedDefs } from '@atproto/api';
 import React, { useMemo } from 'react';
 import Link from '../Link/Link';
-import ImageGrid from '../ImageGrid/ImageGrid';
 import { PostTimestamp } from '../Post/Post';
 import './LargePost.scss';
 import PostControls from '../PostControls/PostControls';
@@ -44,11 +43,6 @@ const LargePost = React.forwardRef<HTMLDivElement, LargePostProps>(({ post }, re
                 <div className='post-content'>
                     <RichText value={rt} />
                 </div>
-
-                {post?.post.embed?.$type === 'app.bsky.embed.images#view' &&
-                <div className='image-grid' style={{ marginTop: rt?.length === 0 ? 0 : '0.2rem' }}>
-                    <ImageGrid images={post.post.embed.images as AppBskyEmbedImages.ViewImage[]} />
-                </div>}
 
                 {post !== undefined && <EmbedHandler post={post} />}
 

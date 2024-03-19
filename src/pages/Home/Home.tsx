@@ -11,7 +11,7 @@ interface HomeProps {
   setCurrentPage: (pageName: string | null) => void;
 }
 const Home: React.FC<HomeProps> = ({ selectedTab, tabs, setCurrentPage }: HomeProps) => {
-  const timeline = usePosts(selectedTab, tabs);
+  const { timeline } = usePosts(selectedTab, tabs);
 
   useEffect(() => {
     setCurrentPage(null);

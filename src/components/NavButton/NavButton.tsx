@@ -10,10 +10,11 @@ interface NavButtonProps {
   link: string;
   active: boolean;
   transform?: string | Transform;
+  onClick?: () => void;
 }
-const NavButton: React.FC<NavButtonProps> = ({ icon, size, link, active, transform }) => {
+const NavButton: React.FC<NavButtonProps> = ({ icon, size, link, active, transform, onClick }) => {
   return (
-    <Link to={link} className='nav-link'>
+    <Link to={link} onClick={onClick} className='nav-link'>
         <button className='nav-button no-button-style'>
             <FontAwesomeIcon transform={(active && transform !== null) ? transform : ''} icon={icon} fontSize={size}/>
         </button>

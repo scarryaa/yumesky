@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { init as initPersistedState } from './state/persisted';
 
 const root = ReactDOM.createRoot(
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -13,6 +14,8 @@ root.render(
     <App />
   </React.StrictMode>
 );
+
+void initPersistedState();
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

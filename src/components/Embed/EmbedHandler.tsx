@@ -56,14 +56,14 @@ const EmbedHandler: React.FC<EmbedHandlerProps> = ({ post }: EmbedHandlerProps) 
       return (
         <>
         <ImageGrid images={(post.post.embed?.media as MediaType).images as ViewImage[]} />
-        <div className='embed-handler'>
+            {(Boolean(((post.post.embed?.media as MediaType)?.external))) && <div className='embed-handler'>
               <img className='embed-external-img' src={((post.post.embed?.media as MediaType)?.external as AppBskyEmbedExternal.External)?.thumb?.toString()} />
               <div className='embed-external-info'>
                 <span className='embed-external-uri'>{((post.post.embed?.media as MediaType)?.external as AppBskyEmbedExternal.External)?.uri}</span>
                 <span className='embed-external-title'>{((post.post.embed?.media as MediaType)?.external as AppBskyEmbedExternal.External)?.title}</span>
                 <span className='embed-external-description'>{((post.post.embed?.media as MediaType)?.external as AppBskyEmbedExternal.External)?.description}</span>
               </div>
-            </div>
+            </div>}
         <EmbedContainer embed={post.post.embed?.record as AppBskyEmbedRecordWithMedia.View}>
           {((post.post.embed?.record as AppBskyEmbedRecord.View).record.value as AppBskyFeedPost.Record)?.text}
           <div className='embed-images-container'>

@@ -38,10 +38,8 @@ const Dropdown: React.FC<DropdownProps> = ({ children, style, items }: DropdownP
 
   return (
     <DropdownMenu.Root>
-        <DropdownMenu.Trigger asChild>
-            <button style={style} className='no-button-style' onClick={() => { setOpen(o => !o); }} ref={buttonRef}>
-                {children}
-            </button>
+        <DropdownMenu.Trigger asChild className='no-button-style' onClick={() => { setOpen(o => !o); }} ref={buttonRef}>
+          {children}
         </DropdownMenu.Trigger>
 
         <DropdownMenu.Portal>

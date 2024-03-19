@@ -7,10 +7,12 @@ export { defaults } from './schema'
 let _state: Schema = defaults;
 
 export const init = async (): Promise<void> => {
+  console.log(store.read());
   const stored = store.read();
-  if (stored == null) {
+  if (stored === null || stored === undefined) {
     store.write(defaults);
   }
+
   _state = stored ?? defaults;
 }
 
