@@ -1,0 +1,58 @@
+.notification {
+    padding: 0.8rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.notification-shell {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.notification-inner {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.notification-avatar-container {
+    width: 35px;
+    height: 35px;
+    max-width: 35px;
+    max-height: 35px;
+    border-radius: 50%;
+    display: flex;
+    gap: 0.2rem;
+}
+
+.notification-avatar {
+    width: 35px;
+    height: 35px;
+    max-width: 35px;
+    max-height: 35px;
+    border-radius: 50%;
+}
+
+.notification-author-container {
+    margin-left: 1.5rem;
+    display: flex;
+    gap: 0.3rem;
+}
+
+.notification-author,
+.notification-others {
+    font-weight: bold;
+}
+
+.notification-timestamp {
+    color: var(--text-light);
+}
+
+.notification-record {
+    margin-left: 1.5rem;
+    color: var(--text-light);
+}

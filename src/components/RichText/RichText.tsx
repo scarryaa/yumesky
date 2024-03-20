@@ -12,9 +12,8 @@ const RichText: React.FC<RichTextProps> = ({ value }: RichTextProps) => {
 
   const { text, facets } = richText;
 
+  void richText.detectFacets(agent);
   if ((facets?.length) == null) {
-    void richText.detectFacets(agent);
-
     return (
         <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{text}</div>
     )

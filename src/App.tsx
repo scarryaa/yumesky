@@ -29,6 +29,7 @@ import Hashtag from './pages/Hashtag/Hashtag';
 import Feeds from './pages/Feeds/Feeds';
 import { LightboxContainer } from './components/Lightbox/Lightbox';
 import { PromptContainer } from './components/Prompt/Prompt';
+import Notifications from './pages/Notifications/Notifications';
 
 const App: React.FC = () => {
   return (
@@ -103,6 +104,7 @@ const AppLoggedIn: React.FC = () => {
           <Route path='/hashtag/:hashtag' element={<Hashtag setCurrentPage={setCurrentPage} />} />
           <Route path='/feeds' element={<Feeds setCurrentPage={setCurrentPage} />} />
           <Route path="/settings" element={<Settings setCurrentPage={setCurrentPage} />} />
+          <Route path='/notifications' element={<Notifications setCurrentPage={setCurrentPage} />} />
         </Routes>
         <PromptContainer />
         <ModalsContainer />
