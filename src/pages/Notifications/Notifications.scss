@@ -4,6 +4,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
+    text-decoration: none !important;
 
     .notification-record {
         margin-left: 3rem;
@@ -28,6 +29,10 @@
     .notification-follow-author-container {
         margin-left: 3rem;
 
+        .notification-reason {
+            margin-left: 0.2rem;
+        }
+
         .notification-author,
         .notification-others {
             font-weight: bold;
@@ -42,32 +47,84 @@
     .notification-shell {
         display: flex;
         flex-direction: row;
-        align-items: center;
+        align-items: flex-start;
         gap: 0.5rem;
         margin-left: 1rem;
+
+        .notification-icon {
+            margin-top: 0.4rem;
+        }
 
         .notification-inner {
             display: flex;
             justify-content: center;
             flex-direction: column;
+        }
+    }
+}
 
-            .notification-avatar-container {
+.notification-avatar-container {
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+
+    .notification-dropdown-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        .notification-dropdown {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: center;
+            gap: 0.5rem;
+
+            .notification-dropdown-avatar {
                 width: 35px;
                 height: 35px;
                 max-width: 35px;
                 max-height: 35px;
                 border-radius: 50%;
+            }
+    
+            .notification-dropdown-link {
                 display: flex;
+                flex-direction: row;
                 gap: 0.2rem;
+                flex-wrap: nowrap;
 
-                .notification-avatar {
-                    width: 35px;
-                    height: 35px;
-                    max-width: 35px;
-                    max-height: 35px;
-                    border-radius: 50%;
+                .display-name {
+                    font-weight: bold;
+                }
+    
+                .handle {
+                    color: var(--text-light);
                 }
             }
         }
+    }
+
+    .notification-avatars {
+        display: flex;
+        flex-direction: row;
+        gap: 0.2rem;
+
+        .notification-avatar {
+            width: 35px;
+            height: 35px;
+            max-width: 35px;
+            max-height: 35px;
+            border-radius: 50%;
+        }
+    }
+
+
+    .notification-chevron {
+        display: flex;
+        gap: 0.2rem;
+        margin-top: 0.5rem;
+        margin-left: 0.2rem;
     }
 }

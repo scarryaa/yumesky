@@ -11,8 +11,8 @@ interface ImageProps {
 }
 const Image: React.FC<ImageProps> = ({ className, src, originalSrc, style, alt, onClick }: ImageProps) => {
   return (
-    <div className='image-container' onClick={onClick}>
-        <img src={src} style={style} className={`${className}`} />
+    <div className={`${className} image-container`} onClick={onClick}>
+        <img src={src} style={style} className={`${className}`}/>
         {(alt !== undefined && alt !== '') && <div className='image-alt-tag'>ALT</div>}
     </div>
   )

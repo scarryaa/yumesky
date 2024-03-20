@@ -20,8 +20,15 @@ export const usePost = (): PostContextType => {
 const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cachedPost, setCachedPost] = useState<AppBskyFeedDefs.FeedViewPost | undefined>(undefined);
 
+  const validatedSetCachedPost: PostContextType['setCachedPost'] = (newCachedPost) => {
+    if (newCachedPost === null || newCachedPost === undefined) {
+      throw new Error('Attempted to set cachedPost to null or undefined!');
+    }
+    setCachedPost(newCachedPost);
+  };
+
   return (
-      <PostContext.Provider value={{ cachedPost, setCachedPost }}>
+      <PostContext.Provider value={{ cachedPost, setCachedPost: validatedSetCachedPost }}>
         {children}
       </PostContext.Provider>
   );
