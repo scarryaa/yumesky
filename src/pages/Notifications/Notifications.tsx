@@ -7,6 +7,7 @@ import './Notifications.scss';
 import { ago } from '../../utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAt, faHeart, faRetweet, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import Post from '../../components/Post/Post';
 
 type GroupedNotifications = Record<string, {
   notifications: AppBskyNotificationListNotifications.Notification[];
@@ -31,37 +32,84 @@ const reasonIconMap: Record<string, { icon: any, color: string }> = {
   repost: { icon: faRetweet, color: 'var(--green)' }
 };
 
-const NotificationItem: React.FC<{ post: GroupedNotifications[string], reason: string }> = ({ post, reason }) => (
-  <div className='notification'>
-    <div className='notification-shell'>
-      {reasonIconMap[reason] !== undefined && (
-        <FontAwesomeIcon
-          color={reasonIconMap[reason].color}
-          icon={reasonIconMap[reason].icon}
-          fontSize={18}
-        />
-      )}
-      <div className='notification-inner'>
-        <div className="notification-avatar-container">
-          {post.avatars.map((avatar, i) => (
-            <Image className='notification-avatar' key={i} src={avatar} />
-          ))}
+const NotificationItem: React.FC<{ post: GroupedNotifications[string], reason: string }> = ({ post, reason }) => {
+  switch (reason) {
+    case 'like':
+    case 'mention':
+    case 'repost':
+      return (
+          <div className='notification'>
+              <div className='notification-shell'>
+              {reasonIconMap[reason] !== undefined && (
+                  <FontAwesomeIcon
+                  color={reasonIconMap[reason].color}
+                  icon={reasonIconMap[reason].icon}
+                  fontSize={22}
+                  />
+              )}
+              <div className='notification-inner'>
+                  <div className="notification-avatar-container">
+                  {post.avatars.map((avatar, i) => (
+                      <Image className='notification-avatar' key={i} src={avatar} />
+                  ))}
+                  </div>
+              </div>
+              </div>
+              <div className="notification-author-container">
+              <span className='notification-author'>{post.authors[0]}</span>
+              <span className='no-bold'>{post.authors.length > 1 && 'and'}</span>
+              {post.authors.length > 1 && (
+                  <span className="notification-others">
+                  {`${post.authors.length - 1} other${post.authors.length - 1 === 1 ? '' : 's'}`}
+                  </span>
+              )}
+              <span>{reasonTextMap[reason]}</span>
+              <span className='notification-timestamp'>{ago(post.notifications[0].indexedAt)}</span>
+              </div>
+              {((post.post?.record) != null) && <div className='notification-record'>{(post.post.record as AppBskyFeedPost.Record).text}</div>}
+          </div>
+      );
+    case 'reply':
+    case 'quote':
+      return (
+        post.post !== undefined ? <Post post={{ post: post.post }} /> : null
+      );
+    case 'follow':
+      return (
+        <div className='notification'>
+            <div className='notification-shell'>
+            {reasonIconMap[reason] !== undefined && (
+                <FontAwesomeIcon
+                color={reasonIconMap[reason].color}
+                icon={reasonIconMap[reason].icon}
+                fontSize={22}
+                />
+            )}
+            <div className='notification-inner'>
+                <div className="notification-avatar-container">
+                {post.avatars.map((avatar, i) => (
+                    <Image className='notification-avatar' key={i} src={avatar} />
+                ))}
+                </div>
+            </div>
+            </div>
+            <div className="notification-follow-author-container">
+                <span className='notification-author'>{post.authors[0]} </span>
+                <span className='no-bold'>{post.authors.length > 1 && 'and'}</span>
+                {post.authors.length > 1 && (
+                    <span className="notification-others">
+                    {`${post.authors.length - 1} other${post.authors.length - 1 === 1 ? '' : 's'}`}
+                    </span>
+                )}
+                <span>{reasonTextMap[reason]}</span>
+                <span className='notification-timestamp'>{ago(post.notifications[0].indexedAt)}</span>
+            </div>
+            {((post.post?.record) != null) && <div className='notification-record'>{(post.post.record as AppBskyFeedPost.Record).text}</div>}
         </div>
-      </div>
-    </div>
-    <div className="notification-author-container">
-      <span className='notification-author'>{post.authors.join(' and ')}</span>
-      {post.authors.length > 1 && (
-        <span className="notification-others">
-          {`${post.authors.length - 1} other${post.authors.length - 1 === 1 ? '' : 's'}`}
-        </span>
-      )}
-      <span>{reasonTextMap[reason]}</span>
-      <span className='notification-timestamp'>{ago(post.notifications[0].indexedAt)}</span>
-    </div>
-    {((post.post?.record) != null) && <div className='notification-record'>{(post.post.record as AppBskyFeedPost.Record).text}</div>}
-  </div>
-);
+      )
+    default: return null;
+  }
+}
 
 const Notifications: React.FC<{ setCurrentPage: (pageName: string) => void }> = ({ setCurrentPage }) => {
   useEffect(() => {
@@ -74,9 +122,10 @@ const Notifications: React.FC<{ setCurrentPage: (pageName: string) => void }> = 
     const groupedNotifications: GroupedNotifications = {};
 
     notifications.forEach(notification => {
-      const { cid, author, reason } = notification;
-      if (cid !== undefined && author?.avatar !== undefined) {
-        const compoundKey = `${cid}-${reason}`;
+      const { cid, author, reason, record } = notification;
+      const subjectUri = (record as AppBskyFeedLike.Record)?.subject?.uri ?? notification.uri;
+      if (cid !== undefined && author?.avatar !== undefined && subjectUri !== undefined) {
+        const compoundKey = `${reason}-${subjectUri}`;
         if (groupedNotifications[compoundKey] === undefined) {
           groupedNotifications[compoundKey] = {
             notifications: [],
@@ -98,8 +147,10 @@ const Notifications: React.FC<{ setCurrentPage: (pageName: string) => void }> = 
       Object.values(groupedNotifications).forEach(group => {
         const { notifications } = group;
         const matchingNotification = notifications.find(notification => {
-          return ((notification.record as AppBskyFeedLike.Record).subject?.uri === postUri || notification.uri === postUri);
+          const subjectUri = (notification.record as AppBskyFeedLike.Record)?.subject?.uri ?? notification.uri;
+          return (subjectUri === postUri);
         });
+
         if (matchingNotification !== undefined) {
           group.post = post;
         }
