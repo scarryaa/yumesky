@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import agent, { getTimeline } from '../api/agent';
 import { type AppBskyFeedDefs } from '@atproto/api';
 
-export const usePosts = (selectedTab: string, tabs: AppBskyFeedDefs.GeneratorView[]): { timeline: AppBskyFeedDefs.FeedViewPost[] | undefined, refreshTimeline: (() => Promise<void>) } => {
+export const usePosts = (selectedTab: string = 'Following', tabs: AppBskyFeedDefs.GeneratorView[] = []): { timeline: AppBskyFeedDefs.FeedViewPost[] | undefined, refreshTimeline: (() => Promise<void>) } => {
   const [timeline, setTimeline] = useState<AppBskyFeedDefs.FeedViewPost[] | undefined>(undefined);
 
   useEffect(() => {

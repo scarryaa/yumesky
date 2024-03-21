@@ -74,6 +74,17 @@
             font-size: 18px;
             position: relative;
             margin-top: 0.2rem;
+
+            .composer-bottom-actions {
+                border-top: 1px solid var(--border);
+                position: absolute;
+                display: flex;
+                flex-direction: row;
+                padding: 0.6rem 0.2rem;
+                bottom: 0;
+                width: 100%;
+                gap: 0.5rem;
+            }
             
             .composer-uploaded-img-container {
                 display: flex;
@@ -82,7 +93,7 @@
                 bottom: 0rem;
                 gap: 0.5rem;
                 margin-left: 0.2rem;
-                margin-bottom: 1rem;
+                margin-bottom: 3.5rem;
 
                 .composer-uploaded-img-overlay-container {
                     width: 100%;
@@ -183,5 +194,21 @@
         width: 50px;
         height: 50px;
         border-radius: 50%;
+    }
+
+    .composer-emoji-picker-mask {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+
+        .composer-emoji-picker {
+            position: absolute;
+            top: 400px;
+            left: 200px;
+            z-index: 999999;   
+        }
     }
 }

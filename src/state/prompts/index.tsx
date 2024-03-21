@@ -4,6 +4,10 @@ export interface DeletePostPromptType extends Prompt {
   name: 'delete-post',
 };
 
+export interface DeleteDraftPromptType extends Prompt {
+  name: 'delete-draft'
+}
+
 export interface Prompt {
   name: string;
   title: string;

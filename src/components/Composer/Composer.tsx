@@ -1,19 +1,48 @@
-import React, { useRef } from 'react';
+import React, { type ChangeEvent, useRef, type KeyboardEvent, type MouseEvent } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useComposer } from '../../hooks/useComposer';
 import './Composer.scss';
-import { faPencil, faTimes, faX } from '@fortawesome/free-solid-svg-icons';
+import { faImage, faPencil, faSmile, faTimes, faX } from '@fortawesome/free-solid-svg-icons';
 import ImageElement from '../Image/Image';
 import { useProfile } from '../../hooks/useProfile';
 import agent from '../../api/agent';
 import { type AppBskyFeedPost } from '@atproto/api';
+import { usePromptControls } from '../../state/prompts';
+import { DeleteDraftPrompt } from '../Prompt/delete-draft/Prompt';
+import Picker from '@emoji-mart/react'
+import data from '@emoji-mart/data'
 
 const Composer: React.FC = () => {
-  const { composerOpen, closeComposer, post, text, setText, sendPost, setImgs, imgs, removeImg } = useComposer();
+  const { emojiPickerOpen, setEmojiPickerOpen, composerOpen, closeComposer, post, text, setText, sendPost, setImgs, imgs, removeImg } = useComposer();
+  const { openPrompt } = usePromptControls();
   const profile = useProfile(agent.session?.handle);
   const contentRef = useRef<HTMLDivElement | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   if (!composerOpen) return null;
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>): void => {
+    if (event.key === 'Escape') {
+      if ((text !== undefined && text !== '') || imgs.length > 0) {
+        event.preventDefault();
+        event.stopPropagation();
+        openPrompt(DeleteDraftPrompt);
+      } else {
+        closeComposer();
+      }
+    }
+  };
+
+  const handleEmojiSelect = (emoji: string, event: MouseEvent<HTMLDivElement>): void => {
+    if (contentRef.current != null) {
+      contentRef.current.focus();
+      document.execCommand('insertText', false, emoji);
+
+      if (!event.shiftKey) {
+        setEmojiPickerOpen(false);
+      }
+    }
+  };
 
   const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>): void => {
     e.preventDefault();
@@ -54,6 +83,37 @@ const Composer: React.FC = () => {
     }
   };
 
+  const handleImageInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    if (e.target.files !== undefined && (e.target.files?.length ?? 0) > 0) {
+      const file = e.target.files?.[0] as Blob;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target !== undefined) {
+          const dataURL = event.target?.result as string;
+
+          // Create an Image object to get image dimensions
+          const imgElement = new Image();
+          imgElement.onload = () => {
+            const width = imgElement.width;
+            const height = imgElement.height;
+
+            if (imgs.length < 4) {
+              setImgs((prevImgs) => [...prevImgs, { width, height, src: dataURL, alt: '' }]);
+            }
+          };
+          imgElement.src = dataURL;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleImageClick = (): void => {
+    if (fileInputRef.current != null) {
+      fileInputRef.current.click();
+    }
+  };
+
   const editImg = (i: number): void => {
 
   }
@@ -62,24 +122,30 @@ const Composer: React.FC = () => {
 
   }
 
+  const onTextInput = (e: React.FormEvent<HTMLDivElement>): void => {
+    setText(contentRef.current?.textContent ?? '');
+  }
+
   // TODO should redesign this to not use hardcoded heights
   const getComposerStyle = (): { height: string } => {
     if (post !== undefined && imgs.length > 0) {
-      return { height: '570px' };
+      return { height: '540px' };
     } else if (post !== undefined && imgs.length === 0) {
-      return { height: '420px' };
+      return { height: '410px' };
     } else if (post === undefined && imgs.length > 0) {
-      return { height: '440px' };
+      return { height: '480px' };
     } else {
-      return { height: '300px' };
+      return { height: '340px' };
     }
   };
 
   return (
     <div className='composer-container'>
       <div className='composer' style={getComposerStyle()}>
-        <div className='composer-actions' onClick={() => { closeComposer(); }}>
-          <FontAwesomeIcon icon={faTimes} fontSize={18} color='var(--text)' />
+        <div className='composer-actions'>
+            <button className='no-button-style composer-close-button' onClick={() => { closeComposer(); }}>
+                <FontAwesomeIcon icon={faTimes} fontSize={18} color='var(--text)' />
+            </button>
           <button className='no-button-style composer-reply-button' onClick={() => { sendPost(); }}>
             {post !== undefined ? 'Reply' : 'Post'}
           </button>
@@ -104,9 +170,10 @@ const Composer: React.FC = () => {
             translate="no"
             tabIndex={0}
             ref={contentRef}
-            onInput={() => { setText(contentRef.current?.textContent ?? ''); }}
+            onKeyDown={(e) => { handleKeyDown(e); }}
+            onInput={(e) => { onTextInput(e); }}
             onPaste={(e) => { handlePaste(e); }}
-          ></div>
+            />
           {(text === '' && imgs.length <= 0) && <p className='composer-placeholder'>Write your {post !== undefined ? 'reply' : 'post'}</p>}
           <div className='composer-uploaded-img-container'>
                 {imgs.map((img, i) => (
@@ -130,8 +197,30 @@ const Composer: React.FC = () => {
                     </div>
                 ))}
             </div>
+            <div className='composer-bottom-actions'>
+                <button className='no-button-style' onClick={handleImageClick}>
+                    <FontAwesomeIcon icon={faImage} fontSize={18} color='var(--white)' />
+                </button>
+                <input
+                    id="fileInput"
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleImageInputChange}
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                />
+                <button className='no-button-style' onClick={() => { setEmojiPickerOpen(v => !v) }}>
+                    <FontAwesomeIcon icon={faSmile} fontSize={18} color='var(--white)' />
+                </button>
+            </div>
         </div>
       </div>
+      {emojiPickerOpen &&
+      <div className='composer-emoji-picker-mask' onClick={() => { setEmojiPickerOpen(false); }}>
+        <div className='composer-emoji-picker'>
+            <Picker data={data} onEmojiSelect={(emoji: any, event: MouseEvent<HTMLDivElement>) => { handleEmojiSelect(emoji.native as string, event); event.stopPropagation(); }} />
+        </div>
+        </div>}
     </div>
   );
 }

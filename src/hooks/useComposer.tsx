@@ -18,6 +18,7 @@ interface ComposerContext {
   post: AppBskyFeedDefs.FeedViewPost | undefined;
   text: string;
   imgs: UploadedImage[];
+  emojiPickerOpen: boolean;
   setText: React.Dispatch<React.SetStateAction<string>>
   sendPost: () => void;
   setLangs: React.Dispatch<React.SetStateAction<string[]>>;
@@ -25,6 +26,7 @@ interface ComposerContext {
   setParent: React.Dispatch<React.SetStateAction<{ cid: string, uri: string } | undefined>>;
   setImgs: React.Dispatch<React.SetStateAction<UploadedImage[]>>;
   removeImg: (index: number) => void;
+  setEmojiPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const composerContext = createContext<ComposerContext>({
@@ -34,6 +36,8 @@ const composerContext = createContext<ComposerContext>({
   post: undefined,
   text: '',
   imgs: [],
+  emojiPickerOpen: false,
+  setEmojiPickerOpen: () => {},
   setText: () => {},
   sendPost: () => {},
   setLangs: () => {},
@@ -51,6 +55,7 @@ export const Provider = ({ children }: React.PropsWithChildren<Record<string, un
   const [root, setRoot] = useState<{ cid: string, uri: string }>();
   const [parent, setParent] = useState<{ cid: string, uri: string }>();
   const [imgs, setImgs] = useState<UploadedImage[]>([]);
+  const [emojiPickerOpen, setEmojiPickerOpen] = useState<boolean>(false);
 
   const handleEmbed = async (): Promise<{ images: ATProtoImage[] }> => {
     const imagePromises = imgs.map(async (img) => {
@@ -82,6 +87,12 @@ export const Provider = ({ children }: React.PropsWithChildren<Record<string, un
       reply: parent !== undefined && root !== undefined ? { parent, root } : undefined,
       embed: { $type: images.length > 0 ? 'app.bsky.embed.images' : '', images }
     });
+
+    setComposerOpen(false);
+    setPost(undefined);
+    setText('');
+    setImgs([])
+    setEmojiPickerOpen(false);
   };
 
   const removeImg = (index: number): void => {
@@ -99,7 +110,6 @@ export const Provider = ({ children }: React.PropsWithChildren<Record<string, un
   const contextValue: ComposerContext = {
     composerOpen,
     openComposer: (post: AppBskyFeedDefs.FeedViewPost | undefined) => {
-      console.log(post);
       setComposerOpen(true); setPost(post);
 
       if (post === undefined) {
@@ -114,7 +124,8 @@ export const Provider = ({ children }: React.PropsWithChildren<Record<string, un
       setComposerOpen(false);
       setPost(undefined);
       setText('');
-      setImgs([])
+      setImgs([]);
+      setEmojiPickerOpen(false);
     },
     post,
     text,
@@ -125,7 +136,9 @@ export const Provider = ({ children }: React.PropsWithChildren<Record<string, un
     setRoot,
     setParent,
     setImgs,
-    removeImg
+    removeImg,
+    emojiPickerOpen,
+    setEmojiPickerOpen
   };
 
   return (

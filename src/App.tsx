@@ -33,6 +33,7 @@ import { PromptContainer } from './components/Prompt/Prompt';
 import Notifications from './pages/Notifications/Notifications';
 import Composer from './components/Composer/Composer';
 import ComposeButton from './components/Composer/ComposeButton';
+import { useSelectedTab } from './hooks/useSelectedTab';
 
 const App: React.FC = () => {
   return (
@@ -68,14 +69,13 @@ const App: React.FC = () => {
 
 const AppLoggedIn: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<string | null>(null);
-  const [selectedTab, setSelectedTab] = useState<string>(getConfig().DEFAULT_HOME_TABS.TABS[0]);
-  const [tabs, setTabs] = useState<DefaultHomeTabs>(getConfig().DEFAULT_HOME_TABS.TABS);
+  const { selectedTab, tabs, changeTab, setTabs } = useSelectedTab();
   const { setPrefs } = usePrefs();
   const [generators, setGenerators] = useState<AppBskyFeedDefs.GeneratorView[]>(
     convertStringArrayToGeneratorViewArray(getConfig().DEFAULT_HOME_TABS.TABS, getConfig().DEFAULT_HOME_TABS.GENERATORS));
 
   const handleTabClick = (tabDisplayName: string): void => {
-    setSelectedTab(tabDisplayName);
+    changeTab(tabDisplayName);
   };
 
   // get initial info we need
@@ -92,7 +92,7 @@ const AppLoggedIn: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    setTabs(generators.map(generator => generator.displayName) as DefaultHomeTabs);
+    setTabs(generators.map(generator => generator));
   }, [generators]);
 
   return (
@@ -100,10 +100,10 @@ const AppLoggedIn: React.FC = () => {
       <Sidebar />
       <div className="current-route">
         <MainTopBar
-          component={(currentPage == null) ? <TabList tabs={tabs} selectedTab={selectedTab} onTabClick={handleTabClick} /> : null}
+          component={(currentPage == null) ? <TabList tabs={tabs?.map(tab => tab.displayName) as DefaultHomeTabs} selectedTab={selectedTab ?? ''} onTabClick={handleTabClick} /> : null}
           title={(currentPage != null) ? `${currentPage?.[0].toUpperCase()}${currentPage?.substring(1)}` : null}/>
         <Routes>
-          <Route path="/" element={<Home tabs={generators} setCurrentPage={setCurrentPage} selectedTab={selectedTab} />} />
+          <Route path="/" element={<Home tabs={generators} setCurrentPage={setCurrentPage} selectedTab={selectedTab ?? ''} />} />
           <Route path="/profile/:username" element={<Profile setCurrentPage={setCurrentPage}/>} />
           <Route path="/profile/:username/post/:id" element={<ThreadView setCurrentPage={setCurrentPage} />} />
           <Route path='/hashtag/:hashtag' element={<Hashtag setCurrentPage={setCurrentPage} />} />
