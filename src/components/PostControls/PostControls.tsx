@@ -7,6 +7,7 @@ import agent from '../../api/agent';
 import './PostControls.scss';
 import Dropdown from '../Dropdown/Dropdown';
 import usePostDropdown from '../../hooks/dropdown/usePostDropdown';
+import { useComposer } from '../../hooks/useComposer';
 
 interface MoreButtonProps {
   post: AppBskyFeedDefs.FeedViewPost | undefined;
@@ -20,7 +21,7 @@ const MoreButton: React.FC<MoreButtonProps> = ({ post, big }: MoreButtonProps) =
 
   return (
     <Dropdown items={dropdownItems}>
-        <button onClick={async (e) => { more(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-controls-more no-button-style'>
+        <button onClick={async (e) => { more(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-control post-controls-more no-button-style'>
             <FontAwesomeIcon icon={faEllipsisH} fontSize={(big ?? false) ? 20 : 16} />
         </button>
     </Dropdown>
@@ -37,9 +38,11 @@ const PostControls: React.FC<PostControlsProps> = ({ post, big }: PostControlsPr
   const [likeCount, setLikeCount] = useState<number | undefined>(post?.post.likeCount);
   const [repostCount, setRepostCount] = useState<number | undefined>(post?.post.repostCount);
   const [replyCount] = useState<number | undefined>(post?.post.replyCount);
+  const { openComposer } = useComposer();
 
   const reply = (e: React.MouseEvent<HTMLButtonElement>, post: AppBskyFeedDefs.FeedViewPost | undefined): void => {
     e.preventDefault();
+    openComposer(post);
   }
 
   const repost = async (e: React.MouseEvent<HTMLButtonElement>, post: AppBskyFeedDefs.FeedViewPost | undefined): Promise<void> => {
@@ -83,19 +86,19 @@ const PostControls: React.FC<PostControlsProps> = ({ post, big }: PostControlsPr
   return (
       <div className='post-controls' style={{ paddingInline: (big ?? false) ? '0.2rem' : 0 }}>
         <div style={{ flex: (big ?? false) ? 0 : 1 }}>
-          <button onClick={async (e) => { reply(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-controls-comment no-button-style'>
+          <button onClick={async (e) => { reply(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-control post-controls-comment no-button-style'>
               <FontAwesomeIcon icon={faComment} fontSize={(big ?? false) ? 20 : 16} />
               <span className='post-controls-comment-count'>{replyCount === 0 ? null : replyCount}</span>
           </button>
         </div>
           <div style={{ flex: (big ?? false) ? 0 : 1 }}>
-            <button onClick={async (e) => { await repost(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-controls-repost no-button-style'>
+            <button onClick={async (e) => { await repost(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-control post-controls-repost no-button-style'>
                 <FontAwesomeIcon icon={faRetweet} color={(repostedUri != null) ? 'var(--green)' : 'var(--text-light)'} fontSize={(big ?? false) ? 20 : 16} />
                 <span className='post-controls-repost-count' style={{ color: (repostedUri != null) ? 'var(--green)' : 'var(--text-light)' }}>{repostCount === 0 ? null : repostCount}</span>
             </button>
           </div>
           <div style={{ flex: (big ?? false) ? 0 : 1 }}>
-            <button onClick={async (e) => { await like(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-controls-like no-button-style'>
+            <button onClick={async (e) => { await like(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-control post-controls-like no-button-style'>
                 <FontAwesomeIcon icon={(likedUri != null) ? faHeartSolid : faHeart} color={(likedUri != null) ? 'var(--red)' : 'var(--text-light)'} fontSize={(big ?? false) ? 20 : 16} />
                 <span className='post-controls-like-count' style={{ color: (likedUri != null) ? 'var(--red)' : 'var(--text-light)' }}>{likeCount === 0 ? null : likeCount}</span>
             </button>

@@ -12,6 +12,7 @@
     }    
 
     .notification-author-container {
+        align-items: baseline;
         margin-left: 3rem;
         display: flex;
         gap: 0.2rem;
@@ -27,6 +28,7 @@
     }
 
     .notification-follow-author-container {
+        align-items: baseline;
         margin-left: 3rem;
 
         .notification-reason {

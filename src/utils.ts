@@ -88,3 +88,19 @@ export const generateProfileShareLink = (profile: AppBskyActorDefs.ProfileView |
   if (profile === undefined) throw new Error('Profile is undefined');
   return `${getConfig().DOMAIN}/profile/${profile.handle}`;
 }
+
+export const stripFormatting = (text: string): string => {
+  return text.replace(/<[^>]+>/g, '');
+};
+
+export const convertDataURIToUint8Array = (dataURI: string): Uint8Array => {
+  const base64String = dataURI.split(',')[1];
+  const byteCharacters = atob(base64String);
+  const byteNumbers = new Array(byteCharacters.length);
+
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+
+  return new Uint8Array(byteNumbers);
+}

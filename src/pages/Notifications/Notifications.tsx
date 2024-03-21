@@ -71,6 +71,7 @@ const AvatarDropdown: React.FC<{ open: boolean, post: GroupedNotifications[strin
     : null
 );
 
+// TODO fix reply tags
 const NotificationItem: React.FC<{ post: GroupedNotifications[string], reason: string }> = ({ post, reason }) => {
   const { setCachedPost } = usePost();
 
@@ -108,6 +109,9 @@ const NotificationItem: React.FC<{ post: GroupedNotifications[string], reason: s
           </Link>
       );
     case 'reply':
+      return (
+        post.post !== undefined ? <Post post={{ post: post.post, reply: { root: { $type: '', ...(post.post.record as AppBskyFeedPost.ReplyRef).root }, parent: { $type: '', ...(post.post.record as AppBskyFeedPost.ReplyRef).parent } } }} /> : null
+      );
     case 'quote':
       return (
         post.post !== undefined ? <Post post={{ post: post.post }} /> : null
