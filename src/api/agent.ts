@@ -1,4 +1,4 @@
-import { type AppBskyFeedDefs, BskyAgent, type AppBskyActorDefs, type AtpPersistSessionHandler } from '@atproto/api';
+import { BskyAgent, type AppBskyActorDefs, type AtpPersistSessionHandler, type AppBskyFeedGetTimeline } from '@atproto/api';
 import { type ThreadViewPost, type NotFoundPost, type BlockedPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
 import * as persisted from '../state/persisted'
 import { addAccountToSessionIfNeeded } from '../utils';
@@ -31,11 +31,11 @@ const agent = new BskyAgent({
   persistSession
 });
 
-export const getTimeline = async (): Promise<AppBskyFeedDefs.FeedViewPost[]> => {
-  const res = await agent.getTimeline();
+export const getTimeline = async (cursor: string | undefined, pageSize: number): Promise<AppBskyFeedGetTimeline.Response> => {
+  const res = await agent.getTimeline({ cursor: cursor ?? '', limit: pageSize });
 
   if (res.success) {
-    return res.data.feed;
+    return res;
   } else {
     throw new Error('Fetching timeline was unsuccessful.');
   }

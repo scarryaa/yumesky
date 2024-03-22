@@ -6,6 +6,7 @@ import { type IconProp } from '@fortawesome/fontawesome-svg-core';
 import Link from '../Link/Link';
 import useAccountSwitchDropdown from '../../hooks/dropdown/useAccountSwitchDropdown';
 import Dropdown from '../Dropdown/Dropdown';
+import NotificationBubble from '../NotificationBubble/NotificationBubble';
 
 interface TopBarButtonProps {
   icon: IconProp;
@@ -36,6 +37,7 @@ const MainTopBar: React.FC<MainTopBarProps> = ({ title, component }: MainTopBarP
         <div className='main-top-bar-buttons'>
             <TopBarButton link='/settings' icon={faCog} fontSize={20} />
             <TopBarButton link='/notifications' icon={faBell} fontSize={20} />
+            <NotificationBubble />
             <TopBarButton link='/messages' icon={faEnvelope} fontSize={20} />
             <ProfileIcon className='main-top-bar-profile-icon' size={40} />
             <Dropdown items={dropdownItems}>

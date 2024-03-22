@@ -1,0 +1,20 @@
+.notification-bubble-container {
+    position: relative;
+    pointer-events: none;
+    width: 0;
+    height: 0;
+
+    .notification-bubble {
+        position: absolute;
+        right: 8px;
+        top: -16px;
+        background-color: var(--primary);
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        font-size: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
