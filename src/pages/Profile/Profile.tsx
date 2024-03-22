@@ -69,7 +69,7 @@ const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
   }, [])
 
   return (
-    <BasicView viewPadding={true}>
+    <BasicView viewPadding={false}>
         <div className='profile'>
           {((profile?.banner) != null) ? <div className='profile-banner'><Image onClick={() => { isLightboxActive ? closeLightbox() : openLightbox([profile?.banner ?? ''], 0, []) }} src={profile?.banner} /></div> : <div className='profile-banner fallback-div'></div>}
           <div className='profile-info'>

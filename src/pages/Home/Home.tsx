@@ -14,6 +14,7 @@ interface HomeProps {
 const Home: React.FC<HomeProps> = ({ selectedTab, tabs, setCurrentPage }: HomeProps) => {
   const { timeline, loadMore, setLoadMore } = usePosts(selectedTab, tabs);
   const bottomBoundaryRef = useRef<HTMLDivElement>(null);
+  const isHandlingScroll = useRef(false);
 
   useEffect(() => {
     setCurrentPage(null);
@@ -21,11 +22,16 @@ const Home: React.FC<HomeProps> = ({ selectedTab, tabs, setCurrentPage }: HomePr
 
   const handleScroll = async (): Promise<void> => {
     if (bottomBoundaryRef.current === null) return;
+    isHandlingScroll.current = true;
+
     const bottomBoundary = bottomBoundaryRef.current.getBoundingClientRect().top - window.innerHeight;
-    if (bottomBoundary < 0) {
+    if (bottomBoundary < 0 || (bottomBoundary < 200 && bottomBoundary > 0)) {
       setLoadMore(true);
-      console.log(loadMore);
     }
+
+    setTimeout(() => {
+      isHandlingScroll.current = false;
+    }, 500);
   };
 
   useEffect(() => {
