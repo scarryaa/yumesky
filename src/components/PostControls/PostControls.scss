@@ -6,23 +6,14 @@
     align-items: center;
     margin-top: 0.8rem;
 
-    .post-controls-button-container {
-        flex: 1;
-    }
-
-    .post-controls-comment,
-    .post-controls-repost,
-    .post-controls-like,
-    .post-controls-more {
+    .post-control {
         min-width: 0;
         display: flex;
         justify-self: flex-start;
         align-items: center;
     }
 
-    .post-controls-comment-count,
-    .post-controls-repost-count,
-    .post-controls-like-count {
+    .post-control-count {
         margin-left: 0.5rem;
         font-size: 15px;
         align-items: center;

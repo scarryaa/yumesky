@@ -3,7 +3,7 @@ import { type IconProp } from '@fortawesome/fontawesome-svg-core';
 import './Dropdown.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useDropdown from '../../hooks/dropdown/useDropdown';
-import React, { type MouseEvent } from 'react';
+import React, { useRef, type MouseEvent } from 'react';
 
 export type MenuItem = {
   label: 'separator';
@@ -52,11 +52,12 @@ interface DropdownProps {
   items: MenuItem[];
 }
 const Dropdown: React.FC<DropdownProps> = ({ children, style, items }: DropdownProps) => {
-  const { setOpen, buttonRef, menuRef } = useDropdown();
+  const { setOpen, menuRef } = useDropdown();
+  const ref = useRef<HTMLButtonElement>(null);
 
   return (
     <DropdownMenu.Root>
-        <DropdownMenu.Trigger asChild className='no-button-style' onClick={() => { setOpen(o => !o); }} ref={buttonRef}>
+        <DropdownMenu.Trigger asChild className='no-button-style' onClick={() => { setOpen(o => !o); }} ref={ref}>
           {children}
         </DropdownMenu.Trigger>
 

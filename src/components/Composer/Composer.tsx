@@ -1,4 +1,4 @@
-import React, { type ChangeEvent, useRef, type KeyboardEvent, type MouseEvent } from 'react';
+import React, { type ChangeEvent, useRef, type KeyboardEvent, type MouseEvent, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useComposer } from '../../hooks/useComposer';
 import './Composer.scss';
@@ -18,6 +18,28 @@ const Composer: React.FC = () => {
   const profile = useProfile(agent.session?.handle);
   const contentRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [pickerPosition, setPickerPosition] = useState<{ top: number; left: number, bottom: number }>({ top: 0, left: 0, bottom: 0 });
+
+  useEffect(() => {
+    const updatePickerPosition = (): void => {
+      if (composerOpen && (contentRef.current != null)) {
+        const composerRect = contentRef.current.getBoundingClientRect();
+        const pickerHeight = (document.querySelector('.composer-emoji-picker')?.clientHeight) ?? 0;
+
+        setPickerPosition({
+          top: composerRect.bottom - 22,
+          left: composerRect.left + 15,
+          bottom: window.innerHeight - composerRect.bottom - pickerHeight
+        });
+      }
+    };
+
+    updatePickerPosition();
+    window.addEventListener('resize', updatePickerPosition);
+    return () => {
+      window.removeEventListener('resize', updatePickerPosition);
+    };
+  }, [composerOpen]);
 
   if (!composerOpen) return null;
 
@@ -215,11 +237,13 @@ const Composer: React.FC = () => {
             </div>
         </div>
       </div>
-      {emojiPickerOpen &&
-      <div className='composer-emoji-picker-mask' onClick={() => { setEmojiPickerOpen(false); }}>
-        <div className='composer-emoji-picker'>
-            <Picker data={data} onEmojiSelect={(emoji: any, event: MouseEvent<HTMLDivElement>) => { handleEmojiSelect(emoji.native as string, event); event.stopPropagation(); }} />
-        </div>
+    {emojiPickerOpen &&
+        <div className='composer-emoji-picker-mask' onClick={() => { setEmojiPickerOpen(false); }}>
+            <div className='composer-emoji-picker-relative' style={{ top: pickerPosition.top, left: pickerPosition.left }}>
+                <div className='composer-emoji-picker'>
+                    <Picker data={data} onEmojiSelect={(emoji: any, event: MouseEvent<HTMLDivElement>) => { handleEmojiSelect(emoji.native as string, event); event.stopPropagation(); }} />
+                </div>
+            </div>
         </div>}
     </div>
   );

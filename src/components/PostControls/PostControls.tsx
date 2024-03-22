@@ -2,53 +2,97 @@ import { type AppBskyFeedDefs } from '@atproto/api';
 import { faComment, faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faEllipsisH, faRetweet, faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import agent from '../../api/agent';
 import './PostControls.scss';
 import Dropdown from '../Dropdown/Dropdown';
 import usePostDropdown from '../../hooks/dropdown/usePostDropdown';
 import { useComposer } from '../../hooks/useComposer';
+import { type IconProp } from '@fortawesome/fontawesome-svg-core';
+import { useToasts } from '../../state/toasts';
 
-interface MoreButtonProps {
-  post: AppBskyFeedDefs.FeedViewPost | undefined;
-  big?: boolean;
+interface ButtonWithHoverProps {
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  icon: IconProp;
+  count: number | undefined;
+  hoverColor: string;
+  defaultColor: string;
+  isHover: boolean;
+  big: boolean | undefined;
+  hoverCallback: (bool: boolean) => void;
+  uri?: string;
 }
-const MoreButton: React.FC<MoreButtonProps> = ({ post, big }: MoreButtonProps) => {
-  const more = (e: React.MouseEvent<HTMLButtonElement>, post: AppBskyFeedDefs.FeedViewPost | undefined): void => {
-    e.preventDefault();
-  }
-  const { dropdownItems } = usePostDropdown(post);
-
+const ButtonWithHover = React.forwardRef<HTMLButtonElement, ButtonWithHoverProps>(({
+  onClick,
+  icon,
+  count,
+  hoverColor,
+  defaultColor,
+  isHover,
+  big,
+  hoverCallback,
+  uri,
+  ...rest
+}, ref) => {
   return (
-    <Dropdown items={dropdownItems}>
-        <button onClick={async (e) => { more(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-control post-controls-more no-button-style'>
-            <FontAwesomeIcon icon={faEllipsisH} fontSize={(big ?? false) ? 20 : 16} />
-        </button>
-    </Dropdown>
-  )
-}
+    <button
+      ref={ref}
+      onMouseOver={() => { hoverCallback(true); }}
+      onMouseLeave={() => { hoverCallback(false); }}
+      onClick={onClick}
+      className='post-control no-button-style'
+      {...rest}
+    >
+      <FontAwesomeIcon
+        icon={icon}
+        color={isHover ? hoverColor : defaultColor}
+        fontSize={(big ?? false) ? 20 : 16}
+      />
+      {count !== undefined && <span className='post-control-count' style={{ color: (uri != null || isHover) ? hoverColor : defaultColor }}>{count === 0 ? null : count}</span>}
+    </button>
+  );
+});
+ButtonWithHover.displayName = 'ButtonWithHover'
 
 interface PostControlsProps {
   post: AppBskyFeedDefs.FeedViewPost | undefined;
   big?: boolean;
 }
+
 const PostControls: React.FC<PostControlsProps> = ({ post, big }: PostControlsProps) => {
   const [likedUri, setLikedUri] = useState<string | undefined>(post?.post.viewer?.like);
   const [repostedUri, setRepostedUri] = useState<string | undefined>(post?.post.viewer?.repost);
   const [likeCount, setLikeCount] = useState<number | undefined>(post?.post.likeCount);
   const [repostCount, setRepostCount] = useState<number | undefined>(post?.post.repostCount);
   const [replyCount] = useState<number | undefined>(post?.post.replyCount);
+  const [hoverLike, setHoverLike] = useState<boolean>(false);
+  const [hoverRepost, setHoverRepost] = useState<boolean>(false);
+  const [hoverReply, setHoverReply] = useState<boolean>(false);
+  const [hoverMore, setHoverMore] = useState<boolean>(false);
   const { openComposer } = useComposer();
+  const { dropdownItems } = usePostDropdown(post);
+  const { addToast } = useToasts();
+
+  const more = (e: React.MouseEvent<HTMLButtonElement>, post: AppBskyFeedDefs.FeedViewPost | undefined): void => {
+    e.preventDefault();
+  }
 
   const reply = (e: React.MouseEvent<HTMLButtonElement>, post: AppBskyFeedDefs.FeedViewPost | undefined): void => {
     e.preventDefault();
+    if (post === undefined) {
+      addToast({ message: 'Error: Post is undefined!' });
+      return;
+    }
+
     openComposer(post);
   }
 
   const repost = async (e: React.MouseEvent<HTMLButtonElement>, post: AppBskyFeedDefs.FeedViewPost | undefined): Promise<void> => {
     e.preventDefault();
-    if (post === undefined) return;
-    // TODO add better error handling (msg, toast?)
+    if (post === undefined) {
+      addToast({ message: 'Error: Post is undefined!' });
+      return;
+    }
 
     if (repostedUri !== undefined) {
       // if reposted, attempt to un-repost
@@ -66,8 +110,10 @@ const PostControls: React.FC<PostControlsProps> = ({ post, big }: PostControlsPr
 
   const like = async (e: React.MouseEvent<HTMLButtonElement>, post: AppBskyFeedDefs.FeedViewPost | undefined): Promise<void> => {
     e.preventDefault();
-    if (post === undefined) return;
-    // TODO add better error handling (msg, toast?)
+    if (post === undefined) {
+      addToast({ message: 'Error: Post is undefined!' });
+      return;
+    }
 
     if (likedUri !== undefined) {
       // if liked, attempt to unlike
@@ -84,29 +130,60 @@ const PostControls: React.FC<PostControlsProps> = ({ post, big }: PostControlsPr
   }
 
   return (
-      <div className='post-controls' style={{ paddingInline: (big ?? false) ? '0.2rem' : 0 }}>
-        <div style={{ flex: (big ?? false) ? 0 : 1 }}>
-          <button onClick={async (e) => { reply(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-control post-controls-comment no-button-style'>
-              <FontAwesomeIcon icon={faComment} fontSize={(big ?? false) ? 20 : 16} />
-              <span className='post-controls-comment-count'>{replyCount === 0 ? null : replyCount}</span>
-          </button>
-        </div>
-          <div style={{ flex: (big ?? false) ? 0 : 1 }}>
-            <button onClick={async (e) => { await repost(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-control post-controls-repost no-button-style'>
-                <FontAwesomeIcon icon={faRetweet} color={(repostedUri != null) ? 'var(--green)' : 'var(--text-light)'} fontSize={(big ?? false) ? 20 : 16} />
-                <span className='post-controls-repost-count' style={{ color: (repostedUri != null) ? 'var(--green)' : 'var(--text-light)' }}>{repostCount === 0 ? null : repostCount}</span>
-            </button>
-          </div>
-          <div style={{ flex: (big ?? false) ? 0 : 1 }}>
-            <button onClick={async (e) => { await like(e, post); }} style={{ flex: (big ?? false) ? 0 : 1 }} className='post-control post-controls-like no-button-style'>
-                <FontAwesomeIcon icon={(likedUri != null) ? faHeartSolid : faHeart} color={(likedUri != null) ? 'var(--red)' : 'var(--text-light)'} fontSize={(big ?? false) ? 20 : 16} />
-                <span className='post-controls-like-count' style={{ color: (likedUri != null) ? 'var(--red)' : 'var(--text-light)' }}>{likeCount === 0 ? null : likeCount}</span>
-            </button>
-          </div>
-          <div style={{ flex: (big ?? false) ? 0 : 1 }}>
-            <MoreButton post={post} big={big} />
-          </div>
+    <div className='post-controls' style={{ paddingInline: (big ?? false) ? '0.2rem' : 0 }}>
+      <div style={{ flex: (big ?? false) ? 0 : 1 }}>
+        <ButtonWithHover
+          hoverCallback={setHoverReply}
+          big={big}
+          onClick={(e) => { reply(e, post); }}
+          icon={faComment}
+          count={replyCount}
+          hoverColor='var(--blue)'
+          defaultColor='var(--text-light)'
+          isHover={hoverReply}
+        />
       </div>
+      <div style={{ flex: (big ?? false) ? 0 : 1 }}>
+        <ButtonWithHover
+          hoverCallback={setHoverRepost}
+          big={big}
+          onClick={async (e) => { await repost(e, post); }}
+          icon={faRetweet}
+          count={repostCount}
+          hoverColor='var(--green)'
+          defaultColor={(repostedUri != null || hoverRepost) ? 'var(--green)' : 'var(--text-light)'}
+          isHover={hoverRepost}
+          uri={repostedUri}
+        />
+      </div>
+      <div style={{ flex: (big ?? false) ? 0 : 1 }}>
+        <ButtonWithHover
+          hoverCallback={setHoverLike}
+          big={big}
+          onClick={async (e) => { await like(e, post); }}
+          icon={(likedUri != null) ? hoverLike ? faHeart : faHeartSolid : faHeart}
+          count={likeCount}
+          hoverColor='var(--red)'
+          defaultColor={(likedUri != null || hoverLike) ? 'var(--red)' : 'var(--text-light)'}
+          isHover={hoverLike}
+          uri={likedUri}
+        />
+      </div>
+      <div style={{ flex: (big ?? false) ? 0 : 1 }}>
+        <Dropdown items={dropdownItems}>
+          <ButtonWithHover
+            hoverCallback={setHoverMore}
+            big={big}
+            onClick={(e) => { more(e, post); }}
+            icon={faEllipsisH}
+            count={undefined}
+            hoverColor='var(--white)'
+            defaultColor='var(--text-light)'
+            isHover={hoverMore}
+          />
+        </Dropdown>
+      </div>
+    </div>
   )
 }
 

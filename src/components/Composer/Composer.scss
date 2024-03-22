@@ -204,11 +204,13 @@
         height: 100%;
         z-index: 9999;
 
-        .composer-emoji-picker {
-            position: absolute;
-            top: 400px;
-            left: 200px;
-            z-index: 999999;   
+        .composer-emoji-picker-relative {
+            position: relative;
+
+            .composer-emoji-picker {
+                position: absolute;
+                z-index: 999999;   
+            }
         }
     }
 }
