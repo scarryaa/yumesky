@@ -127,8 +127,7 @@ const AppContent: React.FC = () => {
 
   const handleLogin = async (username: string, password: string): Promise<void> => {
     try {
-      const res = await agent.login({ identifier: username, password });
-
+      const res = (await agent.login({ identifier: username, password }));
       if (res.success) {
         setIsAuthenticated(true);
       }

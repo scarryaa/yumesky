@@ -6,15 +6,33 @@ import useDropdown from '../../hooks/dropdown/useDropdown';
 import React, { type MouseEvent } from 'react';
 
 export type MenuItem = {
-  label: string | 'separator';
+  label: 'separator';
   icon?: never;
   iconSize?: never;
   onClick?: never;
+  img?: never;
+  accountName?: never;
 } | {
   label: string;
   icon: IconProp;
   iconSize: number;
   onClick: (event: MouseEvent<HTMLDivElement>) => void;
+  img?: never;
+  accountName?: never;
+} | {
+  label: 'account';
+  icon?: never;
+  iconSize?: never;
+  onClick: (event: MouseEvent<HTMLDivElement>) => void;
+  img: string;
+  accountName: string;
+} | {
+  label: 'add-account';
+  icon: IconProp;
+  iconSize: number;
+  onClick?: never;
+  img?: never;
+  accountName?: never;
 };
 
 type ItemProps = React.ComponentProps<(typeof DropdownMenu)['Item']>
@@ -49,6 +67,30 @@ const Dropdown: React.FC<DropdownProps> = ({ children, style, items }: DropdownP
                 e.preventDefault();
               }}>
             {items.map((item, index) => {
+              if (item.label === 'account') {
+                return <DropdownMenuItem onClick={(e) => {
+                  e.stopPropagation();
+                  if (item.onClick !== undefined) { item.onClick(e); }
+                }}
+                key={index}>
+                  <img className='dropdown-account-image' src={item.img} />
+                  <span>{item.accountName}</span>
+                </DropdownMenuItem>
+              }
+
+              if (item.label === 'add-account') {
+                return (
+                  <DropdownMenuItem onClick={(e) => {
+                    e.stopPropagation();
+                    if (item.onClick !== undefined) { item.onClick(e); }
+                  }}
+                      key={index}>
+                      {item.icon !== undefined && <FontAwesomeIcon className='dropdown-icon' icon={item.icon} transform={{ x: 8, size: 30 }} fontSize={item.iconSize} />}
+                      <span>Add account</span>
+                  </DropdownMenuItem>
+                )
+              }
+
               if (item.label === 'separator') {
                 return (
                     <DropdownMenu.Separator onClick={(e) => {

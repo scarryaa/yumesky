@@ -1,8 +1,34 @@
-import { type AppBskyFeedDefs, BskyAgent, type AppBskyActorDefs } from '@atproto/api';
+import { type AppBskyFeedDefs, BskyAgent, type AppBskyActorDefs, type AtpPersistSessionHandler } from '@atproto/api';
 import { type ThreadViewPost, type NotFoundPost, type BlockedPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
+import * as persisted from '../state/persisted'
+import { addAccountToSessionIfNeeded } from '../utils';
+
+const persistSession: AtpPersistSessionHandler = (evt, session) => {
+  try {
+    if (evt === 'expired' || evt === 'create-failed') {
+      throw new Error('Session expired or creation failed.');
+    }
+
+    if (session !== undefined) {
+      addAccountToSessionIfNeeded(persisted.get('session'), {
+        service: 'https://public.api.bsky.app',
+        did: session.did,
+        handle: session.handle,
+        accessJwt: session.accessJwt,
+        email: session.email,
+        emailConfirmed: session.emailConfirmed,
+        deactivated: false,
+        refreshJwt: session.refreshJwt
+      });
+    }
+  } catch (error) {
+    console.error('Error occurred while persisting session:', error);
+  }
+};
 
 const agent = new BskyAgent({
-  service: 'https://bsky.social'
+  service: 'https://bsky.social',
+  persistSession
 });
 
 export const getTimeline = async (): Promise<AppBskyFeedDefs.FeedViewPost[]> => {

@@ -10,9 +10,16 @@ export type ReportModal = {
   | { did: string }
 );
 
+export interface AddAccountModal {
+  name: 'add-account'
+}
+
 export type Modal =
     // Moderation
-    ReportModal;
+    ReportModal |
+
+    // Account
+    AddAccountModal;
 
 interface ModalContext {
   isModalActive: boolean;

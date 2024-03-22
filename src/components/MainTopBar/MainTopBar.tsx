@@ -1,9 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './MainTopBar.scss';
-import { faBell, faCog, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faArrowsUpDown, faBell, faCog, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import ProfileIcon from '../ProfileIcon/ProfileIcon';
 import { type IconProp } from '@fortawesome/fontawesome-svg-core';
 import Link from '../Link/Link';
+import useAccountSwitchDropdown from '../../hooks/dropdown/useAccountSwitchDropdown';
+import Dropdown from '../Dropdown/Dropdown';
 
 interface TopBarButtonProps {
   icon: IconProp;
@@ -25,6 +27,8 @@ interface MainTopBarProps {
   component?: React.ReactNode;
 }
 const MainTopBar: React.FC<MainTopBarProps> = ({ title, component }: MainTopBarProps) => {
+  const { dropdownItems } = useAccountSwitchDropdown();
+
   return (
     <div className='main-top-bar' style={{ paddingLeft: title !== null ? '1rem' : 0 }}>
         {component !== null && <div className='main-top-bar-component'>{component}</div>}
@@ -34,6 +38,11 @@ const MainTopBar: React.FC<MainTopBarProps> = ({ title, component }: MainTopBarP
             <TopBarButton link='/notifications' icon={faBell} fontSize={20} />
             <TopBarButton link='/messages' icon={faEnvelope} fontSize={20} />
             <ProfileIcon className='main-top-bar-profile-icon' size={40} />
+            <Dropdown items={dropdownItems}>
+              <button className='no-button-style main-top-bar-account-switch-button'>
+                  <FontAwesomeIcon className='main-top-bar-account-switch-icon' icon={faArrowsUpDown} fontSize={16} fill='var(--white)' color='var(--white)' />
+              </button>
+            </Dropdown>
         </div>
     </div>
   )

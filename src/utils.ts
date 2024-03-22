@@ -1,5 +1,7 @@
 import { type AppBskyActorDefs, type AppBskyFeedDefs } from '@atproto/api';
 import getConfig from './config';
+import * as persisted from './state/persisted';
+import { type Account, type Session } from './state/session';
 
 export const ago = (date: number | string | Date): string => {
   let ts: number;
@@ -104,3 +106,14 @@ export const convertDataURIToUint8Array = (dataURI: string): Uint8Array => {
 
   return new Uint8Array(byteNumbers);
 }
+
+export const addAccountToSessionIfNeeded = (session: Session | null, newAccount: Account): void => {
+  if (session !== null) {
+    const existingAccount = session.accounts?.find(account => account.did === newAccount.did);
+    if (existingAccount === undefined) {
+      persisted.write('session', {
+        accounts: [...(session.accounts ?? []), newAccount]
+      });
+    }
+  }
+};
