@@ -1,4 +1,4 @@
-import { AppBskyEmbedRecord, type AppBskyEmbedExternal, type AppBskyEmbedImages, type AppBskyEmbedRecordWithMedia } from '@atproto/api';
+import { AppBskyEmbedRecord, type AppBskyFeedDefs, type AppBskyEmbedExternal, type AppBskyEmbedImages, type AppBskyEmbedRecordWithMedia } from '@atproto/api';
 import './EmbedContainer.scss';
 import { ago } from '../../utils';
 import Avatar from '../Avatar/Avatar';
@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { usePost } from '../../contexts/PostContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { getThread } from '../../api/agent';
 
 type EmbedType = AppBskyEmbedImages.View | AppBskyEmbedExternal.View | AppBskyEmbedRecord.View | AppBskyEmbedRecordWithMedia.View | {
   $type: string;
@@ -57,8 +58,7 @@ const EmbedContainer: React.FC<EmbedContainerProps> = ({ children, embed }: Embe
   }
 
   return (
-    // TODO fix caching interaction with this
-    <Link onClick={(e: React.MouseEvent<Element>) => { setCachedPost(undefined); e.stopPropagation(); e.preventDefault(); navigate(`../profile/${AppBskyEmbedRecord.isViewRecord(embed.record) && embed.record.author.handle}/post/${AppBskyEmbedRecord.isViewRecord(embed.record) && embed.record.uri.split('/')[4]}`); }} linkStyle={false} to={`/profile/${AppBskyEmbedRecord.isViewRecord(embed.record) && embed.record.author.handle}/post/${AppBskyEmbedRecord.isViewRecord(embed.record) && embed.record.uri.split('/')[4]}`} className='embed-container'>
+    <Link onClick={async (e: React.MouseEvent<Element>) => { const thread = await getThread(AppBskyEmbedRecord.isViewRecord(embed.record) ? embed.record.uri : ''); setCachedPost({ post: (thread?.post as AppBskyFeedDefs.PostView) }); e.stopPropagation(); e.preventDefault(); navigate(`../profile/${AppBskyEmbedRecord.isViewRecord(embed.record) && embed.record.author.handle}/post/${AppBskyEmbedRecord.isViewRecord(embed.record) && embed.record.uri.split('/')[4]}`); }} linkStyle={false} to={`/profile/${AppBskyEmbedRecord.isViewRecord(embed.record) && embed.record.author.handle}/post/${AppBskyEmbedRecord.isViewRecord(embed.record) && embed.record.uri.split('/')[4]}`} className='embed-container'>
         <div className='embed-info'>
             <Avatar src={AppBskyEmbedRecord.isViewRecord(embed.record) ? embed.record.author.avatar : ''} height={15} width={15} />
             <div className='embed-info-and-timestamp'>

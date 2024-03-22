@@ -28,10 +28,9 @@ const Avatar: React.FC<AvatarProps> = ({ link, src, originalSrc, width, height, 
 
   return (
     <Link linkStyle={false} to={link ?? ''} className={`avatar ${className}`} style={{ width, height }}>
-        { ((src !== undefined) || (originalSrc !== undefined)) &&
         <object className='avatar-image' type='image/jpeg' data={originalSrc ?? src} style={{ width, height }}>
             <div className='avatar-fallback' style={{ width, height }}><FontAwesomeIcon className='avatar-fallback-icon' icon={faUser} fontSize={width / 1.25} /></div>
-        </object>}
+        </object>
     </Link>
   )
 }

@@ -6,6 +6,7 @@ import './LargePost.scss';
 import PostControls from '../PostControls/PostControls';
 import RichText from '../RichText/RichText';
 import EmbedHandler from '../Embed/EmbedHandler';
+import Avatar from '../Avatar/Avatar';
 
 interface LargePostProps {
   post: AppBskyFeedDefs.FeedViewPost | undefined;
@@ -27,9 +28,7 @@ const LargePost = React.forwardRef<HTMLDivElement, LargePostProps>(({ post }, re
   return (
     <div className='large-post' ref={ref}>
         <div className='poster-info' style={{ marginBottom: rt?.length === 0 ? 0 : '0.5rem' }}>
-          <Link linkStyle={false} to={`/profile/${post?.post.author.handle}`}>
-            <img className='post-avatar' src={post?.post.author.avatar} />
-          </Link>
+          <Avatar className='post-avatar' src={post?.post.author.avatar} link={`/profile/${post?.post.author.handle}`} width={40} height={40} />
             <div className='post-info-inner'>
                 <Link linkStyle={true} className='post-display-name-link' to={`/profile/${post?.post.author.handle}`}>
                     <span className='post-display-name'>{post?.post.author.displayName}</span>
