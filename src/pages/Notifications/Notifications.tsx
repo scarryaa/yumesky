@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { type AppBskyFeedLike, type AppBskyFeedDefs, type AppBskyFeedPost, type AppBskyNotificationListNotifications, type AppBskyActorDefs } from '@atproto/api';
 import BasicView from '../../components/BasicView/BasicView';
 import { useNotifications } from '../../hooks/useNotifications';
@@ -154,7 +154,31 @@ const Notifications: React.FC<{ setCurrentPage: (pageName: string) => void }> = 
     setCurrentPage('Notifications');
   }, []);
 
-  const { notifications, notifPosts } = useNotifications();
+  const bottomBoundaryRef = useRef<HTMLDivElement>(null);
+  const isHandlingScroll = useRef(false);
+  const { notifications, notifPosts, loadMore, setLoadMore } = useNotifications();
+  const [seenNotificationIds] = useState<Set<string>>(new Set());
+
+  const handleScroll = async (): Promise<void> => {
+    if (bottomBoundaryRef.current === null || isHandlingScroll.current) return;
+    isHandlingScroll.current = true;
+
+    const bottomBoundary = bottomBoundaryRef.current.getBoundingClientRect().top - window.innerHeight;
+    if (bottomBoundary < 0 || (bottomBoundary < 300 && bottomBoundary > 0)) {
+      setLoadMore(true);
+    }
+
+    setTimeout(() => {
+      isHandlingScroll.current = false;
+    }, 200);
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [loadMore]);
 
   const groupNotifs = (notifications: AppBskyNotificationListNotifications.Notification[], notifPosts: AppBskyFeedDefs.PostView[]): GroupedNotifications => {
     const groupedNotifications: GroupedNotifications = {};
@@ -172,27 +196,15 @@ const Notifications: React.FC<{ setCurrentPage: (pageName: string) => void }> = 
             post: undefined
           };
         }
-        groupedNotifications[compoundKey].notifications.push(notification);
-        if (!groupedNotifications[compoundKey].authors.includes(author ?? '')) {
-          groupedNotifications[compoundKey].authors.push(author ?? '');
-          groupedNotifications[compoundKey].avatars.push(author.avatar);
+
+        if (!groupedNotifications[compoundKey].notifications.some(n => n.cid === cid)) {
+          groupedNotifications[compoundKey].notifications.push(notification);
+          if (!groupedNotifications[compoundKey].authors.includes(author ?? '')) {
+            groupedNotifications[compoundKey].authors.push(author ?? '');
+            groupedNotifications[compoundKey].avatars.push(author.avatar);
+          }
         }
       }
-    });
-
-    notifPosts.forEach(post => {
-      const { uri: postUri } = post;
-      Object.values(groupedNotifications).forEach(group => {
-        const { notifications } = group;
-        const matchingNotification = notifications.find(notification => {
-          const subjectUri = (notification.record as AppBskyFeedLike.Record)?.subject?.uri ?? notification.uri;
-          return (subjectUri === postUri);
-        });
-
-        if (matchingNotification !== undefined) {
-          group.post = post;
-        }
-      });
     });
 
     return groupedNotifications;
@@ -201,10 +213,12 @@ const Notifications: React.FC<{ setCurrentPage: (pageName: string) => void }> = 
   const groupedNotifications = groupNotifs(notifications, notifPosts);
 
   return (
-    <BasicView viewPadding={true}>
+    <BasicView viewPadding={false}>
       {Object.entries(groupedNotifications).map(([compoundKey, data], index) => (
+        !seenNotificationIds.has(data.notifications[0].cid) &&
         <NotificationItem key={index} post={data} reason={data.notifications[0].reason} />
       ))}
+      <div className='bottom-boundary-ref' ref={bottomBoundaryRef} />
     </BasicView>
   );
 };

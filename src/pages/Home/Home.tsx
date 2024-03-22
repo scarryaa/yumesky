@@ -25,7 +25,7 @@ const Home: React.FC<HomeProps> = ({ selectedTab, tabs, setCurrentPage }: HomePr
     isHandlingScroll.current = true;
 
     const bottomBoundary = bottomBoundaryRef.current.getBoundingClientRect().top - window.innerHeight;
-    if (bottomBoundary < 0 || (bottomBoundary < 200 && bottomBoundary > 0)) {
+    if (bottomBoundary < 0 || (bottomBoundary < 300 && bottomBoundary > 0)) {
       setLoadMore(true);
     }
 
