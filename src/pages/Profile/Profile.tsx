@@ -20,6 +20,8 @@ import { useLightbox, useLightboxControls } from '../../state/lightbox';
 import useProfileDropdown from '../../hooks/dropdown/useProfileDropdown';
 import Dropdown from '../../components/Dropdown/Dropdown';
 import FollowButton from '../../components/FollowButton/FollowButton';
+import { useCachedProfile } from '../../hooks/useCachedProfile';
+import Link from '../../components/Link/Link';
 
 interface ProfileDropdownProps {
   profile: AppBskyActorDefs.ProfileView;
@@ -48,6 +50,7 @@ const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
   const isAgentProfile = agent.session?.handle === username;
   const { isLightboxActive } = useLightbox();
   const { openLightbox, closeLightbox } = useLightboxControls();
+  const { setCachedProfile } = useCachedProfile();
 
   const [selectedTab, setSelectedTab] = useState<DefaultProfileTabs[number] | DefaultHomeTabs[number]>(getConfig().DEFAULT_PROFILE_TABS.TABS[0]);
   const [tabs, setTabs] = useState<Array<DefaultProfileTabs[number] | null>>(['Posts', 'Replies', 'Media', (isAgentProfile || hasFeedgens) ? 'Feeds' : null, (isAgentProfile || hasLists) ? 'Lists' : null, isAgentProfile ? 'Likes' : null]);
@@ -67,7 +70,14 @@ const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
 
   useEffect(() => {
     setCurrentPage('Profile');
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    if (profile !== undefined && profile?.handle !== '') {
+      console.log(profile);
+      setCachedProfile(profile);
+    }
+  }, [profile]);
 
   return (
     <BasicView viewPadding={false}>
@@ -90,8 +100,8 @@ const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
             </div>
             <div className='profile-body'>
               <div className='profile-metrics'>
-                  <span className='hover-underline'><span className='text-bold profile-metrics-text'>{profile?.followersCount}</span> followers</span>
-                  <span className='hover-underline'><span className='text-bold profile-metrics-text'>{profile?.followsCount}</span> following</span>
+                  <Link linkStyle={true} to={`/profile/${profile?.handle}/followers`} className='hover-underline'><span className='text-bold profile-metrics-text'>{profile?.followersCount}</span> followers</Link>
+                  <Link linkStyle={true} to={`/profile/${profile?.handle}/follows`} className='hover-underline'><span className='text-bold profile-metrics-text'>{profile?.followsCount}</span> following</Link>
                   <span><span className='text-bold profile-metrics-text'>{profile?.postsCount}</span> posts</span>
               </div>
               <RichText value={descriptionRT} />

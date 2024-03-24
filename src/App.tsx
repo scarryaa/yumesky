@@ -25,6 +25,7 @@ import { Provider as PromptProvider } from './state/prompts/index';
 import { Provider as LightboxProvider, useLightbox } from './state/lightbox';
 import { Provider as ToastProvider } from './state/toasts';
 import { Provider as ComposerProvider } from './hooks/useComposer';
+import { Provider as CachedProfileProvider } from './hooks/useCachedProfile';
 import { ModalsContainer } from './components/Modal/Modal';
 import Hashtag from './pages/Hashtag/Hashtag';
 import Feeds from './pages/Feeds/Feeds';
@@ -35,7 +36,9 @@ import Composer from './components/Composer/Composer';
 import ComposeButton from './components/Composer/ComposeButton';
 import { useSelectedTab } from './hooks/useSelectedTab';
 import LikedBy from './pages/LikedBy/LikedBy';
-import ReposteedBy from './pages/Home/RepostedBy/RepostedBy';
+import RepostedBy from './pages/Home/RepostedBy/RepostedBy';
+import Followers from './pages/Followers/Followers';
+import Follows from './pages/Follows/Follows';
 
 const App: React.FC = () => {
   return (
@@ -43,25 +46,27 @@ const App: React.FC = () => {
       <HiddenPostsProvider>
         <MutedThreadsProvider>
           <ComposerProvider>
-            <LightboxProvider>
-              <PromptProvider>
-                <ModalProvider>
-                  <ToastProvider>
-                    <PostProvider>
-                      <ThemeProvider>
-                        <AuthProvider>
-                          <HashRouter>
-                            <div className="app">
-                              <AppContent />
-                            </div>
-                          </HashRouter>
-                        </AuthProvider>
-                      </ThemeProvider>
-                    </PostProvider>
-                  </ToastProvider>
-                </ModalProvider>
-              </PromptProvider>
-            </LightboxProvider>
+            <CachedProfileProvider>
+              <LightboxProvider>
+                <PromptProvider>
+                  <ModalProvider>
+                    <ToastProvider>
+                      <PostProvider>
+                        <ThemeProvider>
+                          <AuthProvider>
+                            <HashRouter>
+                              <div className="app">
+                                <AppContent />
+                              </div>
+                            </HashRouter>
+                          </AuthProvider>
+                        </ThemeProvider>
+                      </PostProvider>
+                    </ToastProvider>
+                  </ModalProvider>
+                </PromptProvider>
+              </LightboxProvider>
+            </CachedProfileProvider>
           </ComposerProvider>
         </MutedThreadsProvider>
       </HiddenPostsProvider>
@@ -113,7 +118,9 @@ const AppLoggedIn: React.FC = () => {
           <Route path="/settings" element={<Settings setCurrentPage={setCurrentPage} />} />
           <Route path='/notifications' element={<Notifications setCurrentPage={setCurrentPage} />} />
           <Route path='profile/:username/post/:id/liked-by' element={<LikedBy setCurrentPage={setCurrentPage} />} />
-          <Route path='profile/:username/post/:id/reposted-by' element={<ReposteedBy setCurrentPage={setCurrentPage} />} />
+          <Route path='profile/:username/post/:id/reposted-by' element={<RepostedBy setCurrentPage={setCurrentPage} />} />
+          <Route path='profile/:username/followers' element={<Followers setCurrentPage={setCurrentPage} />} />
+          <Route path='profile/:username/follows' element={<Follows setCurrentPage={setCurrentPage} />} />
         </Routes>
         <Composer />
         <ComposeButton />

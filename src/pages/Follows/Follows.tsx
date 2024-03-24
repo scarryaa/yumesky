@@ -1,17 +1,18 @@
+import BasicView from '../../components/BasicView/BasicView';
+import AccountCard from '../../components/AccountCard/AccountCard';
 import { useEffect, useRef } from 'react';
-import AccountCard from '../../../components/AccountCard/AccountCard';
-import BasicView from '../../../components/BasicView/BasicView';
-import { usePost } from '../../../contexts/PostContext';
-import { useRepostedBy } from '../../../hooks/useRepostedBy';
+import { useFollows } from '../../hooks/useFollows';
+import { useParams } from 'react-router-dom';
 
-const RepostedBy: React.FC<{ setCurrentPage: (pageName: string) => void }> = ({ setCurrentPage }: { setCurrentPage: (pageName: string) => void }) => {
-  const { cachedPost } = usePost();
-  const { repostedByRes, setLoadMore } = useRepostedBy(cachedPost?.post.uri ?? '');
+const Follows: React.FC<{ setCurrentPage: (pageName: string) => void }> = ({ setCurrentPage }: { setCurrentPage: (pageName: string) => void }) => {
+  const { username } = useParams();
+  const { followsRes, setLoadMore, setCursor } = useFollows(username ?? '');
   const bottomBoundaryRef = useRef<HTMLDivElement>(null);
   const isHandlingScroll = useRef(false);
 
   useEffect(() => {
-    setCurrentPage('Liked By')
+    setCurrentPage('Following');
+    setCursor(undefined);
   }, []);
 
   const handleScroll = async (): Promise<void> => {
@@ -37,12 +38,12 @@ const RepostedBy: React.FC<{ setCurrentPage: (pageName: string) => void }> = ({ 
 
   return (
     <BasicView viewPadding={false}>
-        {repostedByRes?.data.repostedBy.map((repostedBy, i) => (
-            <AccountCard profile={repostedBy} key={i} />
+        {followsRes?.data.follows.map((following, i) => (
+            <AccountCard profile={following} key={i} />
         ))}
         <div className='bottom-boundary-ref' ref={bottomBoundaryRef} />
     </BasicView>
   )
 }
 
-export default RepostedBy;
+export default Follows;
