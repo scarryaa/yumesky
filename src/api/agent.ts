@@ -3,12 +3,8 @@ import { type ThreadViewPost, type NotFoundPost, type BlockedPost } from '@atpro
 import * as persisted from '../state/persisted'
 import { addAccountToSessionIfNeeded } from '../utils';
 
-const persistSession: AtpPersistSessionHandler = (evt, session) => {
+const persistSession: AtpPersistSessionHandler = async (evt, session) => {
   try {
-    if (evt === 'expired' || evt === 'create-failed') {
-      throw new Error('Session expired or creation failed.');
-    }
-
     if (session !== undefined) {
       addAccountToSessionIfNeeded(persisted.get('session'), {
         service: 'https://public.api.bsky.app',
@@ -20,6 +16,23 @@ const persistSession: AtpPersistSessionHandler = (evt, session) => {
         deactivated: false,
         refreshJwt: session.refreshJwt
       });
+    } else {
+      await agent.refreshSession();
+      const newSession = agent.session;
+      if (newSession !== undefined) {
+        addAccountToSessionIfNeeded(persisted.get('session'), {
+          service: 'https://public.api.bsky.app',
+          did: newSession.did,
+          handle: newSession.handle,
+          accessJwt: newSession.accessJwt,
+          email: newSession.email,
+          emailConfirmed: newSession.emailConfirmed,
+          deactivated: false,
+          refreshJwt: newSession.refreshJwt
+        });
+      } else {
+        console.error('Unable to refresh session.');
+      }
     }
   } catch (error) {
     console.error('Error occurred while persisting session:', error);

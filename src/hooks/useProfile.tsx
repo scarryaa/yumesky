@@ -5,7 +5,7 @@ import { type DefaultHomeTabs, type DefaultProfileTabs } from '../config';
 
 const PAGE_SIZE = 30;
 
-export const useProfile = (actor: string | undefined): AppBskyActorDefs.ProfileViewDetailed | undefined => {
+export const useProfile = (actor: string | undefined): { profile: AppBskyActorDefs.ProfileViewDetailed | undefined, setProfile: React.Dispatch<React.SetStateAction<AppBskyActorDefs.ProfileViewDetailed | undefined>> } => {
   const [profile, setProfile] = useState<AppBskyActorDefs.ProfileViewDetailed | undefined>();
 
   useEffect(() => {
@@ -22,11 +22,11 @@ export const useProfile = (actor: string | undefined): AppBskyActorDefs.ProfileV
     void getActorProfile();
   }, [actor]);
 
-  return profile;
+  return { profile, setProfile };
 }
 
 export const useProfilePosts = (actor: string | undefined, selectedTab: (DefaultProfileTabs | DefaultHomeTabs)[number]): { posts: AppBskyFeedDefs.FeedViewPost[] | undefined, feeds: AppBskyFeedDefs.GeneratorView[] | undefined, lists: AppBskyGraphDefs.ListView[] | undefined, setLoadMore: React.Dispatch<React.SetStateAction<boolean>>, loadMore: boolean,
-  loadMorePosts: () => void } => {
+  loadMorePosts: () => void, setPosts: React.Dispatch<React.SetStateAction<AppBskyFeedDefs.FeedViewPost[] | undefined>> } => {
   const [posts, setPosts] = useState<AppBskyFeedDefs.FeedViewPost[] | undefined>();
   const [feeds, setFeeds] = useState<AppBskyFeedDefs.GeneratorView[] | undefined>();
   const [lists, setLists] = useState<AppBskyGraphDefs.ListView[] | undefined>();
@@ -95,9 +95,9 @@ export const useProfilePosts = (actor: string | undefined, selectedTab: (Default
   };
 
   useEffect(() => {
-    if (selectedTab === undefined) return;
-
     setPosts([]);
+
+    if (selectedTab === undefined) return;
     void getPosts(undefined);
   }, [selectedTab])
 
@@ -120,5 +120,5 @@ export const useProfilePosts = (actor: string | undefined, selectedTab: (Default
     });
   }, [selectedTab, actor, loadMore]);
 
-  return { posts, feeds, lists, loadMore, setLoadMore, loadMorePosts };
+  return { posts, feeds, lists, loadMore, setLoadMore, loadMorePosts, setPosts };
 }

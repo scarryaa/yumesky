@@ -9,7 +9,7 @@ interface ProfileIconProps {
 }
 
 const ProfileIcon: React.FC<ProfileIconProps> = ({ size, className }: ProfileIconProps) => {
-  const profile = useProfile(agent.session?.handle);
+  const { profile } = useProfile(agent.session?.handle);
 
   return (
     <Link to={`/profile/${agent.session?.handle}`} className={`profile-icon ${className}`} style={{ width: size, height: size }}>

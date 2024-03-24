@@ -118,6 +118,16 @@ export const addAccountToSessionIfNeeded = (session: Session | null, newAccount:
   }
 };
 
+export const overwriteSession = (session: Session | null, newAccount: Account): void => {
+  const existingAccount = session?.accounts?.find(account => account.did === newAccount.did);
+  if (existingAccount === undefined) {
+    persisted.write('session', {
+      accounts: [...(session?.accounts ?? []), newAccount],
+      currentAccount: newAccount
+    });
+  }
+};
+
 export const lightenColor = (color: string, amount: number): string => {
   const hexRegex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
   const match = color.match(hexRegex);

@@ -18,7 +18,7 @@ const Login: React.FC<LoginProps> = ({ onSubmit }) => {
     const resumeSession = async (): Promise<void> => {
       const session = persisted.get('session');
 
-      if (session.accounts[0].refreshJwt !== undefined) {
+      if (session.currentAccount?.refreshJwt !== undefined) {
         const res = await agent.resumeSession({
           ...session.currentAccount,
           refreshJwt: session.currentAccount?.refreshJwt ?? session.accounts[0].refreshJwt,

@@ -15,7 +15,7 @@ import data from '@emoji-mart/data'
 const Composer: React.FC = () => {
   const { emojiPickerOpen, setEmojiPickerOpen, composerOpen, closeComposer, post, text, setText, sendPost, setImgs, imgs, removeImg } = useComposer();
   const { openPrompt } = usePromptControls();
-  const profile = useProfile(agent.session?.handle);
+  const { profile } = useProfile(agent.session?.handle);
   const contentRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [pickerPosition, setPickerPosition] = useState<{ top: number; left: number, bottom: number }>({ top: 0, left: 0, bottom: 0 });

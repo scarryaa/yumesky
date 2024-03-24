@@ -45,7 +45,7 @@ interface ProfileProps {
 }
 const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
   const { username } = useParams();
-  const profile = useProfile(username);
+  const { profile, setProfile } = useProfile(username);
   const { hasFeedgens, hasLists } = useProfileExtras(profile?.did);
   const isAgentProfile = agent.session?.handle === username;
   const { isLightboxActive } = useLightbox();
@@ -62,19 +62,19 @@ const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
   const descriptionRT = new RichTextAPI({ text: description ?? '' });
 
   const authorDisplayNameOrHandle = useMemo(() =>
-    (profile?.displayName ?? profile?.handle), [profile]);
+    (profile?.displayName === '' || profile?.displayName === undefined ? profile?.handle : profile?.displayName), [profile]);
 
   useEffect(() => {
     setTabs(['Posts', 'Replies', 'Media', (isAgentProfile || hasFeedgens) ? 'Feeds' : null, (isAgentProfile || hasLists) ? 'Lists' : null, isAgentProfile ? 'Likes' : null]);
-  }, [hasFeedgens, hasLists]);
+  }, [hasFeedgens, hasLists, profile]);
 
   useEffect(() => {
+    setProfile(undefined);
     setCurrentPage('Profile');
   }, []);
 
   useEffect(() => {
     if (profile !== undefined && profile?.handle !== '') {
-      console.log(profile);
       setCachedProfile(profile);
     }
   }, [profile]);

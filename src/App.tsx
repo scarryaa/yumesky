@@ -17,7 +17,7 @@ import { type AppBskyFeedDefs } from '@atproto/api';
 import Profile from './pages/Profile/Profile';
 import FeedService from './api/feed';
 import getConfig, { type DefaultHomeTabs } from './config';
-import { convertStringArrayToGeneratorViewArray } from './utils';
+import { overwriteSession, convertStringArrayToGeneratorViewArray } from './utils';
 import { Provider as MutedThreadsProvider } from './state/muted-threads';
 import { Provider as HiddenPostsProvider } from './state/hidden-posts';
 import { Provider as ModalProvider } from './state/modals/index';
@@ -39,6 +39,7 @@ import LikedBy from './pages/LikedBy/LikedBy';
 import RepostedBy from './pages/Home/RepostedBy/RepostedBy';
 import Followers from './pages/Followers/Followers';
 import Follows from './pages/Follows/Follows';
+import * as persisted from './state/persisted';
 
 const App: React.FC = () => {
   return (
@@ -140,6 +141,17 @@ const AppContent: React.FC = () => {
     try {
       const res = (await agent.login({ identifier: username, password }));
       if (res.success) {
+        const session = res.data;
+        overwriteSession(persisted.get('session'), {
+          did: session.did,
+          handle: session.handle,
+          service: 'https://bsky.social',
+          accessJwt: session.accessJwt,
+          deactivated: false,
+          email: session.email,
+          emailConfirmed: session.emailConfirmed,
+          refreshJwt: session.refreshJwt
+        })
         setIsAuthenticated(true);
       }
     } catch (error) {

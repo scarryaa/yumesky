@@ -12,7 +12,7 @@ interface ProfileBodyProps {
   currentTab: Tab;
 }
 const ProfileBody: React.FC<ProfileBodyProps> = ({ actor, currentTab }: ProfileBodyProps) => {
-  const { posts, feeds, lists, loadMore, setLoadMore } = useProfilePosts(actor, currentTab);
+  const { posts, feeds, lists, loadMore, setLoadMore, setPosts } = useProfilePosts(actor, currentTab);
   const bottomBoundaryRef = useRef<HTMLDivElement>(null);
   const isHandlingScroll = useRef(false);
 
@@ -29,6 +29,10 @@ const ProfileBody: React.FC<ProfileBodyProps> = ({ actor, currentTab }: ProfileB
       isHandlingScroll.current = false;
     }, 500);
   };
+
+  useEffect(() => {
+    setPosts(undefined);
+  }, [actor])
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);

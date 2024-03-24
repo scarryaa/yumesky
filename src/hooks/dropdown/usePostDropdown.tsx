@@ -9,6 +9,7 @@ import { useModalControls } from '../../state/modals';
 import agent from '../../api/agent';
 import { usePromptControls } from '../../state/prompts';
 import { DeletePostPrompt } from '../../components/Prompt/delete-post/Prompt';
+import { useToasts } from '../../state/toasts';
 
 interface UsePostDropdownProps {
   dropdownItems: MenuItem[];
@@ -21,6 +22,7 @@ const usePostDropdown = (post: AppBskyFeedDefs.FeedViewPost | undefined): UsePos
   const toggleHidePost = useToggleHidePost();
   const { openModal } = useModalControls();
   const { openPrompt } = usePromptControls();
+  const { addToast } = useToasts();
 
   const dropdownItems: MenuItem[] = [
     {
@@ -60,11 +62,11 @@ const usePostDropdown = (post: AppBskyFeedDefs.FeedViewPost | undefined): UsePos
         if (post == null) return;
         const muted = toggleThreadMute(post?.post.uri);
 
-        // TODO show toast
+        // TODO implement muted/unmuted threads
         if (muted) {
-          console.log('muted');
+          addToast({ message: 'Thread muted.' });
         } else {
-          console.log('unmuted');
+          addToast({ message: 'Thread unmuted.' });
         }
       }
     },
@@ -72,6 +74,7 @@ const usePostDropdown = (post: AppBskyFeedDefs.FeedViewPost | undefined): UsePos
       label: 'Mute words & tags',
       icon: faFilter,
       iconSize: 18,
+      // TODO implement this
       onClick: () => { }
     },
     {
@@ -82,11 +85,11 @@ const usePostDropdown = (post: AppBskyFeedDefs.FeedViewPost | undefined): UsePos
         if (post == null) return;
         const hidden = toggleHidePost(post?.post.uri);
 
-        // TODO show toast
+        // TODO implement hidden/unhidden posts
         if (hidden) {
-          console.log('post hidden');
+          addToast({ message: 'Post hidden.' });
         } else {
-          console.log('post unhidden');
+          addToast({ message: 'Post unhidden.' });
         }
       }
     },
@@ -106,6 +109,7 @@ const usePostDropdown = (post: AppBskyFeedDefs.FeedViewPost | undefined): UsePos
           label: 'Report post',
           icon: faCircleExclamation,
           iconSize: 18,
+          // TODO implement reporting
           onClick: () => {
             openModal({
               name: 'report',
