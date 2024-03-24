@@ -5,9 +5,10 @@ import { Link } from 'react-router-dom';
 
 interface RichTextProps {
   value: RichTextAPI | string;
+  className?: string;
 }
 
-const RichText: React.FC<RichTextProps> = ({ value }: RichTextProps) => {
+const RichText: React.FC<RichTextProps> = ({ value, className }: RichTextProps) => {
   const richText = React.useMemo(() => value instanceof RichTextAPI ? value : new RichTextAPI({ text: value }), [value]);
 
   const { text, facets } = richText;
@@ -16,7 +17,7 @@ const RichText: React.FC<RichTextProps> = ({ value }: RichTextProps) => {
     void richText.detectFacets(agent);
 
     return (
-        <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{text}</div>
+        <div className={className} style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{text}</div>
     )
   }
 
@@ -40,7 +41,7 @@ const RichText: React.FC<RichTextProps> = ({ value }: RichTextProps) => {
     key++;
   }
 
-  return (<div style={{ whiteSpace: 'pre-wrap' }}>{els}</div>)
+  return (<div className={className} style={{ whiteSpace: 'pre-wrap' }}>{els}</div>)
 }
 
 export default RichText;

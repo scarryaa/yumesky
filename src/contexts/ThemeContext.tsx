@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import * as persisted from '../state/persisted';
+import { lightenColor } from '../utils';
 
 // TODO clean up
 export interface Theme {
@@ -91,6 +92,7 @@ const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   const changePrimaryColor = (primaryColor: string): void => {
     persisted.write('colorMode', { value: persisted.get('colorMode').value, primary: primaryColor });
     document.documentElement.style.setProperty('--primary', primaryColor);
+    document.documentElement.style.setProperty('--primary-light', lightenColor(primaryColor, 50));
     setPrimaryColor(primaryColor);
   }
 

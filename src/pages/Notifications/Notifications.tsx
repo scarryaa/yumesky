@@ -40,7 +40,7 @@ const AvatarGroup: React.FC<{ post: GroupedNotifications[string] }> = ({ post })
   return (
     <div className="notification-avatar-container" onClick={(e) => { e.preventDefault(); setOpen(!open); }}>
         <div className='notification-avatars'>
-            {post.avatars.map((avatar, i) => (
+            {post.avatars.slice(0, 10).map((avatar, i) => (
               !open ? <Image className='notification-avatar' key={i} src={avatar} /> : null
             ))}
             <AvatarDropdown open={open} post={post} />

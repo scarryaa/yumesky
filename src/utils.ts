@@ -117,3 +117,20 @@ export const addAccountToSessionIfNeeded = (session: Session | null, newAccount:
     }
   }
 };
+
+export const lightenColor = (color: string, amount: number): string => {
+  const hexRegex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
+  const match = color.match(hexRegex);
+  if (match == null) {
+    throw new Error('Invalid color format');
+  }
+  const [, red, green, blue] = match.map(component => parseInt(component, 16));
+
+  const adjustedRed = Math.min(255, red + amount);
+  const adjustedGreen = Math.min(255, green + amount);
+  const adjustedBlue = Math.min(255, blue + amount);
+
+  const adjustedColor = `#${(adjustedRed << 16 | adjustedGreen << 8 | adjustedBlue).toString(16).padStart(6, '0')}`;
+
+  return adjustedColor;
+};

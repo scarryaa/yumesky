@@ -43,8 +43,8 @@ const Home: React.FC<HomeProps> = ({ selectedTab, tabs, setCurrentPage }: HomePr
 
   return (
     <BasicView viewPadding={false}>
-      {timeline?.map((post) => (
-        <Post post={post} key={post.post.cid} />
+      {timeline?.map((post, i) => (
+        <Post post={post} key={`${post.post.cid}_${i}`} />
       ))}
       <div className='bottom-boundary-ref' ref={bottomBoundaryRef} />
     </BasicView>

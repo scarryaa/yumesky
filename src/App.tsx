@@ -34,6 +34,8 @@ import Notifications from './pages/Notifications/Notifications';
 import Composer from './components/Composer/Composer';
 import ComposeButton from './components/Composer/ComposeButton';
 import { useSelectedTab } from './hooks/useSelectedTab';
+import LikedBy from './pages/LikedBy/LikedBy';
+import ReposteedBy from './pages/Home/RepostedBy/RepostedBy';
 
 const App: React.FC = () => {
   return (
@@ -110,6 +112,8 @@ const AppLoggedIn: React.FC = () => {
           <Route path='/feeds' element={<Feeds setCurrentPage={setCurrentPage} />} />
           <Route path="/settings" element={<Settings setCurrentPage={setCurrentPage} />} />
           <Route path='/notifications' element={<Notifications setCurrentPage={setCurrentPage} />} />
+          <Route path='profile/:username/post/:id/liked-by' element={<LikedBy setCurrentPage={setCurrentPage} />} />
+          <Route path='profile/:username/post/:id/reposted-by' element={<ReposteedBy setCurrentPage={setCurrentPage} />} />
         </Routes>
         <Composer />
         <ComposeButton />

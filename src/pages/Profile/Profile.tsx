@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import './Profile.scss';
 import PillButton from '../../components/PillButton/PillButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import FollowsYou from '../../components/FollowsYou/FollowsYou';
 import TabList from '../../components/TabList/TabList';
 import RichText from '../../components/RichText/RichText';
@@ -19,6 +19,7 @@ import Image from '../../components/Image/Image';
 import { useLightbox, useLightboxControls } from '../../state/lightbox';
 import useProfileDropdown from '../../hooks/dropdown/useProfileDropdown';
 import Dropdown from '../../components/Dropdown/Dropdown';
+import FollowButton from '../../components/FollowButton/FollowButton';
 
 interface ProfileDropdownProps {
   profile: AppBskyActorDefs.ProfileView;
@@ -83,9 +84,7 @@ const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
                 </div>
               </div>
               <div className='profile-buttons'>
-                <PillButton color='var(--secondary-highlight)' className='profile-buttons-following'>
-                  {((profile?.viewer?.following) != null) ? <><FontAwesomeIcon icon={faCheck} fontSize={14} />Following</> : (profile?.did === agent.session?.did) ? 'Edit Profile' : 'Follow'}
-                </PillButton>
+                <FollowButton profile={profile} />
                 {profile !== undefined && <ProfileDropdown profile={profile}/>}
               </div>
             </div>

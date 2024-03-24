@@ -27,32 +27,32 @@ const LargePost = React.forwardRef<HTMLDivElement, LargePostProps>(({ post }, re
 
   return (
     <div className='large-post' ref={ref}>
-        <div className='poster-info' style={{ marginBottom: rt?.length === 0 ? 0 : '0.5rem' }}>
-          <Avatar className='post-avatar' src={post?.post.author.avatar} link={`/profile/${post?.post.author.handle}`} width={40} height={40} />
-            <div className='post-info-inner'>
-                <Link linkStyle={true} className='post-display-name-link' to={`/profile/${post?.post.author.handle}`}>
-                    <span className='post-display-name'>{post?.post.author.displayName}</span>
-                    &nbsp;
-                </Link>
-                <Link linkStyle={true} to={`/profile/${post?.post.author.handle}`} className='post-handle'>@{post?.post.author.handle}</Link>
-            </div>
+      <div className='poster-info' style={{ marginBottom: rt?.length === 0 ? 0 : '0.5rem' }}>
+        <Avatar className='post-avatar' src={post?.post.author.avatar} link={`/profile/${post?.post.author.handle}`} width={40} height={40} />
+        <div className='post-info-inner'>
+          <Link linkStyle={true} className='post-display-name-link' to={`/profile/${post?.post.author.handle}`}>
+            <span className='post-display-name'>{post?.post.author.displayName}</span>
+            &nbsp;
+          </Link>
+          <Link linkStyle={true} to={`/profile/${post?.post.author.handle}`} className='post-handle'>@{post?.post.author.handle}</Link>
         </div>
-        <div className='post-info-container'>
-            <div className='post-info'>
-                <div className='post-content'>
-                    <RichText value={rt} />
-                </div>
+      </div>
+      <div className='post-info-container'>
+        <div className='post-info'>
+          <div className='post-content'>
+            <RichText value={rt} />
+          </div>
 
-                {post !== undefined && <EmbedHandler post={post} />}
+          {post !== undefined && <EmbedHandler post={post} />}
 
-                <PostTimestamp className='post-timestamp no-underline' short={false} post={post} />
-                {((((post?.post.likeCount) != null) && post.post.likeCount > 0) || ((post?.post.repostCount != null) && post.post.repostCount > 0)) && <div className='reposts-and-likes'>
-                    {(post.post.repostCount != null) && post.post.repostCount > 0 && <span className='count'>{post?.post.repostCount} <span className='normal-text'>repost{(((post?.post.repostCount) != null) && post?.post.repostCount !== 1) ? 's' : ''}</span></span>}
-                    {(post.post.likeCount != null) && post.post.likeCount > 0 && <span className='count'>{post?.post.likeCount} <span className='normal-text'>like{(((post?.post.likeCount) != null) && post?.post.likeCount !== 1) ? 's' : ''}</span></span>}
-                </div>}
-                <PostControls big={true} post={post} />
-            </div>
+          <PostTimestamp className='post-timestamp no-underline' short={false} post={post} />
+          {((((post?.post.likeCount) != null) && post.post.likeCount > 0) || ((post?.post.repostCount != null) && post.post.repostCount > 0)) && <div className='reposts-and-likes'>
+            {(post.post.repostCount != null) && post.post.repostCount > 0 && <Link linkStyle={true} to={`/profile/${post.post.author.handle}/post/${post.post.uri.split('/')[4]}/reposted-by`} className='count'>{post?.post.repostCount} <span className='normal-text'>repost{(((post?.post.repostCount) != null) && post?.post.repostCount !== 1) ? 's' : ''}</span></Link>}
+            {(post.post.likeCount != null) && post.post.likeCount > 0 && <Link linkStyle={true} to={`/profile/${post.post.author.handle}/post/${post.post.uri.split('/')[4]}/liked-by`} className='count'>{post?.post.likeCount} <span className='normal-text'>like{(((post?.post.likeCount) != null) && post?.post.likeCount !== 1) ? 's' : ''}</span></Link>}
+          </div>}
+          <PostControls big={true} post={post} />
         </div>
+      </div>
     </div>
   )
 });

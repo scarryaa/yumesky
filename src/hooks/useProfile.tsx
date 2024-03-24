@@ -33,6 +33,10 @@ export const useProfilePosts = (actor: string | undefined, selectedTab: (Default
   const [loadMore, setLoadMore] = useState(false);
   const [cursor, setCursor] = useState<string | undefined>();
 
+  useEffect(() => {
+    void getPosts(undefined);
+  }, [actor])
+
   const loadMorePosts = async (): Promise<void> => {
     if (actor === undefined) return;
     await getPosts(cursor);
@@ -48,7 +52,12 @@ export const useProfilePosts = (actor: string | undefined, selectedTab: (Default
       case 'Media':
       case 'Likes': {
         const filter = selectedTab === 'Likes' ? 'posts_liked' : selectedTab === 'Media' ? 'posts_with_media' : `posts_${selectedTab === 'Posts' ? 'no_' : 'with_'}replies`;
-        res = await agent.api.app.bsky.feed.getAuthorFeed({ actor: actor ?? '', filter, cursor, limit: PAGE_SIZE });
+        if (selectedTab === 'Likes') {
+          res = await agent.getActorLikes({ actor: actor ?? '', cursor, limit: PAGE_SIZE });
+        } else {
+          res = await agent.api.app.bsky.feed.getAuthorFeed({ actor: actor ?? '', filter, cursor, limit: PAGE_SIZE });
+        }
+
         if (res.success) {
           const newPosts = res.data.feed;
 
@@ -57,7 +66,6 @@ export const useProfilePosts = (actor: string | undefined, selectedTab: (Default
             setCursor(res.data.cursor);
           } else {
             const uniquePosts = filterDuplicatePosts(newPosts);
-            console.log(uniquePosts);
 
             setPosts(prevPosts => {
               return (prevPosts != null) ? [...prevPosts, ...uniquePosts] : uniquePosts;
@@ -89,6 +97,7 @@ export const useProfilePosts = (actor: string | undefined, selectedTab: (Default
   useEffect(() => {
     if (selectedTab === undefined) return;
 
+    setPosts([]);
     void getPosts(undefined);
   }, [selectedTab])
 

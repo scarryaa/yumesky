@@ -5,6 +5,8 @@
     flex-direction: column;
     gap: 0.4rem;
     text-decoration: none !important;
+    white-space: nowrap;
+    overflow: hidden;
 
     .notification-record {
         margin-left: 3rem;
@@ -13,12 +15,25 @@
 
     .notification-author-container {
         align-items: baseline;
+        width: 100%;
         margin-left: 3rem;
         display: flex;
         gap: 0.2rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 80%;
+
+        .notification-author {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: block;
+            overflow: hidden;
+        }
 
         .notification-author,
         .notification-others {
+            white-space: nowrap;
             font-weight: bold;
         }
         
@@ -29,7 +44,11 @@
 
     .notification-follow-author-container {
         align-items: baseline;
+        display: flex;
         margin-left: 3rem;
+        text-wrap: nowrap;
+        margin-right: 1rem;
+        overflow: hidden;
 
         .notification-reason {
             margin-left: 0.2rem;
@@ -37,6 +56,9 @@
 
         .notification-author,
         .notification-others {
+            max-width: 80%;
+            overflow: hidden;
+            text-overflow: ellipsis;
             font-weight: bold;
         }
         

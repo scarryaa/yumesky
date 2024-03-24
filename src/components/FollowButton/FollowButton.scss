@@ -1,0 +1,15 @@
+:root {
+    --follow-button-highlight: var(--primary-light);
+}
+
+.follow-button {
+    font-size: 14px;
+    height: 38px;
+    width: 115px;
+    min-width: 115px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+}
