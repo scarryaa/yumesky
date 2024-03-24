@@ -1,0 +1,97 @@
+.feeds {
+    .feeds-my-feeds {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        padding: 1rem 0.8rem;
+        align-items: center;
+        border-bottom: 1px solid var(--border);
+
+        .feeds-my-feeds-container {
+            display: flex;
+            flex-direction: column;
+
+            .feeds-my-feeds-name {
+                font-size: 20px;
+                font-weight: bold;
+            }
+
+            .feeds-my-feeds-tagline {
+                margin-top: 0.2rem;
+                color: var(--text-light);
+                font-size: 16px;
+            }
+        }
+
+        .feeds-my-feeds-logo {
+            border-radius: 50%;
+            background-color: var(--primary-very-dark);
+            color: var(--primary);
+            padding: 0.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+        }
+    }
+
+    .feeds-new-feeds {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        padding: 1rem 0.8rem;
+        align-items: center;
+        border-bottom: 1px solid var(--border);
+
+        .feeds-new-feeds-container {
+            display: flex;
+            flex-direction: column;
+
+            .feeds-new-feeds-name {
+                font-size: 20px;
+                font-weight: bold;
+            }
+
+            .feeds-new-feeds-tagline {
+                margin-top: 0.2rem;
+                color: var(--text-light);
+                font-size: 16px;
+            }
+        }
+
+        
+        .feeds-new-feeds-logo {
+            border-radius: 50%;
+            background-color: var(--primary-very-dark);
+            color: var(--primary);
+            padding: 0.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+        }
+    }
+
+    .feeds-feed {
+        text-decoration: none !important;
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        padding: 0.8rem 1rem;
+        align-items: center;
+        border-bottom: 1px solid var(--border);
+
+        .feeds-feed-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+        }
+
+        .feeds-feed-display-name {
+            font-weight: bold;
+            max-width: max-content;
+        }
+    }
+}

@@ -24,14 +24,35 @@ const FeedService = {
     }
   },
 
-  getUserFeeds: async (prefs: AppBskyActorDefs.Preferences): Promise<AppBskyFeedDefs.GeneratorView[]> => {
-    const savedFeedsPref = prefs.find(
+  getMyFeeds: async (prefs: AppBskyActorDefs.Preferences) => {
+    const feedsPref = prefs.find(
       (pref): pref is AppBskyActorDefs.SavedFeedsPref =>
         AppBskyActorDefs.isSavedFeedsPref(pref)
     );
 
-    if (savedFeedsPref !== undefined) {
-      const res = await agent.app.bsky.feed.getFeedGenerators({ feeds: savedFeedsPref?.pinned });
+    if (feedsPref !== undefined) {
+      const res = await agent.app.bsky.feed.getFeedGenerators({
+        feeds: (((feedsPref?.saved) != null) && feedsPref.pinned !== null)
+          ? [...feedsPref?.saved, ...feedsPref?.pinned.filter((feed) => feedsPref.saved.find((f) => f === feed) == null)]
+          : ((feedsPref?.saved) != null)
+              ? feedsPref.saved
+              : ((feedsPref?.pinned) != null) ? feedsPref.pinned : []
+      });
+
+      return res.data.feeds;
+    }
+
+    return [];
+  },
+
+  getPinnedFeeds: async (prefs: AppBskyActorDefs.Preferences): Promise<AppBskyFeedDefs.GeneratorView[]> => {
+    const pinneedFeedsPref = prefs.find(
+      (pref): pref is AppBskyActorDefs.SavedFeedsPref =>
+        AppBskyActorDefs.isSavedFeedsPref(pref)
+    );
+
+    if (pinneedFeedsPref !== undefined) {
+      const res = await agent.app.bsky.feed.getFeedGenerators({ feeds: pinneedFeedsPref?.pinned });
       const followingFeed = { displayName: 'Following', cid: '', uri: '', indexedAt: '', did: '', creator: { did: '', handle: '' } };
       res.data.feeds.unshift(followingFeed);
 
@@ -39,6 +60,11 @@ const FeedService = {
     }
 
     return [];
+  },
+
+  getDiscoveryFeeds: async (cursor?: string | undefined) => {
+    const res = await agent.app.bsky.feed.getSuggestedFeeds({ cursor });
+    return res;
   }
 }
 

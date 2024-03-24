@@ -1,0 +1,95 @@
+.large-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none !important;
+    justify-content: center;
+
+    .large-feed-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+    }
+
+    .large-feed-shell {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .large-feed-inner {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        overflow: hidden;
+
+        .large-feed-add-button {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+
+            &:hover {
+                background-color: var(--secondary-highlight);
+            }
+        }
+
+        .large-feed-inner-name-by {
+            display: flex;
+            flex-direction: column;
+
+            .large-feed-name {
+                font-weight: bold;
+                font-size: 16px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                width: 100%;
+            }
+    
+            .large-feed-by {
+                font-size: 14px;
+                color: var(--text-light);
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                width: 100%;
+            }
+        }
+    }
+
+    .large-feed-liked-by {
+        display: flex;
+        font-size: 14px;
+        color: var(--text-light);
+    }
+
+    .large-feed-description {
+        font-size: 14px;
+        color: var(--text);
+        max-width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        word-break: break-word;
+    }
+}
+
+.large-feed-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 36px;
+    min-height: 36px;
+    max-width: 36px;
+    max-height: 36px;
+    border-radius: 8px;
+    background-color: var(--primary);
+}

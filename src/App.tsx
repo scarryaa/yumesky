@@ -1,5 +1,5 @@
 import './App.scss';
-import agent, { getPrefs } from './api/agent';
+import agent from './api/agent';
 import MainTopBar from './components/MainTopBar/MainTopBar';
 import Sidebar from './components/Sidebar/Sidebar';
 import AuthProvider, { useAuth } from './contexts/AuthContext';
@@ -12,12 +12,10 @@ import { useEffect, useState } from 'react';
 import ThreadView from './pages/ThreadView/ThreadView';
 import PostProvider from './contexts/PostContext';
 import TabList from './components/TabList/TabList';
-import PrefsProvider, { usePrefs } from './contexts/PrefsContext';
-import { type AppBskyFeedDefs } from '@atproto/api';
+import PrefsProvider from './contexts/PrefsContext';
 import Profile from './pages/Profile/Profile';
-import FeedService from './api/feed';
-import getConfig, { type DefaultHomeTabs } from './config';
-import { overwriteSession, convertStringArrayToGeneratorViewArray } from './utils';
+import { type DefaultHomeTabs } from './config';
+import { overwriteSession } from './utils';
 import { Provider as MutedThreadsProvider } from './state/muted-threads';
 import { Provider as HiddenPostsProvider } from './state/hidden-posts';
 import { Provider as ModalProvider } from './state/modals/index';
@@ -40,6 +38,7 @@ import RepostedBy from './pages/Home/RepostedBy/RepostedBy';
 import Followers from './pages/Followers/Followers';
 import Follows from './pages/Follows/Follows';
 import * as persisted from './state/persisted';
+import { useGenerators } from './hooks/useGenerators';
 
 const App: React.FC = () => {
   return (
@@ -78,30 +77,15 @@ const App: React.FC = () => {
 const AppLoggedIn: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<string | null>(null);
   const { selectedTab, tabs, changeTab, setTabs } = useSelectedTab();
-  const { setPrefs } = usePrefs();
-  const [generators, setGenerators] = useState<AppBskyFeedDefs.GeneratorView[]>(
-    convertStringArrayToGeneratorViewArray(getConfig().DEFAULT_HOME_TABS.TABS, getConfig().DEFAULT_HOME_TABS.GENERATORS));
+  const { pinnedGenerators } = useGenerators();
 
   const handleTabClick = (tabDisplayName: string): void => {
     changeTab(tabDisplayName);
   };
 
-  // get initial info we need
   useEffect(() => {
-    const getUserPrefs = async (): Promise<void> => {
-      const res = await getPrefs();
-      setPrefs(res);
-
-      const gens = await FeedService.getUserFeeds(res);
-      setGenerators(gens);
-    }
-
-    void getUserPrefs();
-  }, []);
-
-  useEffect(() => {
-    setTabs(generators.map(generator => generator));
-  }, [generators]);
+    setTabs(pinnedGenerators.map(generator => generator));
+  }, [pinnedGenerators]);
 
   return (
     <>
@@ -111,7 +95,7 @@ const AppLoggedIn: React.FC = () => {
           component={(currentPage == null) ? <TabList tabs={tabs?.map(tab => tab.displayName) as DefaultHomeTabs} selectedTab={selectedTab ?? ''} onTabClick={handleTabClick} /> : null}
           title={(currentPage != null) ? `${currentPage?.[0].toUpperCase()}${currentPage?.substring(1)}` : null}/>
         <Routes>
-          <Route path="/" element={<Home tabs={generators} setCurrentPage={setCurrentPage} selectedTab={selectedTab ?? ''} />} />
+          <Route path="/" element={<Home tabs={pinnedGenerators} setCurrentPage={setCurrentPage} selectedTab={selectedTab ?? ''} />} />
           <Route path="/profile/:username" element={<Profile setCurrentPage={setCurrentPage}/>} />
           <Route path="/profile/:username/post/:id" element={<ThreadView setCurrentPage={setCurrentPage} />} />
           <Route path='/hashtag/:hashtag' element={<Hashtag setCurrentPage={setCurrentPage} />} />

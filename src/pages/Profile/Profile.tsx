@@ -51,6 +51,7 @@ const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
   const { isLightboxActive } = useLightbox();
   const { openLightbox, closeLightbox } = useLightboxControls();
   const { setCachedProfile } = useCachedProfile();
+  const [loading, setLoading] = useState<boolean>(true);
 
   const [selectedTab, setSelectedTab] = useState<DefaultProfileTabs[number] | DefaultHomeTabs[number]>(getConfig().DEFAULT_PROFILE_TABS.TABS[0]);
   const [tabs, setTabs] = useState<Array<DefaultProfileTabs[number] | null>>(['Posts', 'Replies', 'Media', (isAgentProfile || hasFeedgens) ? 'Feeds' : null, (isAgentProfile || hasLists) ? 'Lists' : null, isAgentProfile ? 'Likes' : null]);
@@ -78,6 +79,20 @@ const Profile: React.FC<ProfileProps> = ({ setCurrentPage }: ProfileProps) => {
       setCachedProfile(profile);
     }
   }, [profile]);
+
+  useEffect(() => {
+    if (profile !== undefined) {
+      setLoading(false);
+    }
+  }, [profile]);
+
+  if (loading) {
+    return (
+    <BasicView viewPadding={false}>
+      <div></div>
+    </BasicView>
+    )
+  }
 
   return (
     <BasicView viewPadding={false}>

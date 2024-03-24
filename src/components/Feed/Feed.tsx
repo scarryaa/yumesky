@@ -1,7 +1,7 @@
 import { type AppBskyFeedDefs } from '@atproto/api'
 import Link from '../Link/Link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 import './Feed.scss';
 
 interface FeedProps {
@@ -11,7 +11,7 @@ interface FeedProps {
 const FeedIcon: React.FC = () => {
   return (
     <div className='feed-icon'>
-        <FontAwesomeIcon icon={faUsers} fontSize={16} />
+        <FontAwesomeIcon icon={faHashtag} fontSize={16} />
     </div>
   )
 }
@@ -20,7 +20,7 @@ const Feed: React.FC<FeedProps> = ({ feed }: FeedProps) => {
   const feedId = feed.uri.split('/')[4];
 
   return (
-    <Link linkStyle={false} className='feed' to={`/profile/${feed.creator.handle}/feeds/${feedId}`}>
+    <Link linkStyle={false} className='feed' to={`/profile/${feed.creator.handle}/feed/${feedId}`}>
         <div className='feed-shell'>
             {feed.avatar === undefined ? <FeedIcon /> : <img className='feed-avatar' src={feed.avatar} />}
             <div className='feed-inner'>
