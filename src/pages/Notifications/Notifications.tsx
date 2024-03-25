@@ -76,7 +76,6 @@ const AvatarDropdown: React.FC<{ open: boolean, post: GroupedNotifications[strin
     : null
 );
 
-// TODO fix reply tags
 const NotificationItem: React.FC<{ post: GroupedNotifications[string], reason: string, style: CSSProperties }> = ({ post, reason, style }) => {
   const { setCachedPost } = usePost();
 

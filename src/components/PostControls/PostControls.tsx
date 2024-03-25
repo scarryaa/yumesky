@@ -2,7 +2,7 @@ import { type AppBskyFeedDefs } from '@atproto/api';
 import { faComment, faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faEllipsisH, faRetweet, faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import agent from '../../api/agent';
 import './PostControls.scss';
 import Dropdown from '../Dropdown/Dropdown';
@@ -64,7 +64,7 @@ const PostControls: React.FC<PostControlsProps> = ({ post, big }: PostControlsPr
   const [repostedUri, setRepostedUri] = useState<string | undefined>(post?.post.viewer?.repost);
   const [likeCount, setLikeCount] = useState<number | undefined>(post?.post.likeCount);
   const [repostCount, setRepostCount] = useState<number | undefined>(post?.post.repostCount);
-  const [replyCount] = useState<number | undefined>(post?.post.replyCount);
+  const [replyCount, setReplyCount] = useState<number | undefined>(post?.post.replyCount);
   const [hoverLike, setHoverLike] = useState<boolean>(false);
   const [hoverRepost, setHoverRepost] = useState<boolean>(false);
   const [hoverReply, setHoverReply] = useState<boolean>(false);
@@ -72,6 +72,14 @@ const PostControls: React.FC<PostControlsProps> = ({ post, big }: PostControlsPr
   const { openComposer } = useComposer();
   const { dropdownItems } = usePostDropdown(post);
   const { addToast } = useToasts();
+
+  useEffect(() => {
+    setLikeCount(post?.post.likeCount);
+    setReplyCount(post?.post.replyCount);
+    setRepostCount(post?.post.repostCount);
+    setRepostedUri(post?.post.viewer?.repost);
+    setLikedUri(post?.post.viewer?.like);
+  }, [post]);
 
   const more = (e: React.MouseEvent<HTMLButtonElement>, post: AppBskyFeedDefs.FeedViewPost | undefined): void => {
     e.preventDefault();

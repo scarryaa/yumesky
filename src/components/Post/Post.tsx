@@ -70,7 +70,7 @@ const PostInfo: React.FC<PostProps> = ({ post, ref }: PostProps) => {
         {post.reason?.$type === 'app.bsky.feed.defs#reasonRepost' &&
             <Link linkStyle={false} to={`/profile/${AppBskyFeedDefs.isReasonRepost(post.reason) && post.reason.by.handle}`} className='post-reason'>
                 <FontAwesomeIcon className='post-reason-icon' icon={faRetweet} fontSize={14} />
-                <span>Reposted by <Link to={`/profile/${postReasonAuthor}`} linkStyle={true}>{postReasonAuthor}</Link></span>
+                <span>Reposted by <Link to={`/profile/${AppBskyFeedDefs.isReasonRepost(post.reason) && post.reason.by.handle}`} linkStyle={true}>{postReasonAuthor}</Link></span>
             </Link>}
         <div className='post-info-container'>
           <Avatar link={`/profile/${post.post.author.handle}`} width={40} height={40} className='post-avatar' src={post.post.author.avatar} />

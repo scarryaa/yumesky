@@ -6,6 +6,7 @@
   --primary-very-dark: #192b3f;
   --secondary: #f9fafb;
   --secondary-highlight: #e2e2e2;
+  --secondary-placeholder: #dadada;
   --background: #fff;
   --text: #000;
   --text-inverse: #fff;
@@ -29,6 +30,7 @@
 [data-theme='dim'] {
   --secondary: #1f2a33;
   --secondary-highlight: #2d3e4b;
+  --secondary-placeholder: #263341;
   --background: #1b2229;
   --text: #fff;
   --text-inverse: #000;
@@ -45,6 +47,7 @@
 [data-theme='dark'] {
   --secondary: #070707;
   --secondary-highlight: #363636;
+  --secondary-placeholder: #161616;
   --background: #000;
   --text: #fff;
   --text-inverse: #000;

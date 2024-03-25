@@ -39,38 +39,43 @@ import Followers from './pages/Followers/Followers';
 import Follows from './pages/Follows/Follows';
 import * as persisted from './state/persisted';
 import { useGenerators } from './hooks/useGenerators';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 const App: React.FC = () => {
   return (
-    <PrefsProvider>
-      <HiddenPostsProvider>
-        <MutedThreadsProvider>
-          <ComposerProvider>
-            <CachedProfileProvider>
-              <LightboxProvider>
-                <PromptProvider>
-                  <ModalProvider>
-                    <ToastProvider>
-                      <PostProvider>
-                        <ThemeProvider>
-                          <AuthProvider>
-                            <HashRouter>
-                              <div className="app">
-                                <AppContent />
-                              </div>
-                            </HashRouter>
-                          </AuthProvider>
-                        </ThemeProvider>
-                      </PostProvider>
-                    </ToastProvider>
-                  </ModalProvider>
-                </PromptProvider>
-              </LightboxProvider>
-            </CachedProfileProvider>
-          </ComposerProvider>
-        </MutedThreadsProvider>
-      </HiddenPostsProvider>
-    </PrefsProvider>
+    <QueryClientProvider client={queryClient}>
+      <PrefsProvider>
+        <HiddenPostsProvider>
+          <MutedThreadsProvider>
+            <ComposerProvider>
+              <CachedProfileProvider>
+                <LightboxProvider>
+                  <PromptProvider>
+                    <ModalProvider>
+                      <ToastProvider>
+                        <PostProvider>
+                          <ThemeProvider>
+                            <AuthProvider>
+                              <HashRouter>
+                                <div className="app">
+                                  <AppContent />
+                                </div>
+                              </HashRouter>
+                            </AuthProvider>
+                          </ThemeProvider>
+                        </PostProvider>
+                      </ToastProvider>
+                    </ModalProvider>
+                  </PromptProvider>
+                </LightboxProvider>
+              </CachedProfileProvider>
+            </ComposerProvider>
+          </MutedThreadsProvider>
+        </HiddenPostsProvider>
+      </PrefsProvider>
+    </QueryClientProvider>
   );
 }
 
