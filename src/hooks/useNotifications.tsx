@@ -54,6 +54,7 @@ export const useNotifications = (): {
         if (notificationRes.success) {
           setNotifications(notificationRes.data.notifications);
           const notificationUris = notificationRes.data.notifications.map((notif => (notif.record as AppBskyFeedLike.Record)?.subject?.uri ?? notif.uri));
+          notificationUris.push(...notificationRes.data.notifications.map((notif => notif.reasonSubject ?? '')));
           const numBatches = Math.ceil(notificationUris.length / batchSize);
           for (let i = 0; i < numBatches; i++) {
             const startIndex = i * batchSize;

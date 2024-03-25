@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { type CSSProperties, useEffect, useRef, useState } from 'react';
 import { type AppBskyFeedLike, type AppBskyFeedDefs, type AppBskyFeedPost, type AppBskyNotificationListNotifications, type AppBskyActorDefs } from '@atproto/api';
 import BasicView from '../../components/BasicView/BasicView';
 import { useNotifications } from '../../hooks/useNotifications';
@@ -12,12 +12,15 @@ import Link from '../../components/Link/Link';
 import { usePost } from '../../contexts/PostContext';
 import { type ViewImage } from '@atproto/api/dist/client/types/app/bsky/embed/images';
 import ImageGridSmall from '../../components/ImageGrid/ImageGridSmall';
+import agent from '../../api/agent';
+import { useNotificationCount } from '../../hooks/useNotificationCount';
 
 type GroupedNotifications = Record<string, {
   notifications: AppBskyNotificationListNotifications.Notification[];
   authors: AppBskyActorDefs.ProfileView[];
   avatars: string[];
   post?: AppBskyFeedDefs.PostView;
+  parent?: AppBskyFeedDefs.PostView;
 }>;
 
 const reasonTextMap: Record<string, string> = {
@@ -74,7 +77,7 @@ const AvatarDropdown: React.FC<{ open: boolean, post: GroupedNotifications[strin
 );
 
 // TODO fix reply tags
-const NotificationItem: React.FC<{ post: GroupedNotifications[string], reason: string }> = ({ post, reason }) => {
+const NotificationItem: React.FC<{ post: GroupedNotifications[string], reason: string, style: CSSProperties }> = ({ post, reason, style }) => {
   const { setCachedPost } = usePost();
 
   switch (reason) {
@@ -82,7 +85,7 @@ const NotificationItem: React.FC<{ post: GroupedNotifications[string], reason: s
     case 'mention':
     case 'repost':
       return (
-          <Link onClick={() => { post.post !== undefined && setCachedPost({ post: post.post }); }} linkStyle={false} to={`/profile/${post.post?.author.handle}/post/${post.post?.uri.split('/')[4]}`} className='notification'>
+          <Link style={style} onClick={() => { post.post !== undefined && setCachedPost({ post: post.post }); }} linkStyle={false} to={`/profile/${post.post?.author.handle}/post/${post.post?.uri.split('/')[4]}`} className='notification'>
               <div className='notification-shell'>
               {reasonIconMap[reason] !== undefined && (
                   <FontAwesomeIcon
@@ -113,17 +116,20 @@ const NotificationItem: React.FC<{ post: GroupedNotifications[string], reason: s
               </div>}
           </Link>
       );
-    case 'reply':
+    case 'reply': {
+      console.log(post);
+
       return (
-        post.post !== undefined ? <Post post={{ post: post.post, reply: { root: { $type: '', ...(post.post.record as AppBskyFeedPost.ReplyRef).root }, parent: { $type: '', ...(post.post.record as AppBskyFeedPost.ReplyRef).parent } } }} /> : null
+        post.post !== undefined ? <Post style={style} post={{ post: post.post, reply: { root: { $type: '' }, parent: { $type: '', uri: (post.post.record as AppBskyFeedPost.Record).reply?.parent.uri, author: post.parent?.author } } }} /> : null
       );
+    }
     case 'quote':
       return (
-        post.post !== undefined ? <Post post={{ post: post.post }} /> : null
+        post.post !== undefined ? <Post style={style} post={{ post: post.post }} /> : null
       );
     case 'follow':
       return (
-        <div className='notification'>
+        <div className='notification' style={style}>
             <div className='notification-shell'>
             {reasonIconMap[reason] !== undefined && (
                 <FontAwesomeIcon
@@ -155,7 +161,15 @@ const NotificationItem: React.FC<{ post: GroupedNotifications[string], reason: s
 }
 
 const Notifications: React.FC<{ setCurrentPage: (pageName: string) => void }> = ({ setCurrentPage }) => {
+  const { setNotificationCount } = useNotificationCount();
+
   useEffect(() => {
+    const updateSeen = async (): Promise<void> => {
+      await agent.updateSeenNotifications(new Date().toISOString());
+      setNotificationCount(0);
+    }
+
+    void updateSeen();
     setCurrentPage('Notifications');
   }, []);
 
@@ -193,7 +207,7 @@ const Notifications: React.FC<{ setCurrentPage: (pageName: string) => void }> = 
 
     // Group notifications
     notifications.forEach(notification => {
-      const { cid, author, reason, record } = notification;
+      const { cid, author, reason, record, reasonSubject } = notification;
       const subjectUri = (record as AppBskyFeedLike.Record)?.subject?.uri ?? notification.uri;
       if (cid !== undefined && author?.avatar !== undefined && subjectUri !== undefined) {
         const compoundKey = `${reason}-${subjectUri}`;
@@ -202,7 +216,8 @@ const Notifications: React.FC<{ setCurrentPage: (pageName: string) => void }> = 
             notifications: [],
             authors: [],
             avatars: [],
-            post: undefined
+            post: undefined,
+            parent: undefined
           };
         }
 
@@ -211,6 +226,15 @@ const Notifications: React.FC<{ setCurrentPage: (pageName: string) => void }> = 
           if (!groupedNotifications[compoundKey].authors.includes(author ?? '')) {
             groupedNotifications[compoundKey].authors.push(author ?? '');
             groupedNotifications[compoundKey].avatars.push(author.avatar);
+          }
+        }
+
+        // check for reply
+        if (reason === 'reply' && (reasonSubject != null)) {
+          const replyParentUri = reasonSubject;
+          const parentPost = notifPosts.find(post => post.uri === replyParentUri);
+          if (parentPost != null) {
+            groupedNotifications[compoundKey].parent = parentPost;
           }
         }
       }
@@ -232,10 +256,12 @@ const Notifications: React.FC<{ setCurrentPage: (pageName: string) => void }> = 
 
   return (
     <BasicView viewPadding={false}>
-      {Object.entries(groupedNotifications).map(([compoundKey, data], index) => (
-        !seenNotificationIds.has(data.notifications[0].cid) &&
-        <NotificationItem key={index} post={data} reason={data.notifications[0].reason} />
-      ))}
+      {Object.entries(groupedNotifications).map(([compoundKey, data], index) => {
+        return (
+          !seenNotificationIds.has(data.notifications[0].cid) &&
+        <NotificationItem style={{ backgroundColor: (data.notifications.every(n => n.isRead)) ? '' : 'var(--secondary-highlight)' }} key={`notif_${index}`} post={data} reason={data.notifications[0].reason} />
+        )
+      })}
       <div className='bottom-boundary-ref' ref={bottomBoundaryRef} />
     </BasicView>
   );

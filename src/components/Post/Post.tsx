@@ -3,7 +3,7 @@ import './Post.scss';
 import Link from '../Link/Link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faReply, faRetweet } from '@fortawesome/free-solid-svg-icons';
-import { useMemo } from 'react';
+import { type CSSProperties, useMemo } from 'react';
 import { usePost } from '../../contexts/PostContext';
 import { ago, agoLong } from '../../utils';
 import PostControls from '../PostControls/PostControls';
@@ -25,6 +25,7 @@ export const PostTimestamp: React.FC<PostTimestampProps> = ({ post, short, class
 interface PostProps {
   post: AppBskyFeedDefs.FeedViewPost;
   ref?: any;
+  style?: CSSProperties;
 }
 
 const PostInfo: React.FC<PostProps> = ({ post, ref }: PostProps) => {
@@ -99,11 +100,11 @@ const PostInfo: React.FC<PostProps> = ({ post, ref }: PostProps) => {
   )
 }
 
-const Post: React.FC<PostProps> = ({ post }: PostProps) => {
+const Post: React.FC<PostProps> = ({ post, style }: PostProps) => {
   const { setCachedPost } = usePost();
 
   return (
-        <Link onClick={() => { setCachedPost(post); }} linkStyle={false} to={`/profile/${post.post.author.handle}/post/${post.post.uri.split('/')[4]}`} className='post'>
+        <Link style={style} onClick={() => { setCachedPost(post); }} linkStyle={false} to={`/profile/${post.post.author.handle}/post/${post.post.uri.split('/')[4]}`} className='post'>
             <PostInfo post={post} />
         </Link>
   )
