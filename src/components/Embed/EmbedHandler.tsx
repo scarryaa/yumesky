@@ -3,8 +3,8 @@ import ImageGrid from '../ImageGrid/ImageGrid';
 import EmbedContainer from './EmbedContainer';
 import './EmbedHandler.scss';
 import { type View, type ViewImage } from '@atproto/api/dist/client/types/app/bsky/embed/images';
+import Link from '../Link/Link';
 
-// TODO improve/clean up this component
 type EmbedType = 'app.bsky.embed.images#view' | 'app.bsky.embed.record#view' | 'app.bsky.embed.external#view' | 'app.bsky.embed.recordWithMedia#view';
 type EmbedEmbedType = Array<AppBskyEmbedImages.View | AppBskyEmbedExternal.View | View | AppBskyEmbedRecordWithMedia.View | {
   $type: string;
@@ -23,68 +23,80 @@ const EmbedHandler: React.FC<EmbedHandlerProps> = ({ post }: EmbedHandlerProps) 
 
   switch (embedType) {
     case 'app.bsky.embed.images#view': {
+      const viewImage = post.post.embed?.images as AppBskyEmbedImages.ViewImage[];
+
       return (
-        <ImageGrid images={post.post.embed?.images as AppBskyEmbedImages.ViewImage[]} />
+        <ImageGrid images={viewImage} />
       )
     }
+
     case 'app.bsky.embed.record#view': {
+      const record = post.post.embed?.record as AppBskyEmbedRecord.ViewRecord;
+      const value = record?.value as AppBskyFeedPost.Record;
+
       return (
         <EmbedContainer embed={post.post.embed}>
-            {((post.post.embed?.record as AppBskyEmbedRecord.ViewRecord).value as AppBskyFeedPost.Record)?.text}
-            <div className='embed-images-container'>
-              {(((post.post.embed?.record as AppBskyEmbedRecord.ViewRecord).embeds?.length) != null) &&
-              (post.post.embed?.record as AppBskyEmbedRecord.ViewRecord).embeds?.map((embed, i) => (
+          {value?.text}
+          <div className='embed-images-container'>
+            {record.embeds?.length != null &&
+              record.embeds?.map((embed, i) => (
                 <ImageGrid className='embed-images' key={i} images={embed.images as ViewImage[]} />
               ))}
-            </div>
+          </div>
         </EmbedContainer>
       )
     }
+
     case 'app.bsky.embed.external#view': {
+      const external = post.post.embed?.external as AppBskyEmbedExternal.External;
+
       return (
-            <div className='embed-handler'>
-              <img className='embed-external-img' src={(post.post.embed?.external as AppBskyEmbedExternal.External).thumb?.toString()} />
-              <div className='embed-external-info'>
-                <span className='embed-external-uri'>{(post.post.embed?.external as AppBskyEmbedExternal.External).uri}</span>
-                <span className='embed-external-title'>{(post.post.embed?.external as AppBskyEmbedExternal.External).title}</span>
-                <span className='embed-external-description'>{(post.post.embed?.external as AppBskyEmbedExternal.External).description}</span>
-              </div>
-            </div>
+        <Link onClick={(e) => { e.preventDefault(); location.href = external.uri; }} to={external.uri} linkStyle={false} className='embed-handler'>
+          <img className='embed-external-img' src={external.thumb?.toString()} />
+          <div className='embed-external-info'>
+            <span className='embed-external-uri'>{external.uri}</span>
+            <span className='embed-external-title'>{external.title}</span>
+            <span className='embed-external-description'>{external.description}</span>
+          </div>
+        </Link>
       )
     }
+
     case 'app.bsky.embed.recordWithMedia#view': {
+      const embedRecordWithMedia = post.post.embed?.record as AppBskyEmbedRecordWithMedia.View;
+      const embedRecordView = post.post.embed?.record as AppBskyEmbedRecord.View;
+      const mediaType = post.post.embed?.media as MediaType;
+      const mediaTypeExternal = mediaType?.external as AppBskyEmbedExternal.External;
+
       return (
         <>
-        <ImageGrid images={(post.post.embed?.media as MediaType).images as ViewImage[]} />
-            {(Boolean(((post.post.embed?.media as MediaType)?.external))) && <div className='embed-handler'>
-              <img className='embed-external-img' src={((post.post.embed?.media as MediaType)?.external as AppBskyEmbedExternal.External)?.thumb?.toString()} />
-              <div className='embed-external-info'>
-                <span className='embed-external-uri'>{((post.post.embed?.media as MediaType)?.external as AppBskyEmbedExternal.External)?.uri}</span>
-                <span className='embed-external-title'>{((post.post.embed?.media as MediaType)?.external as AppBskyEmbedExternal.External)?.title}</span>
-                <span className='embed-external-description'>{((post.post.embed?.media as MediaType)?.external as AppBskyEmbedExternal.External)?.description}</span>
-              </div>
-            </div>}
-        <EmbedContainer embed={post.post.embed?.record as AppBskyEmbedRecordWithMedia.View}>
-          {((post.post.embed?.record as AppBskyEmbedRecord.View).record.value as AppBskyFeedPost.Record)?.text}
-          <div className='embed-images-container'>
-            {(((post.post.embed?.record as AppBskyEmbedRecord.View).record.embeds) != null) &&
-            (post.post.embed?.record as AppBskyEmbedRecord.View).record.embeds !== null &&
-            ((post.post.embed?.record as AppBskyEmbedRecord.View).record.embeds as EmbedEmbedType).map((embed, i) => (
-              <ImageGrid className='embed-images' key={i} images={(embed.media as MediaType)?.images as ViewImage[]} />
-            ))}
-            {(((post.post.embed?.record as AppBskyEmbedRecord.View).record.embeds) != null) &&
-            (post.post.embed?.record as AppBskyEmbedRecord.View).record.embeds !== null &&
-            ((post.post.embed?.record as AppBskyEmbedRecord.View).record.embeds as EmbedEmbedType).map((embed, i) => (
-              <ImageGrid className='embed-images' key={i} images={(embed.images as ViewImage[])} />
-            ))}
-          </div>
-      </EmbedContainer>
+          <ImageGrid images={mediaType.images as ViewImage[]} />
+          {(((post.post.embed?.media as MediaType)?.external !== undefined)) && <div className='embed-handler'>
+            <img className='embed-external-img' src={(mediaType?.external as AppBskyEmbedExternal.External)?.thumb?.toString()} />
+            <div className='embed-external-info'>
+              <span className='embed-external-uri'>{mediaTypeExternal?.uri}</span>
+              <span className='embed-external-title'>{mediaTypeExternal?.title}</span>
+              <span className='embed-external-description'>{mediaTypeExternal?.description}</span>
+            </div>
+          </div>}
+          <EmbedContainer embed={embedRecordWithMedia}>
+            {((post.post.embed?.record as AppBskyEmbedRecord.View).record?.value as AppBskyFeedPost.Record)?.text}
+            <div className='embed-images-container'>
+              {((embedRecordView.record.embeds) != null) &&
+                (embedRecordView.record.embeds as EmbedEmbedType).map((embed, i) => (
+                  <ImageGrid className='embed-images' key={i} images={(embed.media as MediaType)?.images as ViewImage[]} />
+                ))}
+              {((embedRecordView.record.embeds) != null) &&
+                (embedRecordView.record.embeds as EmbedEmbedType).map((embed, i) => (
+                  <ImageGrid className='embed-images' key={i} images={(embed.images as ViewImage[])} />
+                ))}
+            </div>
+          </EmbedContainer>
         </>
       )
     }
-    default: return (
-      null
-    )
+
+    default: return null;
   }
 }
 

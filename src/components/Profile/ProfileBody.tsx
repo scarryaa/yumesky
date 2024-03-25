@@ -62,7 +62,6 @@ const ProfileBody: React.FC<ProfileBodyProps> = ({ actor, currentTab }: ProfileB
             {feeds?.map((feed, i) => (
                 <Feed feed={feed} key={i} />
             ))}
-            <div className='bottom-boundary-ref' ref={bottomBoundaryRef} />
         </div>
       )
     case 'Lists':
@@ -73,7 +72,6 @@ const ProfileBody: React.FC<ProfileBodyProps> = ({ actor, currentTab }: ProfileB
             {lists?.map((list, i) => (
                 <List list={list} key={i} />
             ))}
-            <div className='bottom-boundary-ref' ref={bottomBoundaryRef} />
         </div>
       )
   }

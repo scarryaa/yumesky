@@ -10,6 +10,8 @@ import { faAt, faChevronDown, faChevronUp, faHeart, faRetweet, faUserPlus } from
 import Post from '../../components/Post/Post';
 import Link from '../../components/Link/Link';
 import { usePost } from '../../contexts/PostContext';
+import { type ViewImage } from '@atproto/api/dist/client/types/app/bsky/embed/images';
+import ImageGridSmall from '../../components/ImageGrid/ImageGridSmall';
 
 type GroupedNotifications = Record<string, {
   notifications: AppBskyNotificationListNotifications.Notification[];
@@ -106,6 +108,9 @@ const NotificationItem: React.FC<{ post: GroupedNotifications[string], reason: s
               <span className='notification-timestamp'>{ago(post.notifications[0].indexedAt)}</span>
               </div>
               {((post.post?.record) != null) && <div className='notification-record'>{(post.post.record as AppBskyFeedPost.Record).text}</div>}
+              {post.post?.embed?.images !== null && <div className='notification-embed-images'>
+                <ImageGridSmall images={post.post?.embed?.images as ViewImage[]} />
+              </div>}
           </Link>
       );
     case 'reply':
@@ -180,9 +185,13 @@ const Notifications: React.FC<{ setCurrentPage: (pageName: string) => void }> = 
     };
   }, [loadMore]);
 
-  const groupNotifs = (notifications: AppBskyNotificationListNotifications.Notification[], notifPosts: AppBskyFeedDefs.PostView[]): GroupedNotifications => {
+  const groupNotifs = (
+    notifications: AppBskyNotificationListNotifications.Notification[],
+    notifPosts: AppBskyFeedDefs.PostView[]
+  ): GroupedNotifications => {
     const groupedNotifications: GroupedNotifications = {};
 
+    // Group notifications
     notifications.forEach(notification => {
       const { cid, author, reason, record } = notification;
       const subjectUri = (record as AppBskyFeedLike.Record)?.subject?.uri ?? notification.uri;
@@ -204,6 +213,15 @@ const Notifications: React.FC<{ setCurrentPage: (pageName: string) => void }> = 
             groupedNotifications[compoundKey].avatars.push(author.avatar);
           }
         }
+      }
+    });
+
+    // Associate notifPosts with notifications
+    notifPosts.forEach(post => {
+      const { uri } = post;
+      const matchingKey = Object.keys(groupedNotifications).find(key => key.endsWith(`-${uri}`));
+      if (matchingKey != null) {
+        groupedNotifications[matchingKey].post = post;
       }
     });
 

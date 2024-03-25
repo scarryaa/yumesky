@@ -1,9 +1,8 @@
 import BasicView from '../../components/BasicView/BasicView';
 import AccountCard from '../../components/AccountCard/AccountCard';
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useCachedProfile } from '../../hooks/useCachedProfile';
 import { useFollows } from '../../hooks/useFollows';
-import React from 'react';
 
 const Following: React.FC<{ setCurrentPage: (pageName: string) => void }> = ({ setCurrentPage }: { setCurrentPage: (pageName: string) => void }) => {
   const { cachedProfile } = useCachedProfile();

@@ -7,10 +7,15 @@
     text-decoration: none !important;
     white-space: nowrap;
     overflow: hidden;
+    max-width: 100%;
 
     .notification-record {
         margin-left: 3rem;
         color: var(--text-light);
+        max-width: 100%;
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
+        word-break: break-word;
     }    
 
     .notification-author-container {

@@ -24,6 +24,15 @@ export const useNotifications = (): {
         if (notificationRes.success) {
           setNotifications(prevNotifications => [...prevNotifications, ...notificationRes.data.notifications]);
           setCursor(notificationRes.data.cursor);
+
+          // Fetch posts for the newly fetched notifications
+          const notificationUris = notificationRes.data.notifications.map((notif => (notif.record as AppBskyFeedLike.Record)?.subject?.uri ?? notif.uri));
+          const postsRes = await agent.app.bsky.feed.getPosts({ uris: notificationUris });
+          if (postsRes.success) {
+            setNotifPosts(prevNotifPosts => [...prevNotifPosts, ...postsRes.data.posts]);
+          } else {
+            console.error(`Failed to fetch posts for notifications: ${notificationUris.join(', ')}`);
+          }
         } else {
           console.error('Failed to fetch more notifications');
         }
